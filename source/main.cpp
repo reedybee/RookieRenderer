@@ -4,6 +4,10 @@
 
 #include "shader/Shader.h"
 
+void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+
 int main(int argc, char* argv[]) {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -14,19 +18,24 @@ int main(int argc, char* argv[]) {
 	
 	GLFWwindow* window = glfwCreateWindow(mode->width / 2, mode->height / 2, "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, frambuffersizeCallback);
 
 	if (!gladLoadGLLoader(GLADloadproc(glfwGetProcAddress)))
 		return -1;
 
-	Shader standardUnlit = Shader("resources/shaders/unlit/unlit-vertex.glsl", "resources/unlit/unlit-fragment.glsl");
+	Shader standardUnlit = Shader("resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl");
 
 	float vertices[] = {
 		1.0f, 0.0f, 0.0f,
-		-1.0f, 0.0f, 0.0f,
+	   -1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,
+		0.0f,-1.0f, 0.0f,
 	};
 
-	int indices[] = { 0, 1, 2 };
+	int indices[] = {
+		0, 1, 2,
+		0, 1, 3
+	};
 
 	unsigned int VAO, VBO, EBO;
 
@@ -44,11 +53,12 @@ int main(int argc, char* argv[]) {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	while (!glfwWindowShouldClose(window)) {
-		glClearColor(0.0f, 0.7f,1.0f, 0.0f);
+		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, NULL);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
+	glfwTerminate();
 }
