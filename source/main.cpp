@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "shader/Shader.h"
+
 int main(int argc, char* argv[]) {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -9,12 +11,14 @@ int main(int argc, char* argv[]) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
+	
 	GLFWwindow* window = glfwCreateWindow(mode->width / 2, mode->height / 2, "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGLLoader(GLADloadproc(glfwGetProcAddress)))
 		return -1;
+
+	Shader standardUnlit = Shader("resources/shaders/unlit/unlit-vertex.glsl", "resources/unlit/unlit-fragment.glsl");
 
 	float vertices[] = {
 		1.0f, 0.0f, 0.0f,
