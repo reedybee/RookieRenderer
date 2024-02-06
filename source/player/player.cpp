@@ -12,7 +12,7 @@
 Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->position = position;
 	rotation = glm::vec3(0.0f);
-	camera = Camera(glm::vec3(position.x, position.y, position.z));
+	camera = new Camera(glm::vec3(position.x, position.y, position.z));
 	this->movementSpeed = 4.0f;
 	this->mouseSensitivity = 0.1f;
 	this->window = window;
@@ -20,19 +20,19 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 
 void Player::PollMovement(float deltatime) {
 	float velocity = deltatime * movementSpeed;
-	//camera.position = this->position;
-	
+	camera->position = this->position;
+
 	if (glfwGetKey(window, GLFW_KEY_W)) {
-		position -= glm::vec3(0.0f, 0.0f, 1.0f) * velocity;
+		position += camera->front * velocity;
 	}
 	if (glfwGetKey(window, GLFW_KEY_S)) {
-		position += glm::vec3(0.0f, 0.0f, 1.0f) * velocity;
+		position -= camera->front * velocity;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A)) {
-		position -= glm::vec3(1.0f, 0.0f, 0.0f) * velocity;
+		position -= camera->right * velocity;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D)) {
-		position += glm::vec3(1.0f, 0.0f, 0.0f) * velocity;
+		position += camera->right * velocity;
 	}
 }
 
@@ -40,18 +40,18 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 	xoffset *= mouseSensitivity;
 	yoffset *= mouseSensitivity;
 
-	camera.yaw += xoffset;
-	camera.pitch += yoffset;
+	camera->yaw += xoffset;
+	camera->pitch += yoffset;
 
 	// make sure that when pitch is out of bounds, screen doesn't get flipped
 	if (constrainPitch)
 	{
-		if (camera.pitch > 89.0f)
-			camera.pitch = 89.0f;
-		if (camera.pitch < -89.0f)
-			camera.pitch = -89.0f;
+		if (camera->pitch > 89.0f)
+			camera->pitch = 89.0f;
+		if (camera->pitch < -89.0f)
+			camera->pitch = -89.0f;
 	}
 
 	// update Front, Right and Up Vectors using the updated Euler angles
-	camera.UpdateCameraVectors();
+	camera->UpdateCameraVectors();
 }

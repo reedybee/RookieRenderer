@@ -22,9 +22,9 @@ float framerate = 144;
 float lastX = windowWidth / 2.0f;
 float lastY = windowHeight / 2.0f;
 bool firstMouse = true;
-float xoffset;
-float yoffset;
 
+Player player;
+bool mouseHidden;
 
 float GetAspectRatio() {
 	return (float)windowWidth / (float)windowHeight;
@@ -47,15 +47,14 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 		lastY = ypos;
 		firstMouse = false;
 	}
-	
-	xoffset = 0.0f;
-	yoffset = 0.0f;
 
-	xoffset = xpos - lastX;
-	yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
 
 	lastX = xpos;
 	lastY = ypos;
+
+	player.PollMouse(xoffset, yoffset, false);
 }
 
 int main(int argc, char* argv[]) {
@@ -69,14 +68,15 @@ int main(int argc, char* argv[]) {
 	glfwMakeContextCurrent(coreWindow);
 	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
 	glfwSetCursorPosCallback(coreWindow, mouse_callback);
+	
 	windowWidth = mode->width;
 	windowHeight = mode->height;
 
 	if (!gladLoadGLLoader(GLADloadproc(glfwGetProcAddress)))
 		return -1;
 
-	Player player = Player(coreWindow, glm::vec3(0.0f,0.0f, 4.0f));
-	Shader standardUnlit = Shader(&player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl");
+	player = Player(coreWindow, glm::vec3(0.0f,0.0f, 4.0f));
+	Shader standardUnlit = Shader(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl");
 
 	glm::vec3 vertices[] = {
 		{ 1.0f, 0.0f, 0.0f },
@@ -109,13 +109,16 @@ int main(int argc, char* argv[]) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
+		if (mouseHidden)
+			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		if (!mouseHidden)
+			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 		standardUnlit.UpdateMatrices(GetAspectRatio());
 
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, NULL);
 
 		player.PollMovement(deltatime);
-		player.PollMouse(xoffset, yoffset, true);
-		std::cout << xoffset << " " << yoffset << "\n";
 
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);

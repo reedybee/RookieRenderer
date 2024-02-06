@@ -13,9 +13,9 @@ class Player {
 public:
 	glm::vec3 position;
 	glm::vec3 rotation;
-	Camera camera;
+	Camera* camera;
 
-	Player(GLFWwindow* window, glm::vec3 position);
+	Player(GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
 	// Executes any movement calls
 	void PollMovement(float deltatime);
 	
