@@ -7,7 +7,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "util/util.h"
 #include "camera/Camera.h"
 
 class Camera {

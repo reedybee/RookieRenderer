@@ -6,10 +6,15 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "util/util.h"
-
 #include "shader/Shader.h"
 #include "camera/Camera.h"
+
+int windowWidth;
+int windowHeight;
+
+float GetAspectRatio() {
+	return (float)windowWidth / (float)windowHeight;
+}
 
 void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -24,7 +29,7 @@ int main(int argc, char* argv[]) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	coreWindow = glfwCreateWindow(mode->width / 2, mode->height / 2, "RookieRenderer", NULL, NULL);
+	GLFWwindow* coreWindow = glfwCreateWindow(mode->width / 2, mode->height / 2, "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(coreWindow);
 	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
 	windowWidth = mode->width;
