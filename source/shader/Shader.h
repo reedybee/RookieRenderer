@@ -3,11 +3,19 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "camera/Camera.h"
 class Shader {
 public:
-	Shader(const char* vertexShaderPath, const char* fragmentShaderPath);
-
+	//Constructor 
+	Shader(Camera* camera, const char* vertexShaderPath, const char* fragmentShaderPath);
+	// sets OpenGLs shader program context to this shaders program
 	void use();
+	// Updates the shaders view transformation
+	void UpdateMatrices(float aspect);
 
 	void SetInt(const char* name, int value) const;
 	void SetFloat(const char* name, float value) const;
@@ -21,5 +29,6 @@ public:
 	void SetMatrix4(const char* name, glm::mat4 matrix) const;
 
 private:
+	Camera* camera;
 	unsigned int program;
 };

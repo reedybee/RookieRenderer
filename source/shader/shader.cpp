@@ -5,9 +5,17 @@
 #include <fstream>
 #include <string>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "camera/Camera.h"
+#include "util/util.h"
+
 #include "Shader.h"
 
-Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
+Shader::Shader(Camera* camera, const char* vertexShaderPath, const char* fragmentShaderPath) {
+	this->camera = camera;
 	std::string currentLine;
 
 	std::string vertexCode;
@@ -16,7 +24,6 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 		while (std::getline(vertexFile, currentLine)) {
 			currentLine.append("\n");
 			vertexCode.append(currentLine);
-			std::cout << currentLine;
 		}
 	}
 	vertexFile.close();
@@ -32,7 +39,6 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 		while (std::getline(fragmentFile, currentLine)) {
 			currentLine.append("\n");
 			fragmentCode.append(currentLine);
-			std::cout << currentLine;
 		}
 	}
 	vertexFile.close();
@@ -51,6 +57,19 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 
 void Shader::use() {
 	glUseProgram(program);
+}
+
+void Shader::UpdateMatrices(float aspect) {
+	use();
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+
+	glm::mat4 view = camera->GetViewMatrix();
+
+	glm::mat4 model = glm::mat4(1.0f);
+
+	SetMatrix4("projection", projection);
+	SetMatrix4("view", view);
+	SetMatrix4("model", model);
 }
 
 void Shader::SetInt(const char* name, int value) const {
@@ -90,5 +109,5 @@ void Shader::SetVector4(const char* name, glm::vec4 vector) {
 }
 
 void Shader::SetMatrix4(const char* name, glm::mat4 matrix) const {
-	glUniformMatrix4fv(glGetUniformLocation(m_program, name), 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix4fv(glGetUniformLocation(program, name), 1, GL_FALSE, glm::value_ptr(matrix));
 }

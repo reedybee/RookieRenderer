@@ -1,4 +1,4 @@
-module;
+/*module;
 
 // #define GLM_GTC_INLINE_NAMESPACE to inline glm::gtc into glm
 // #define GLM_EXT_INLINE_NAMESPACE to inline glm::ext into glm
@@ -2673,3 +2673,4 @@ export namespace std {
 	using std::hash; // See GLM_GTX_hash
 }
 #endif
+*/
