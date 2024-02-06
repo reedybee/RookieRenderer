@@ -138,7 +138,6 @@
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\player\player.cpp" />
     <ClCompile Include="source\shader\shader.cpp" />
-    <ClCompile Include="source\util\util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\include\glad\glad.h" />

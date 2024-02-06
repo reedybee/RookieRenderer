@@ -60,7 +60,7 @@ void Shader::use() {
 
 void Shader::UpdateMatrices(float aspect) {
 	use();
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+	glm::mat4 projection = camera->GetProjectionMatrix(aspect);
 
 	glm::mat4 view = camera->GetViewMatrix();
 	glm::mat4 model = glm::mat4(1.0f);

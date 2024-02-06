@@ -7,4 +7,22 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "util/util.h"
+#include "camera/Camera.h"
+
+class Player {
+public:
+	glm::vec3 position;
+	glm::vec3 rotation;
+	Camera camera;
+
+	Player(GLFWwindow* window, glm::vec3 position);
+	// Executes any movement calls
+	void PollMovement(float deltatime);
+	
+	void PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
+
+	float movementSpeed;
+	float mouseSensitivity;
+private:
+	GLFWwindow* window;
+};

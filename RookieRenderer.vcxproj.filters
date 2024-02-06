@@ -33,9 +33,6 @@
     <ClCompile Include="source\camera\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\util\util.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\player\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
