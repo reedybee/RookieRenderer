@@ -20,6 +20,9 @@ public:
 
 	void ReadFromFile(const char* filepath);
 
+	std::vector<glm::vec3> GetVertices();
+	std::vector<unsigned int> GetIndices();
+
 	void Draw();
 private:
 	std::vector<glm::vec3> vertices;

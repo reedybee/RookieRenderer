@@ -13,6 +13,16 @@
 
 #include "model/Model.h"
 
+Model::Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, Mesh mesh) {
+	shader = Shader(vertexFilePath, fragmentFilePath);
+	this->mesh = mesh;
+	this->camera = camera;
+	position = glm::vec3(0.0f);
+	scale = glm::vec3(1.0f);
+	rotation = glm::vec3(0.0f);
+}
+
+
 Model::Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, std::vector<glm::vec3> vertices, std::vector<unsigned int> indices) {
 	shader = Shader(vertexFilePath, fragmentFilePath);
 	mesh = Mesh(vertices, indices);

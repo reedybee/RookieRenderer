@@ -18,6 +18,7 @@
 
 class Model {
 public:
+	Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, Mesh mesh);
 	Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
 
 	void Draw(float aspect);
@@ -26,8 +27,8 @@ public:
 	glm::vec3 scale;
 	glm::vec3 rotation;
 
+	Mesh mesh;
 private:
 	Shader shader;
-	Mesh mesh;
 	Camera* camera;
 };

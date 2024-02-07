@@ -589,6 +589,9 @@
     <None Include="dependencies\glm\gtx\wrap.inl" />
     <None Include="README.md" />
     <None Include="resources\shaders\unlit\unlit-vertex.glsl" />
+    <None Include="resource\objects\cube.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </None>
     <None Include="resource\shaders\unlit\unlitfragment.glsl" />
     <None Include="resource\shaders\unlit\unlitvertex.glsl" />
   </ItemGroup>
@@ -602,8 +605,25 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\objects\cube.obj">
-      <FileType>Document</FileType>
+      <FileType>OBJ</FileType>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="resource\objects\untitled.obj">
+      <FileType>Document</FileType>
+      <DeploymentContent>true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </DeploymentContent>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="resource\objects\peen.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="resource\objects\suzz.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

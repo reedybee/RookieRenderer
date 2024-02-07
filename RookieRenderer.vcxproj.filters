@@ -1360,6 +1360,7 @@
     <None Include="dependencies\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="resource\objects\cube.obj" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\glfw\lib-vc2022\glfw3_mt.lib" />
@@ -1371,5 +1372,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resource\objects\cube.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="resource\objects\untitled.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="resource\objects\suzz.obj" />
+    <Object Include="resource\objects\peen.obj" />
   </ItemGroup>
 </Project>

@@ -31,9 +31,17 @@ void Mesh::SetData(std::vector<glm::vec3> vertices, std::vector<unsigned int> in
 	GenerateBuffers();
 }
 
+
+std::vector<glm::vec3> Mesh::GetVertices() {
+	return vertices;
+}
+std::vector<unsigned int> Mesh::GetIndices() {
+	return indices;
+}
+
 void Mesh::ReadFromFile(const char* filepath) {
-	glm::vec3 vertex = glm::vec3();
 	std::ifstream file = std::ifstream(filepath);
+	vertices.clear();
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
@@ -41,14 +49,27 @@ void Mesh::ReadFromFile(const char* filepath) {
 			char lineType;
 			iss >> lineType;
 
+			
 			if (lineType == 'v' && iss.peek() == ' ') {
+				glm::vec3 vertex = glm::vec3();
 				iss >> vertex.x >> vertex.y >> vertex.z;
-				vertices.push_back(vertex);
+				vertices.push_back(glm::fvec3(vertex));
 				std::cout << vertex.x << " " << vertex.y << " " << vertex.z << "\n";
+			}
+
+			if (lineType == 'f' && iss.peek() == ' ') {
+				//char delimeter;
+				unsigned int index = 0;
+				for (int i = 0; i < 3; i++) {
+					iss >> index;
+					indices.push_back(index - 1);
+					std::cout << index - 1 << "\n";
+				}
 			}
 		}
 	}
 	file.close();
+	GenerateBuffers();
 }
 
 void Mesh::Draw() {

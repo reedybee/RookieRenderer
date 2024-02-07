@@ -105,7 +105,8 @@ int main(int argc, char* argv[]) {
 	};
 
 	Mesh mesh = Mesh();
-	mesh.ReadFromFile("resource/objects/cube.obj");
+	mesh.ReadFromFile("resource/objects/suzz.obj");
+	Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", mesh.GetVertices(), mesh.GetIndices());
 
 	Model plane = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", planeVertices, planeIndices);
 	plane.position = glm::vec3(0.0f, -3.0f, 0.0f);
@@ -137,7 +138,7 @@ int main(int argc, char* argv[]) {
 		0, 4, 5,
 	};
 
-	Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", cubeVertices, cubeIndices);
+	//Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", cubeVertices, cubeIndices);
 	
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
