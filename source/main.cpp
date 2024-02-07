@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <thread>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -10,6 +11,7 @@
 #include "shader/Shader.h"
 #include "camera/Camera.h"
 #include "player/Player.h"
+#include "mesh/mesh.h"
 
 int windowWidth;
 int windowHeight;
@@ -24,10 +26,19 @@ float lastY = windowHeight / 2.0f;
 bool firstMouse = true;
 
 Player player;
-bool mouseHidden;
+bool mouseHidden = false;
 
 float GetAspectRatio() {
 	return (float)windowWidth / (float)windowHeight;
+}
+
+void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if (key == GLFW_KEY_E && action == GLFW_RELEASE) {
+		mouseHidden = !mouseHidden;
+	}
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+		glfwSetWindowShouldClose(window, true);
+	}
 }
 
 void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
@@ -36,7 +47,7 @@ void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
 	windowHeight = height;
 }
 
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
+void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 	float xpos = static_cast<float>(xposIn);
 	float ypos = static_cast<float>(yposIn);
 
@@ -54,7 +65,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 	lastX = xpos;
 	lastY = ypos;
 
-	player.PollMouse(xoffset, yoffset, false);
+	player.PollMouse(xoffset, yoffset, mouseHidden);
 }
 
 int main(int argc, char* argv[]) {
@@ -67,56 +78,70 @@ int main(int argc, char* argv[]) {
 	GLFWwindow* coreWindow = glfwCreateWindow(mode->width / 2, mode->height / 2, "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(coreWindow);
 	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
-	glfwSetCursorPosCallback(coreWindow, mouse_callback);
+	glfwSetCursorPosCallback(coreWindow, mouseCallback);
+	glfwSetKeyCallback(coreWindow, keyboardCallback);
 	
 	windowWidth = mode->width;
 	windowHeight = mode->height;
 
 	if (!gladLoadGLLoader(GLADloadproc(glfwGetProcAddress)))
 		return -1;
-
+	glEnable(GL_DEPTH_TEST);
 	player = Player(coreWindow, glm::vec3(0.0f,0.0f, 4.0f));
 	Shader standardUnlit = Shader(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl");
 
-	glm::vec3 vertices[] = {
+	Shader planeUnlit = Shader(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl");
+	planeUnlit.scale = glm::vec3(3.0f);
+	planeUnlit.position = glm::vec3(0.0f, -1.0f, 0.0f);
+
+	std::vector<glm::vec3> planeVertices = {
+		{ 1.0f,0.0f, 1.0f },
+		{ 1.0f,0.0f,-1.0f },
+		{-1.0f,0.0f, 1.0f },
+		{-1.0f,0.0f,-1.0f },
+	};
+	std::vector<unsigned int> planeIndices = {
+		0, 1, 2,
+		1, 2, 3,
+	};
+
+	Mesh mesh = Mesh(planeVertices, planeIndices);
+
+	std::vector<glm::vec3> cubeVertices = {
 		{ 1.0f, 0.0f, 0.0f },
 		{-1.0f, 0.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f },
 		{ 0.0f,-1.0f, 0.0f },
+		{ 0.0f, 0.0f,-1.0f },
+		{ 0.0f, 0.0f, 1.0f },
 	};
 
-	int indices[] = {
+	std::vector<unsigned int> cubeIndices = {
 		0, 1, 2,
-		0, 1, 3
+		0, 1, 3,
+		0, 1, 4,
+		0, 1, 5,
+		3, 2, 5,
+		3, 2, 4
 	};
 
-	unsigned int VAO, VBO, EBO;
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_READ);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	Mesh cube = Mesh(cubeVertices, cubeIndices);
 	
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		if (mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (!mouseHidden)
-			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 		standardUnlit.UpdateMatrices(GetAspectRatio());
+		cube.Draw();
 
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, NULL);
+		planeUnlit.UpdateMatrices(GetAspectRatio());
+		mesh.Draw();
 
 		player.PollMovement(deltatime);
 

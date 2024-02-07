@@ -28,6 +28,9 @@ public:
 	void SetVector4(const char* name, glm::vec4 vector);
 	void SetMatrix4(const char* name, glm::mat4 matrix) const;
 
+	glm::vec3 scale;
+	glm::vec3 position;
+
 private:
 	Camera* camera;
 	unsigned int program;

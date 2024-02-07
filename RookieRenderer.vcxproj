@@ -122,7 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\c++\RookieRenderer\dependencies;C:\dev\Projects\c++\RookieRenderer\dependencies\glm;C:\dev\Projects\c++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\c++\RookieRenderer\dependencies\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\dependencies;C:\dev\Projects\c++\RookieRenderer\dependencies\glm;C:\dev\Projects\c++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\c++\RookieRenderer\dependencies\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,9 +138,10 @@
     <ClCompile Include="dependencies\glm\detail\glm.cpp" />
     <ClCompile Include="dependencies\glm\glm.cppm" />
     <ClCompile Include="source\camera\camera.cpp" />
+    <ClCompile Include="source\graphics\mesh\mesh.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\player\player.cpp" />
-    <ClCompile Include="source\shader\shader.cpp" />
+    <ClCompile Include="source\graphics\shader\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\include\glad\glad.h" />
@@ -435,8 +436,9 @@
     <ClInclude Include="dependencies\glm\vec4.hpp" />
     <ClInclude Include="dependencies\glm\vector_relational.hpp" />
     <ClInclude Include="source\camera\Camera.h" />
+    <ClInclude Include="source\graphics\mesh\Mesh.h" />
     <ClInclude Include="source\player\Player.h" />
-    <ClInclude Include="source\shader\Shader.h" />
+    <ClInclude Include="source\graphics\shader\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

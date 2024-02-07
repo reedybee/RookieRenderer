@@ -34,24 +34,32 @@ void Player::PollMovement(float deltatime) {
 	if (glfwGetKey(window, GLFW_KEY_D)) {
 		position += camera->right * velocity;
 	}
+	if (glfwGetKey(window, GLFW_KEY_SPACE)) {
+		position += camera->up * velocity;
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)) {
+		position -= camera->up * velocity;
+	}
 }
 
 void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch) {
-	xoffset *= mouseSensitivity;
-	yoffset *= mouseSensitivity;
+	if (mouseHidden) {
+		xoffset *= mouseSensitivity;
+		yoffset *= mouseSensitivity;
 
-	camera->yaw += xoffset;
-	camera->pitch += yoffset;
+		camera->yaw += xoffset;
+		camera->pitch += yoffset;
 
-	// make sure that when pitch is out of bounds, screen doesn't get flipped
-	if (constrainPitch)
-	{
-		if (camera->pitch > 89.0f)
-			camera->pitch = 89.0f;
-		if (camera->pitch < -89.0f)
-			camera->pitch = -89.0f;
+		// make sure that when pitch is out of bounds, screen doesn't get flipped
+		if (constrainPitch)
+		{
+			if (camera->pitch > 89.0f)
+				camera->pitch = 89.0f;
+			if (camera->pitch < -89.0f)
+				camera->pitch = -89.0f;
+		}
+
+		// update Front, Right and Up Vectors using the updated Euler angles
+		camera->UpdateCameraVectors();
 	}
-
-	// update Front, Right and Up Vectors using the updated Euler angles
-	camera->UpdateCameraVectors();
 }
