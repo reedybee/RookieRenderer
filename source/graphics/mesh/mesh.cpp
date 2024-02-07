@@ -11,10 +11,26 @@
 
 #include "mesh/Mesh.h"
 
+Mesh::Mesh() {
+	this->vertices = std::vector<glm::vec3>();
+	this->indices = std::vector<unsigned int>();
+}
+
 Mesh::Mesh(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices) {
 	this->vertices = vertices;
 	this->indices = indices;
 
+	GenerateBuffers();
+}
+
+void Mesh::SetData(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices) {
+	this->vertices = vertices;
+	this->indices = indices;
+
+	GenerateBuffers();
+}
+
+void Mesh::GenerateBuffers() {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 

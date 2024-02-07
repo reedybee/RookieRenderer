@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,6 +139,7 @@
     <ClCompile Include="dependencies\glm\glm.cppm" />
     <ClCompile Include="source\camera\camera.cpp" />
     <ClCompile Include="source\graphics\mesh\mesh.cpp" />
+    <ClCompile Include="source\graphics\model\model.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\player\player.cpp" />
     <ClCompile Include="source\graphics\shader\shader.cpp" />
@@ -437,6 +438,7 @@
     <ClInclude Include="dependencies\glm\vector_relational.hpp" />
     <ClInclude Include="source\camera\Camera.h" />
     <ClInclude Include="source\graphics\mesh\Mesh.h" />
+    <ClInclude Include="source\graphics\model\Model.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
   </ItemGroup>

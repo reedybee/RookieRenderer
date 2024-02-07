@@ -13,7 +13,10 @@
 
 class Mesh {
 public:
+	Mesh();
 	Mesh(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
+
+	void SetData(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
 
 	void Draw();
 private:
@@ -21,4 +24,6 @@ private:
 	std::vector<unsigned int> indices;
 
 	unsigned int VAO, VBO, EBO;
+
+	void GenerateBuffers();
 };

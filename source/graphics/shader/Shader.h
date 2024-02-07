@@ -10,12 +10,12 @@
 #include "camera/Camera.h"
 class Shader {
 public:
+	// dont use
+	Shader();
 	//Constructor 
-	Shader(Camera* camera, const char* vertexShaderPath, const char* fragmentShaderPath);
+	Shader(const char* vertexShaderPath, const char* fragmentShaderPath);
 	// sets OpenGLs shader program context to this shaders program
 	void use();
-	// Updates the shaders view transformation
-	void UpdateMatrices(float aspect);
 
 	void SetInt(const char* name, int value) const;
 	void SetFloat(const char* name, float value) const;
@@ -28,10 +28,6 @@ public:
 	void SetVector4(const char* name, glm::vec4 vector);
 	void SetMatrix4(const char* name, glm::mat4 matrix) const;
 
-	glm::vec3 scale;
-	glm::vec3 position;
-
 private:
-	Camera* camera;
 	unsigned int program;
 };

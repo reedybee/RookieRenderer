@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "camera/Camera.h"
+#include "Physics/Rigidbody.h"
 
 class Player {
 public:
@@ -24,5 +25,6 @@ public:
 	float movementSpeed;
 	float mouseSensitivity;
 private:
+
 	GLFWwindow* window;
 };

@@ -12,12 +12,13 @@
 #include "camera/Camera.h"
 #include "player/Player.h"
 #include "mesh/mesh.h"
+#include "model/Model.h"
 
 int windowWidth;
 int windowHeight;
 
-float lasttime = glfwGetTime();
-float deltatime = glfwGetTime();
+float lasttime = (float)glfwGetTime();
+float deltatime = (float)glfwGetTime();
 float lastFrame = 0.0f;
 float framerate = 144;
 
@@ -84,48 +85,56 @@ int main(int argc, char* argv[]) {
 	windowWidth = mode->width;
 	windowHeight = mode->height;
 
-	if (!gladLoadGLLoader(GLADloadproc(glfwGetProcAddress)))
+	if (!gladLoadGLLoader(GLADloadproc(glfwGetProcAddress))) {
+		std::cout << "Failed to initialize GLAD \n";
 		return -1;
-	glEnable(GL_DEPTH_TEST);
-	player = Player(coreWindow, glm::vec3(0.0f,0.0f, 4.0f));
-	Shader standardUnlit = Shader(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl");
+	}
 
-	Shader planeUnlit = Shader(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl");
-	planeUnlit.scale = glm::vec3(3.0f);
-	planeUnlit.position = glm::vec3(0.0f, -1.0f, 0.0f);
+	glEnable(GL_DEPTH_TEST);
+	player = Player(coreWindow, glm::vec3(0.0f,0.0f, 0.0f));
 
 	std::vector<glm::vec3> planeVertices = {
-		{ 1.0f,0.0f, 1.0f },
-		{ 1.0f,0.0f,-1.0f },
-		{-1.0f,0.0f, 1.0f },
-		{-1.0f,0.0f,-1.0f },
+		{ 0.5f,0.0f, 0.5f },
+		{ 0.5f,0.0f,-0.5f },
+		{-0.5f,0.0f, 0.5f },
+		{-0.5f,0.0f,-0.5f },
 	};
 	std::vector<unsigned int> planeIndices = {
 		0, 1, 2,
 		1, 2, 3,
 	};
 
-	Mesh mesh = Mesh(planeVertices, planeIndices);
+	Model plane = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", planeVertices, planeIndices);
+	plane.position = glm::vec3(0.0f, -3.0f, 0.0f);
+	plane.scale = glm::vec3(100.0f, 1.0f, 100.0f);
 
 	std::vector<glm::vec3> cubeVertices = {
-		{ 1.0f, 0.0f, 0.0f },
-		{-1.0f, 0.0f, 0.0f },
-		{ 0.0f, 1.0f, 0.0f },
-		{ 0.0f,-1.0f, 0.0f },
-		{ 0.0f, 0.0f,-1.0f },
-		{ 0.0f, 0.0f, 1.0f },
+		{ -0.5f, 0.5f, -0.5f }, // back top left
+		{  0.5f, 0.5f, -0.5f }, // back top right
+		{  0.5f,-0.5f, -0.5f }, // back bottom right
+		{ -0.5f,-0.5f, -0.5f }, // back bottom left
+		{ -0.5f, 0.5f,  0.5f }, // front top left
+		{  0.5f, 0.5f,  0.5f }, // front top right
+		{  0.5f,-0.5f,  0.5f }, // front bottom right
+		{ -0.5f,-0.5f,  0.5f }, // front bottom left
 	};
 
 	std::vector<unsigned int> cubeIndices = {
 		0, 1, 2,
-		0, 1, 3,
-		0, 1, 4,
+		0, 2, 3,
+		4, 5, 6,
+		4, 6, 7,
+		0, 3, 4,
+		3, 4, 7,
+		1, 2, 5,
+		2, 5, 6,
+		2, 3, 6,
+		3, 6, 7,
 		0, 1, 5,
-		3, 2, 5,
-		3, 2, 4
+		0, 4, 5,
 	};
 
-	Mesh cube = Mesh(cubeVertices, cubeIndices);
+	Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", cubeVertices, cubeIndices);
 	
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
@@ -137,11 +146,8 @@ int main(int argc, char* argv[]) {
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-		standardUnlit.UpdateMatrices(GetAspectRatio());
-		cube.Draw();
-
-		planeUnlit.UpdateMatrices(GetAspectRatio());
-		mesh.Draw();
+		cube.Draw(GetAspectRatio());
+		plane.Draw(GetAspectRatio());
 
 		player.PollMovement(deltatime);
 
@@ -157,7 +163,7 @@ int main(int argc, char* argv[]) {
 		while (glfwGetTime() < lasttime + 1.0 / framerate) {
 			std::this_thread::yield();
 		}
-		lasttime += 1.0 / framerate;
+		lasttime += 1.0f / framerate;
 	}
 	glfwTerminate();
 }
