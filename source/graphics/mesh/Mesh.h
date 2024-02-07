@@ -27,6 +27,10 @@ public:
 private:
 	std::vector<glm::vec3> vertices;
 	std::vector<unsigned int> indices;
+	std::vector<glm::vec2> textureCoords;
+	std::vector<unsigned int> textureIndices;
+	std::vector<glm::vec3> normals;
+	std::vector<unsigned int> normalIndices;
 
 	unsigned int VAO, VBO, EBO;
 

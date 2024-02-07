@@ -49,21 +49,32 @@ void Mesh::ReadFromFile(const char* filepath) {
 			char lineType;
 			iss >> lineType;
 
-			
-			if (lineType == 'v' && iss.peek() == ' ') {
-				glm::vec3 vertex = glm::vec3();
-				iss >> vertex.x >> vertex.y >> vertex.z;
-				vertices.push_back(glm::fvec3(vertex));
-				std::cout << vertex.x << " " << vertex.y << " " << vertex.z << "\n";
+			if (lineType == 'v') {
+				if (iss.peek() == ' ') {
+					glm::vec3 vertex = glm::vec3();
+					iss >> vertex.x >> vertex.y >> vertex.z;
+					vertices.push_back(glm::fvec3(vertex));
+					std::cout << vertex.x << " " << vertex.y << " " << vertex.z << "\n";
+				}
+				if (iss.peek() == 't') {
+					glm::fvec2 texCoord = glm::fvec2();
+					iss >> texCoord.x >> texCoord.y;
+					textureCoords.push_back((glm::fvec2)texCoord);
+					std::cout << texCoord.x << " " << texCoord.y << "\n";
+				}
 			}
 
 			if (lineType == 'f' && iss.peek() == ' ') {
-				//char delimeter;
-				unsigned int index = 0;
+				char delimeter;
+				unsigned int vertexIndex = 0;
+				unsigned int textureIndex = 0;
+				unsigned int normalIndex = 0;
 				for (int i = 0; i < 3; i++) {
-					iss >> index;
-					indices.push_back(index - 1);
-					std::cout << index - 1 << "\n";
+					iss >> vertexIndex >> delimeter >> textureIndex >> delimeter >> normalIndex;
+					indices.push_back(vertexIndex - 1);
+					textureIndices.push_back(textureIndex - 1);
+					normalIndices.push_back(normalIndex - 1);
+					std::cout << vertexIndex - 1 << " " << textureIndex - 1 << " " << normalIndex - 1 << "\n";
 				}
 			}
 		}

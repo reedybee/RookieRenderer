@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
 	};
 
 	Mesh mesh = Mesh();
-	mesh.ReadFromFile("resource/objects/suzz.obj");
+	mesh.ReadFromFile("resource/objects/cube.obj");
 	Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", mesh.GetVertices(), mesh.GetIndices());
 
 	Model plane = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", planeVertices, planeIndices);
