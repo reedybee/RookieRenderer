@@ -104,6 +104,9 @@ int main(int argc, char* argv[]) {
 		1, 2, 3,
 	};
 
+	Mesh mesh = Mesh();
+	mesh.ReadFromFile("resource/objects/cube.obj");
+
 	Model plane = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", planeVertices, planeIndices);
 	plane.position = glm::vec3(0.0f, -3.0f, 0.0f);
 	plane.scale = glm::vec3(100.0f, 1.0f, 100.0f);

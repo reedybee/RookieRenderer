@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include <fstream>
+#include <sstream>
 #include <string>
 
 #include <glm/glm.hpp>
@@ -30,6 +31,32 @@ void Mesh::SetData(std::vector<glm::vec3> vertices, std::vector<unsigned int> in
 	GenerateBuffers();
 }
 
+void Mesh::ReadFromFile(const char* filepath) {
+	glm::vec3 vertex = glm::vec3();
+	std::ifstream file = std::ifstream(filepath);
+	if (file.is_open()) {
+		std::string line;
+		while (std::getline(file, line)) {
+			std::istringstream iss(line);
+			char lineType;
+			iss >> lineType;
+
+			if (lineType == 'v' && iss.peek() == ' ') {
+				iss >> vertex.x >> vertex.y >> vertex.z;
+				vertices.push_back(vertex);
+				std::cout << vertex.x << " " << vertex.y << " " << vertex.z << "\n";
+			}
+		}
+	}
+	file.close();
+}
+
+void Mesh::Draw() {
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+	glBindVertexArray(0);
+}
+
 void Mesh::GenerateBuffers() {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
@@ -44,10 +71,4 @@ void Mesh::GenerateBuffers() {
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(unsigned int), &this->indices[0], GL_STATIC_DRAW);
-}
-
-void Mesh::Draw() {
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
-	glBindVertexArray(0);
 }

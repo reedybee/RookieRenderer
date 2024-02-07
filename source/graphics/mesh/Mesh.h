@@ -18,6 +18,8 @@ public:
 
 	void SetData(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
 
+	void ReadFromFile(const char* filepath);
+
 	void Draw();
 private:
 	std::vector<glm::vec3> vertices;

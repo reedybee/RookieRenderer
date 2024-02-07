@@ -1369,4 +1369,7 @@
   <ItemGroup>
     <Text Include="LICENSE.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\objects\cube.obj" />
+  </ItemGroup>
 </Project>

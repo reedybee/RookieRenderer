@@ -10,7 +10,6 @@
 #include "player/Player.h"
 
 Player::Player(GLFWwindow* window, glm::vec3 position) {
-	rigid = Rigidbody(glm::vec3(1.0f));
 	this->position = position;
 	rotation = glm::vec3(0.0f);
 	camera = new Camera(glm::vec3(position.x, position.y, position.z));
