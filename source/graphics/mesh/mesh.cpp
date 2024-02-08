@@ -95,7 +95,7 @@ void Mesh::ReadFromFile(const char* filepath) {
 
 void Mesh::Draw() {
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
 }
 
@@ -108,12 +108,12 @@ void Mesh::GenerateBuffers() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(glm::vec3), &this->vertices[0], GL_STATIC_READ);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 	/*
 	for (const auto& normal : normals) {
 		std::cout << "Normal: " << normal.x << ", " << normal.y << ", " << normal.z << std::endl;
 	}
 
-	glEnableVertexAttribArray(0);
 	glGenBuffers(1, &NBO);
 	glBindBuffer(GL_ARRAY_BUFFER, NBO);
 	glBufferData(GL_ARRAY_BUFFER, this->normals.size() * sizeof(glm::vec3), &this->normals[0], GL_STATIC_DRAW);
