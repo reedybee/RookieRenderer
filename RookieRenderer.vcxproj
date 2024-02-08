@@ -604,11 +604,6 @@
     <Text Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resource\objects\cube.obj">
-      <FileType>OBJ</FileType>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="resource\objects\untitled.obj">
       <FileType>Document</FileType>
       <DeploymentContent>true</DeploymentContent>
