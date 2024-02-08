@@ -1371,9 +1371,6 @@
     <Text Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resource\objects\cube.obj" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="resource\objects\untitled.obj" />
   </ItemGroup>
   <ItemGroup>

@@ -590,7 +590,7 @@
     <None Include="README.md" />
     <None Include="resources\shaders\unlit\unlit-vertex.glsl" />
     <None Include="resource\objects\cube.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="resource\shaders\unlit\unlitfragment.glsl" />
     <None Include="resource\shaders\unlit\unlitvertex.glsl" />
