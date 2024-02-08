@@ -53,14 +53,22 @@ void Mesh::ReadFromFile(const char* filepath) {
 				if (iss.peek() == ' ') {
 					glm::vec3 vertex = glm::vec3();
 					iss >> vertex.x >> vertex.y >> vertex.z;
-					vertices.push_back(glm::fvec3(vertex));
+					vertices.push_back(vertex);
 					std::cout << vertex.x << " " << vertex.y << " " << vertex.z << "\n";
-				}
+				} 
 				if (iss.peek() == 't') {
-					glm::fvec2 texCoord = glm::fvec2();
+					iss.ignore();
+					glm::vec2 texCoord = glm::vec2();
 					iss >> texCoord.x >> texCoord.y;
-					textureCoords.push_back((glm::fvec2)texCoord);
+					textureCoords.push_back(texCoord);
 					std::cout << texCoord.x << " " << texCoord.y << "\n";
+				}
+				if (iss.peek() == 'n') {
+					iss.ignore();
+					glm::vec3 normal = glm::vec3();
+					iss >> normal.x >> normal.y >> normal.z;
+					normals.push_back(normal);
+					std::cout << normal.x << " " << normal.y << " " << normal.z << "\n";
 				}
 			}
 
