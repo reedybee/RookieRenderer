@@ -2,6 +2,7 @@
 
 in vec3 fragPos;
 in vec3 normal;
+//in vec3 texCoord;
 
 uniform vec3 cameraPos;
 uniform vec3 lightPosition;

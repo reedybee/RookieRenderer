@@ -1655,7 +1655,6 @@
   </ItemGroup>
   <ItemGroup>
     <Object Include="resources\objects\suzz.obj" />
-    <Object Include="resource\objects\peen.obj" />
     <Object Include="resources\objects\cube.obj" />
     <Object Include="resources\objects\scale.obj" />
     <Object Include="resources\objects\devscene.obj" />

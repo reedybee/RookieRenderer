@@ -25,6 +25,8 @@ float lasttime = (float)glfwGetTime();
 float deltatime = (float)glfwGetTime();
 float lastFrame = 0.0f;
 float framerate = 144;
+float frameCount = 0;
+float previousTime = 0;
 
 float lastX = windowWidth / 2.0f;
 float lastY = windowHeight / 2.0f;
@@ -129,6 +131,18 @@ int main(int argc, char* argv[]) {
 		float currentFrame = (float)glfwGetTime();
 		deltatime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		double currentTime = glfwGetTime();
+		frameCount++;
+		// If a second has passed.
+		if (currentTime - previousTime >= 1.0)
+		{
+			// Display the frame count here any way you want.
+			std::cout << frameCount << "\n";
+
+			frameCount = 0;
+			previousTime = currentTime;
+		}
 
 		// waits for amount of frames as defined in framerate
 		while (glfwGetTime() < lasttime + 1.0 / framerate) {
