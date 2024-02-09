@@ -21,24 +21,44 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 void Player::PollMovement(float deltatime) {
 	float velocity = deltatime * movementSpeed;
 	camera->position = this->position;
+	this->front = glm::normalize(glm::vec3(camera->front.x, 0, camera->front.z));
 
-	if (glfwGetKey(window, GLFW_KEY_W)) {
-		position += camera->front * velocity;
+	if (camera->type == DEBUG) {
+		if (glfwGetKey(window, GLFW_KEY_W)) {
+			position += camera->front * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_S)) {
+			position -= camera->front * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_A)) {
+			position -= camera->right * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_D)) {
+			position += camera->right * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE)) {
+			position += camera->worldUp * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)) {
+			position -= camera->worldUp * velocity;
+		}
 	}
-	if (glfwGetKey(window, GLFW_KEY_S)) {
-		position -= camera->front * velocity;
-	}
-	if (glfwGetKey(window, GLFW_KEY_A)) {
-		position -= camera->right * velocity;
-	}
-	if (glfwGetKey(window, GLFW_KEY_D)) {
-		position += camera->right * velocity;
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE)) {
-		position += camera->up * velocity;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)) {
-		position -= camera->up * velocity;
+	if (camera->type == FIRST_PERSON) {
+		if (glfwGetKey(window, GLFW_KEY_W)) {
+			position += this->front * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_S)) {
+			position -= this->front * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_A)) {
+			position -= camera->right * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_D)) {
+			position += camera->right * velocity;
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE)) {
+			// jump
+		}
 	}
 }
 

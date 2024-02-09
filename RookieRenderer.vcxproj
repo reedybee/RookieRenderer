@@ -690,8 +690,8 @@
     <None Include="dependencies\glm\gtx\wrap.inl" />
     <None Include="README.md" />
     <None Include="resources\shaders\unlit\unlit-vertex.glsl" />
-    <None Include="resource\shaders\unlit\unlitfragment.glsl" />
-    <None Include="resource\shaders\unlit\unlitvertex.glsl" />
+    <None Include="resources\shaders\unlit\unlitfragment.glsl" />
+    <None Include="resources\shaders\unlit\unlitvertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\assimp\lib\assimp-vc143-mt.lib" />
@@ -703,13 +703,19 @@
     <Text Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Object Include="resource\objects\cube.obj">
+    <Object Include="resources\objects\cube.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="resources\objects\devscene.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="resources\objects\scale.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
     <Object Include="resource\objects\peen.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
-    <Object Include="resource\objects\suzz.obj">
+    <Object Include="resources\objects\suzz.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
   </ItemGroup>

@@ -10,6 +10,11 @@
 
 #include "camera/Camera.h"
 
+enum CAMERA_TYPE {
+	FIRST_PERSON,
+	DEBUG,
+};
+
 class Camera {
 public:
 	glm::vec3 position;
@@ -30,7 +35,8 @@ public:
 	void UpdateCameraVectors();
 
 	glm::vec3 lightPosition;
-private:
 
+	int type;
+private:
 protected:
 };

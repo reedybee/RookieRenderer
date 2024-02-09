@@ -1187,8 +1187,8 @@
     <None Include="README.md" />
     <None Include=".gitignore" />
     <None Include=".gitattributes" />
-    <None Include="resource\shaders\unlit\unlitvertex.glsl" />
-    <None Include="resource\shaders\unlit\unlitfragment.glsl" />
+    <None Include="resources\shaders\unlit\unlitvertex.glsl" />
+    <None Include="resources\shaders\unlit\unlitfragment.glsl" />
     <None Include="dependencies\glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -1654,8 +1654,10 @@
     <Text Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Object Include="resource\objects\suzz.obj" />
+    <Object Include="resources\objects\suzz.obj" />
     <Object Include="resource\objects\peen.obj" />
-    <Object Include="resource\objects\cube.obj" />
+    <Object Include="resources\objects\cube.obj" />
+    <Object Include="resources\objects\scale.obj" />
+    <Object Include="resources\objects\devscene.obj" />
   </ItemGroup>
 </Project>

@@ -24,6 +24,6 @@ public:
 	float movementSpeed;
 	float mouseSensitivity;
 private:
-
+	glm::vec3 front;
 	GLFWwindow* window;
 };
