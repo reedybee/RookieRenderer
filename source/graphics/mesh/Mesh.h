@@ -11,29 +11,38 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+struct Vertex {
+	// position
+	glm::vec3 Position;
+	// normal
+	glm::vec3 Normal;
+	// texCoords
+	glm::vec2 TexCoords;
+	// tangent
+	glm::vec3 Tangent;
+	// bitangent
+	glm::vec3 Bitangent;
+};
+
+
 class Mesh {
 public:
 	Mesh();
-	Mesh(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
+	Mesh(const char* filepath);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 
 	void SetData(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
 
-	void ReadFromFile(const char* filepath);
+	void GenerateBuffers();
 
-	std::vector<glm::vec3> GetVertices();
+	std::vector<Vertex> GetVertices();
 	std::vector<unsigned int> GetIndices();
 
 	void Draw();
 private:
-	std::vector<glm::vec3> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<glm::vec2> textureCoords;
-	std::vector<unsigned int> textureIndices;
-	std::vector<glm::vec3> inputNormals;
-	std::vector<glm::vec3> normals;
-	std::vector<unsigned int> normalIndices;
+	std::vector<Vertex> vertices;
 
-	unsigned int VAO, VBO, TBO, NBO, EBO;
+	unsigned int VAO, VBO, NBO, EBO;
 
-	void GenerateBuffers();
 };

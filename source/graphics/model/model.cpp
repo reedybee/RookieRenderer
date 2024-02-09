@@ -23,7 +23,7 @@ Model::Model(Camera* camera, const char* vertexFilePath, const char* fragmentFil
 }
 
 
-Model::Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, std::vector<glm::vec3> vertices, std::vector<unsigned int> indices) {
+Model::Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
 	shader = Shader(vertexFilePath, fragmentFilePath);
 	mesh = Mesh(vertices, indices);
 	this->camera = camera;
@@ -42,6 +42,9 @@ void Model::Draw(float aspect) {
 	model = glm::scale(model, scale);
 	model = glm::translate(model, position);
 
+	shader.SetVector3("cameraPos", camera->position);
+	shader.SetVector3("lightPosition", camera->lightPosition);
+	shader.SetVector3("objectColour", colour);
 	shader.SetMatrix4("projection", projection);
 	shader.SetMatrix4("view", view);
 	shader.SetMatrix4("model", model);

@@ -19,13 +19,14 @@
 class Model {
 public:
 	Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, Mesh mesh);
-	Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
+	Model(Camera* camera, const char* vertexFilePath, const char* fragmentFilePath, std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 
 	void Draw(float aspect);
 
 	glm::vec3 position;
 	glm::vec3 scale;
 	glm::vec3 rotation;
+	glm::vec3 colour;
 
 	Mesh mesh;
 private:

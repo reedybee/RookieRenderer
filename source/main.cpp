@@ -8,6 +8,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #include "shader/Shader.h"
 #include "camera/Camera.h"
 #include "player/Player.h"
@@ -91,7 +95,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	player = Player(coreWindow, glm::vec3(0.0f,0.0f, 0.0f));
+	player = Player(coreWindow, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	std::vector<glm::vec3> planeVertices = {
 		{ 0.5f,0.0f, 0.5f },
@@ -104,45 +108,14 @@ int main(int argc, char* argv[]) {
 		1, 2, 3,
 	};
 
-	Mesh mesh = Mesh();
-	mesh.ReadFromFile("resource/objects/cube.obj");
-	Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", mesh.GetVertices(), mesh.GetIndices());
+	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 
-	Model plane = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", planeVertices, planeIndices);
-	plane.position = glm::vec3(0.0f, -3.0f, 0.0f);
-	plane.scale = glm::vec3(100.0f, 1.0f, 100.0f);
+	Mesh cubeMesh = Mesh("resource/objects/cube.obj");
+	Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", cubeMesh.GetVertices(), cubeMesh.GetIndices());
+	cube.colour = glm::vec3(0.0f, 0.0f, 1.0f);
 
-	std::vector<glm::vec3> cubeVertices = {
-		{ -0.5f, 0.5f, -0.5f }, // back top left
-		{  0.5f, 0.5f, -0.5f }, // back top right
-		{  0.5f,-0.5f, -0.5f }, // back bottom right
-		{ -0.5f,-0.5f, -0.5f }, // back bottom left
-		{ -0.5f, 0.5f,  0.5f }, // front top left
-		{  0.5f, 0.5f,  0.5f }, // front top right
-		{  0.5f,-0.5f,  0.5f }, // front bottom right
-		{ -0.5f,-0.5f,  0.5f }, // front bottom left
-	};
-
-	std::vector<unsigned int> cubeIndices = {
-		0, 1, 2,
-		0, 2, 3,
-		4, 5, 6,
-		4, 6, 7,
-		0, 3, 4,
-		3, 4, 7,
-		1, 2, 5,
-		2, 5, 6,
-		2, 3, 6,
-		3, 6, 7,
-		0, 1, 5,
-		0, 4, 5,
-	};
-
-	//Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", cubeVertices, cubeIndices);
-	
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
-		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		if (mouseHidden)
@@ -151,7 +124,6 @@ int main(int argc, char* argv[]) {
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 		cube.Draw(GetAspectRatio());
-		plane.Draw(GetAspectRatio());
 
 		player.PollMovement(deltatime);
 

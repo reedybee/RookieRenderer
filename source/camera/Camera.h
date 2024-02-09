@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -27,6 +28,8 @@ public:
 	glm::mat4 GetProjectionMatrix(float aspect);
 
 	void UpdateCameraVectors();
+
+	glm::vec3 lightPosition;
 private:
 
 protected:
