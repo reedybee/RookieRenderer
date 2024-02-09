@@ -17,6 +17,10 @@
 #include "player/Player.h"
 #include "mesh/mesh.h"
 #include "model/Model.h"
+#include "texture/Texture.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image/stb_image.h>
 
 int windowWidth;
 int windowHeight;
@@ -25,7 +29,6 @@ float lasttime = (float)glfwGetTime();
 float deltatime = (float)glfwGetTime();
 float lastFrame = 0.0f;
 float framerate = 144;
-
 float lastX = windowWidth / 2.0f;
 float lastY = windowHeight / 2.0f;
 bool firstMouse = true;
@@ -104,7 +107,8 @@ int main(int argc, char* argv[]) {
 
 	Mesh cubeMesh = Mesh("resources/objects/scale.obj");
 	Model cube = Model(player.camera, "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", cubeMesh.GetVertices(), cubeMesh.GetIndices());
-	cube.colour = glm::vec3(0.0f, 0.0f, 1.0f);
+	dev.colour = glm::vec3(0.0f, 0.0f, 1.0f);
+	dev.albebo = Texture("resources/textures/treadplate1.jpg", GL_RGB);
 
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);

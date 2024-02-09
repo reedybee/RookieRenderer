@@ -15,6 +15,7 @@
 #include "camera/Camera.h"
 #include "player/Player.h"
 #include "mesh/mesh.h"
+#include "texture/Texture.h"
 
 class Model {
 public:
@@ -27,6 +28,10 @@ public:
 	glm::vec3 scale;
 	glm::vec3 rotation;
 	glm::vec3 colour;
+
+	Texture albebo;
+	Texture roughness;
+	Texture normal;
 
 	Mesh mesh;
 private:

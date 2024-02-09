@@ -35,6 +35,10 @@ Model::Model(Camera* camera, const char* vertexFilePath, const char* fragmentFil
 void Model::Draw(float aspect) {
 	shader.use();
 
+	shader.SetInt("albedoMap", 0);
+	shader.SetInt("roughnessMap", 1);
+	shader.SetInt("normalMap", 2);
+
 	glm::mat4 projection = camera->GetProjectionMatrix(aspect);
 
 	glm::mat4 view = camera->GetViewMatrix();
@@ -49,5 +53,8 @@ void Model::Draw(float aspect) {
 	shader.SetMatrix4("view", view);
 	shader.SetMatrix4("model", model);
 
+	albebo.Bind(GL_TEXTURE0);
+	//roughness.Bind(GL_TEXTURE1);
+	//normal.Bind(GL_TEXTURE2);
 	mesh.Draw();
 }

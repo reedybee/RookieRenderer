@@ -2,14 +2,19 @@
 
 in vec3 fragPos;
 in vec3 normal;
+in vec2 texCoord;
 
 uniform vec3 cameraPos;
 uniform vec3 lightPosition;
 uniform vec3 objectColour;
+uniform sampler2D albedoMap;
 
 out vec4 fragColour;
 
 void main() {
+	// textures
+	vec4 albedo = texture(albedoMap, texCoord);
+
 	// ambient 
 	float ambientStrength = 0.1;
 	vec3 ambient = ambientStrength * vec3(1.0);
@@ -28,5 +33,6 @@ void main() {
 	vec3 specular = specularStrength * spec * vec3(1.0);
 
 	vec3 result = (ambient + diffuse + specular) * objectColour;
-	fragColour = vec4(result, 1.0f);
+	//fragColour = vec4(result, 1.0f);
+	fragColour = albedo;
 }

@@ -14,6 +14,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "texture/Texture.h"
 #include "mesh/Mesh.h"
 
 Mesh::Mesh() {
@@ -38,6 +39,20 @@ Mesh::Mesh(const char* filepath) {
 		if (mesh->HasNormals()) {
 			vertex.Normal = glm::normalize(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
 		}
+		if (mesh->HasTextureCoords(0)) {
+			vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
+			vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
+
+			if (mesh->HasTangentsAndBitangents()) {
+				vertex.Tangent.x = mesh->mTangents[i].x;
+				vertex.Tangent.y = mesh->mTangents[i].y;
+				vertex.Tangent.z = mesh->mTangents[i].z;
+
+				vertex.Bitangent.x = mesh->mBitangents[i].x;
+				vertex.Bitangent.y = mesh->mBitangents[i].y;
+				vertex.Bitangent.z = mesh->mBitangents[i].z;
+			}
+		}
 		vertices.push_back(vertex);
 	}
 	for (int i = 0; i < mesh->mNumFaces; i++) {
@@ -46,7 +61,9 @@ Mesh::Mesh(const char* filepath) {
 			indices.push_back(face.mIndices[f]);
 		}
 	}
+
 	importer.FreeScene();
+	this->GenerateBuffers();
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
@@ -90,6 +107,9 @@ void Mesh::GenerateBuffers() {
 	// vertex normals
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+	// vertex texture coords
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 	// element buffer
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);

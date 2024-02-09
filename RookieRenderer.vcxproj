@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;C:\dev\Projects\C++\RookieRenderer\dependencies\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\Projects\C++\RookieRenderer\dependencies\stb_image;C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;C:\dev\Projects\C++\RookieRenderer\dependencies\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +140,7 @@
     <ClCompile Include="source\camera\camera.cpp" />
     <ClCompile Include="source\graphics\mesh\mesh.cpp" />
     <ClCompile Include="source\graphics\model\model.cpp" />
+    <ClCompile Include="source\graphics\texture\texture.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\player\player.cpp" />
     <ClCompile Include="source\graphics\shader\shader.cpp" />
@@ -518,9 +519,30 @@
     <ClInclude Include="dependencies\glm\vec3.hpp" />
     <ClInclude Include="dependencies\glm\vec4.hpp" />
     <ClInclude Include="dependencies\glm\vector_relational.hpp" />
+    <ClInclude Include="dependencies\stb_image\stb_connected_components.h" />
+    <ClInclude Include="dependencies\stb_image\stb_c_lexer.h" />
+    <ClInclude Include="dependencies\stb_image\stb_divide.h" />
+    <ClInclude Include="dependencies\stb_image\stb_ds.h" />
+    <ClInclude Include="dependencies\stb_image\stb_dxt.h" />
+    <ClInclude Include="dependencies\stb_image\stb_easy_font.h" />
+    <ClInclude Include="dependencies\stb_image\stb_herringbone_wang_tile.h" />
+    <ClInclude Include="dependencies\stb_image\stb_hexwave.h" />
+    <ClInclude Include="dependencies\stb_image\stb_image.h" />
+    <ClInclude Include="dependencies\stb_image\stb_image_resize2.h" />
+    <ClInclude Include="dependencies\stb_image\stb_image_write.h" />
+    <ClInclude Include="dependencies\stb_image\stb_include.h" />
+    <ClInclude Include="dependencies\stb_image\stb_leakcheck.h" />
+    <ClInclude Include="dependencies\stb_image\stb_perlin.h" />
+    <ClInclude Include="dependencies\stb_image\stb_rect_pack.h" />
+    <ClInclude Include="dependencies\stb_image\stb_sprintf.h" />
+    <ClInclude Include="dependencies\stb_image\stb_textedit.h" />
+    <ClInclude Include="dependencies\stb_image\stb_tilemap_editor.h" />
+    <ClInclude Include="dependencies\stb_image\stb_truetype.h" />
+    <ClInclude Include="dependencies\stb_image\stb_voxel_render.h" />
     <ClInclude Include="source\camera\Camera.h" />
     <ClInclude Include="source\graphics\mesh\Mesh.h" />
     <ClInclude Include="source\graphics\model\Model.h" />
+    <ClInclude Include="source\graphics\texture\Texture.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
   </ItemGroup>
@@ -689,6 +711,7 @@
     <None Include="dependencies\glm\gtx\vector_query.inl" />
     <None Include="dependencies\glm\gtx\wrap.inl" />
     <None Include="README.md" />
+    <None Include="resources\objects\devscene.mtl" />
     <None Include="resources\shaders\unlit\unlit-vertex.glsl" />
     <None Include="resources\shaders\unlit\unlitfragment.glsl" />
     <None Include="resources\shaders\unlit\unlitvertex.glsl" />
@@ -705,19 +728,25 @@
   <ItemGroup>
     <Object Include="resources\objects\cube.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
     <Object Include="resources\objects\devscene.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
     <Object Include="resources\objects\scale.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Object>
-    <Object Include="resource\objects\peen.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
     <Object Include="resources\objects\suzz.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\Face.JPG" />
+    <Image Include="resources\textures\happyface.png" />
+    <Image Include="resources\textures\treadplate1.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
