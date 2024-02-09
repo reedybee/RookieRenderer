@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	GLFWwindow* coreWindow = glfwCreateWindow(mode->width / 2, mode->height / 2, "RookieRenderer", NULL, NULL);
+	GLFWwindow* coreWindow = glfwCreateWindow(mode->width / 1.2, mode->height / 1.2, "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(coreWindow);
 	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
 	glfwSetCursorPosCallback(coreWindow, mouseCallback);
@@ -95,38 +95,33 @@ int main(int argc, char* argv[]) {
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	player = Player(coreWindow, glm::vec3(0.0f, 0.0f, 0.0f));
-
-	std::vector<glm::vec3> planeVertices = {
-		{ 0.5f,0.0f, 0.5f },
-		{ 0.5f,0.0f,-0.5f },
-		{-0.5f,0.0f, 0.5f },
-		{-0.5f,0.0f,-0.5f },
-	};
-	std::vector<unsigned int> planeIndices = {
-		0, 1, 2,
-		1, 2, 3,
-	};
+	player = Player(coreWindow, glm::vec3(0.0f, 0.0f, 5.0f));
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
+	Mesh devMesh = Mesh("resources/objects/devscene.obj");
+	Model dev = Model(player.camera, "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", devMesh.GetVertices(), devMesh.GetIndices());
+	dev.colour = glm::vec3(0.2f, 0.2f, 0.2f);
 
-	Mesh cubeMesh = Mesh("resource/objects/cube.obj");
-	Model cube = Model(player.camera, "resource/shaders/unlit/unlitvertex.glsl", "resource/shaders/unlit/unlitfragment.glsl", cubeMesh.GetVertices(), cubeMesh.GetIndices());
+	Mesh cubeMesh = Mesh("resources/objects/scale.obj");
+	Model cube = Model(player.camera, "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", cubeMesh.GetVertices(), cubeMesh.GetIndices());
 	cube.colour = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
+		// hides mouse for cleaning looking in game
 		if (mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
+		// draws objects to scene
 		cube.Draw(GetAspectRatio());
-
+		dev.Draw(GetAspectRatio());
+		// player movement
 		player.PollMovement(deltatime);
-
+		// swaps buffers and gets any event requests
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);
 
