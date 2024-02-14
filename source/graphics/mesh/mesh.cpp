@@ -17,18 +17,30 @@
 #include "texture/Texture.h"
 #include "mesh/Mesh.h"
 
-Mesh::Mesh() {
+Mesh::Mesh(const char* filepath, Camera* camera) {
 	this->vertices = std::vector<Vertex>();
 	this->indices = std::vector<unsigned int>();
+	this->filepath = filepath;
+	this->camera = camera;
+
+	this->scale = glm::vec3(1.0f);
+
+	LoadModel();
 }
 
-Mesh::Mesh(const char* filepath) {
+void Mesh::LoadModel() {
 	this->vertices = std::vector<Vertex>();
 	this->indices = std::vector<unsigned int>();
 
 	Assimp::Importer importer;
 
 	const aiScene* object = importer.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	if (!object || object->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !object->mRootNode)
+	{
+		std::cout << "Failed to load file " << filepath << "\n";
+		return;
+	}
 
 	// assuming its a single object
 	aiMesh* mesh = object->mMeshes[0];
@@ -66,19 +78,6 @@ Mesh::Mesh(const char* filepath) {
 	this->GenerateBuffers();
 }
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
-	this->vertices = vertices;
-	this->indices = indices;
-
-	GenerateBuffers();
-}
-
-void Mesh::SetData(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices) {
-	//this->vertices = vertices;
-	this->indices = indices;
-}
-
-
 std::vector<Vertex> Mesh::GetVertices() {
 	return vertices;
 }
@@ -87,7 +86,27 @@ std::vector<unsigned int> Mesh::GetIndices() {
 	return indices;
 }
 
-void Mesh::Draw() {
+void Mesh::Draw(float aspect) {
+	shader.use();
+
+	shader.SetInt("albedoMap", 0);
+	shader.SetInt("roughnessMap", 1);
+	shader.SetInt("normalMap", 2);
+
+	glm::mat4 projection = camera->GetProjectionMatrix(aspect);
+
+	glm::mat4 view = camera->GetViewMatrix();
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::scale(model, scale);
+	model = glm::translate(model, position);
+
+	shader.SetVector3("cameraPos", camera->position);
+	shader.SetVector3("lightPosition", camera->lightPosition);
+	shader.SetVector3("objectColour", colour);
+	shader.SetMatrix4("projection", projection);
+	shader.SetMatrix4("view", view);
+	shader.SetMatrix4("model", model);
+
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);

@@ -11,6 +11,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "shader/Shader.h"
+#include "camera/Camera.h"
+
 struct Vertex {
 	// position
 	glm::vec3 Position;
@@ -27,19 +30,29 @@ struct Vertex {
 
 class Mesh {
 public:
-	Mesh();
-	Mesh(const char* filepath);
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+	Mesh(const char* filepath, Camera* camera);
 
-	void SetData(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
-
-	void GenerateBuffers();
 
 	std::vector<Vertex> GetVertices();
 	std::vector<unsigned int> GetIndices();
 
-	void Draw();
+	void GenerateBuffers();
+
+	void Draw(float aspect);
+
+	glm::vec3 position;
+	glm::vec3 scale;
+	glm::vec3 rotation;
+	glm::vec3 colour;
+
+	Shader shader; 
 private:
+	void LoadModel();
+
+	Camera* camera;
+
+	const char* filepath;
+
 	std::vector<unsigned int> indices;
 	std::vector<Vertex> vertices;
 

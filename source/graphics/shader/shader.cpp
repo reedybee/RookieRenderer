@@ -22,6 +22,9 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 
 	std::string vertexCode;
 	std::ifstream vertexFile = std::ifstream(vertexShaderPath);
+	if (!vertexFile.good()) {
+		std::cout << "Failed to open file " << vertexShaderPath << "\n";
+	}
 	if (vertexFile.is_open()) {
 		while (std::getline(vertexFile, currentLine)) {
 			currentLine.append("\n");
@@ -37,6 +40,9 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 
 	std::string fragmentCode;
 	std::ifstream fragmentFile = std::ifstream(fragmentShaderPath);
+	if (!fragmentFile.good()) {
+		std::cout << "Failed to open file " << vertexShaderPath << "\n";
+	}
 	if (fragmentFile.is_open()) {
 		while (std::getline(fragmentFile, currentLine)) {
 			currentLine.append("\n");

@@ -36,9 +36,6 @@
     <ClCompile Include="source\player\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\model\model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\graphics\mesh\mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -927,9 +924,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\player\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\graphics\model\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dependencies\assimp\include\assimp\Compiler\poppack1.h">

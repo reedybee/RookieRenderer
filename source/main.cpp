@@ -16,7 +16,6 @@
 #include "camera/Camera.h"
 #include "player/Player.h"
 #include "mesh/mesh.h"
-#include "model/Model.h"
 #include "texture/Texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -101,14 +100,9 @@ int main(int argc, char* argv[]) {
 	player = Player(coreWindow, glm::vec3(0.0f, 0.0f, 5.0f));
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
-	Mesh devMesh = Mesh("resources/objects/devscene.obj");
-	Model dev = Model(player.camera, "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", devMesh.GetVertices(), devMesh.GetIndices());
-	dev.colour = glm::vec3(0.2f, 0.2f, 0.2f);
-
-	Mesh cubeMesh = Mesh("resources/objects/scale.obj");
-	Model cube = Model(player.camera, "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", cubeMesh.GetVertices(), cubeMesh.GetIndices());
-	dev.colour = glm::vec3(0.0f, 0.0f, 1.0f);
-	dev.albebo = Texture("resources/textures/treadplate1.jpg", GL_RGB);
+	Mesh devMesh = Mesh("resources/objects/devscene.obj", player.camera);
+	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
+	devMesh.colour = glm::vec3(0.2f, 0.2f, 0.2f);
 
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
@@ -121,8 +115,7 @@ int main(int argc, char* argv[]) {
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 		// draws objects to scene
-		cube.Draw(GetAspectRatio());
-		dev.Draw(GetAspectRatio());
+		devMesh.Draw(GetAspectRatio());
 		// player movement
 		player.PollMovement(deltatime);
 		// swaps buffers and gets any event requests
