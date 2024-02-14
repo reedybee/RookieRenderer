@@ -18,8 +18,6 @@
 #include "mesh/Mesh.h"
 
 Mesh::Mesh(const char* filepath, Camera* camera) {
-	this->vertices = std::vector<Vertex>();
-	this->indices = std::vector<unsigned int>();
 	this->filepath = filepath;
 	this->camera = camera;
 
@@ -29,9 +27,6 @@ Mesh::Mesh(const char* filepath, Camera* camera) {
 }
 
 void Mesh::LoadModel() {
-	this->vertices = std::vector<Vertex>();
-	this->indices = std::vector<unsigned int>();
-
 	Assimp::Importer importer;
 
 	const aiScene* object = importer.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -42,56 +37,57 @@ void Mesh::LoadModel() {
 		return;
 	}
 
-	// assuming its a single object
-	aiMesh* mesh = object->mMeshes[0];
+	for (unsigned int m = 0; m < object->mNumMeshes; m++) {
+		Submesh submesh;
+		aiMesh* mesh = object->mMeshes[m];
+		// gets each of the submeshes vertices
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+			Vertex vertex = Vertex();
+			vertex.Position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+			if (mesh->HasNormals()) {
+				vertex.Normal = glm::normalize(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+			}
+			// gets the submeshes texture coordinates if it contains them
+			if (mesh->HasTextureCoords(0)) {
+				vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
+				vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
 
-	for (int i = 0; i < mesh->mNumVertices; i++) {
-		Vertex vertex = Vertex();
-		vertex.Position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-		if (mesh->HasNormals()) {
-			vertex.Normal = glm::normalize(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+				if (mesh->HasTangentsAndBitangents()) {
+					vertex.Tangent.x = mesh->mTangents[i].x;
+					vertex.Tangent.y = mesh->mTangents[i].y;
+					vertex.Tangent.z = mesh->mTangents[i].z;
+
+					vertex.Bitangent.x = mesh->mBitangents[i].x;
+					vertex.Bitangent.y = mesh->mBitangents[i].y;
+					vertex.Bitangent.z = mesh->mBitangents[i].z;
+				}
+			}
+			submesh.vertices.push_back(vertex);
 		}
-		if (mesh->HasTextureCoords(0)) {
-			vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
-			vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
-
-			if (mesh->HasTangentsAndBitangents()) {
-				vertex.Tangent.x = mesh->mTangents[i].x;
-				vertex.Tangent.y = mesh->mTangents[i].y;
-				vertex.Tangent.z = mesh->mTangents[i].z;
-
-				vertex.Bitangent.x = mesh->mBitangents[i].x;
-				vertex.Bitangent.y = mesh->mBitangents[i].y;
-				vertex.Bitangent.z = mesh->mBitangents[i].z;
+		// gets the submeshes indices
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+			aiFace face = mesh->mFaces[i];
+			for (unsigned int f = 0; f < face.mNumIndices; f++) {
+				submesh.indices.push_back(face.mIndices[f]);
 			}
 		}
-		vertices.push_back(vertex);
-	}
-	for (int i = 0; i < mesh->mNumFaces; i++) {
-		aiFace face = mesh->mFaces[i];
-		for (int f = 0; f < face.mNumIndices; f++) {
-			indices.push_back(face.mIndices[f]);
+		// gets the submeshes material
+		if (mesh->mMaterialIndex >= 0) {
+			aiMaterial* material = object->mMaterials[mesh->mMaterialIndex];
+			aiString texturepath;
+			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texturepath) == aiReturn_SUCCESS) {
+				submesh.texture = Texture(texturepath.C_Str(), GL_RGB);
+				std::cout << "Loaded texture " << texturepath.C_Str() << "\n";
+			}
 		}
+		submesh.GenerateBuffers();
+		meshes.push_back(submesh);
 	}
-
 	importer.FreeScene();
-	this->GenerateBuffers();
-}
-
-std::vector<Vertex> Mesh::GetVertices() {
-	return vertices;
-}
-
-std::vector<unsigned int> Mesh::GetIndices() {
-	return indices;
 }
 
 void Mesh::Draw(float aspect) {
 	shader.use();
-
-	shader.SetInt("albedoMap", 0);
-	shader.SetInt("roughnessMap", 1);
-	shader.SetInt("normalMap", 2);
 
 	glm::mat4 projection = camera->GetProjectionMatrix(aspect);
 
@@ -107,12 +103,19 @@ void Mesh::Draw(float aspect) {
 	shader.SetMatrix4("view", view);
 	shader.SetMatrix4("model", model);
 
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, NULL);
-	glBindVertexArray(0);
+	for (int i = 0; i < meshes.size(); i++) {
+
+		shader.SetInt("albedoMap", 0);
+
+		meshes[i].texture.Bind(GL_TEXTURE0);
+	
+		glBindVertexArray(meshes[i].VAO);
+		glDrawElements(GL_TRIANGLES, (GLsizei)meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
+		glBindVertexArray(0);
+	}
 }
 
-void Mesh::GenerateBuffers() {
+void Submesh::GenerateBuffers() {
 	// create arrays
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
