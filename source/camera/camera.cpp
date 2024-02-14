@@ -17,7 +17,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
 	this->yaw = yaw;
 	this->pitch = pitch;
 	this->fov = 90.0f;
-	this->type = DEBUG;
+	this->type = CAMERA_TYPE_DEBUG;
 	UpdateCameraVectors();
 }
 

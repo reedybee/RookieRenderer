@@ -11,8 +11,8 @@
 #include "camera/Camera.h"
 
 enum CAMERA_TYPE {
-	FIRST_PERSON,
-	DEBUG,
+	CAMERA_TYPE_FIRST_PERSON,
+	CAMERA_TYPE_DEBUG,
 };
 
 class Camera {

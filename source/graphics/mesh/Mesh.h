@@ -39,12 +39,13 @@ struct Submesh {
 	unsigned int VAO, VBO, NBO, EBO;
 };
 
-
 class Mesh {
 public:
 	Mesh(const char* filepath, Camera* camera);
 
 	void Draw(float aspect);
+
+	std::vector<Submesh> GetSubmeshes();
 
 	glm::vec3 position;
 	glm::vec3 scale;
@@ -56,7 +57,7 @@ private:
 	void LoadModel();
 
 	Camera* camera;
-
+	bool ranOnce = false;
 	const char* filepath;
 
 	std::vector<Submesh> meshes;

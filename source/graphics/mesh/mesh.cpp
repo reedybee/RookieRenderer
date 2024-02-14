@@ -16,6 +16,7 @@
 
 #include "texture/Texture.h"
 #include "mesh/Mesh.h"
+#include "util/Util.h"
 
 Mesh::Mesh(const char* filepath, Camera* camera) {
 	this->filepath = filepath;
@@ -104,7 +105,6 @@ void Mesh::Draw(float aspect) {
 	shader.SetMatrix4("model", model);
 
 	for (int i = 0; i < meshes.size(); i++) {
-
 		shader.SetInt("albedoMap", 0);
 
 		meshes[i].texture.Bind(GL_TEXTURE0);
@@ -113,6 +113,10 @@ void Mesh::Draw(float aspect) {
 		glDrawElements(GL_TRIANGLES, (GLsizei)meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
 		glBindVertexArray(0);
 	}
+}
+
+std::vector<Submesh> Mesh::GetSubmeshes() {
+	return meshes;
 }
 
 void Submesh::GenerateBuffers() {

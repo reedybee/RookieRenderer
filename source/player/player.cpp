@@ -17,6 +17,7 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->mouseSensitivity = 0.1f;
 	this->window = window;
 	this->front = glm::vec3(0.0f, 0.0f, 1.0f);
+	this->jumped = false;
 }
 
 void Player::PollMovement(float deltatime) {
@@ -24,7 +25,7 @@ void Player::PollMovement(float deltatime) {
 	camera->position = this->position;
 	this->front = glm::normalize(glm::vec3(camera->front.x, 0, camera->front.z));
 
-	if (camera->type == DEBUG) {
+	if (camera->type == CAMERA_TYPE_DEBUG) {
 		if (glfwGetKey(window, GLFW_KEY_W)) {
 			position += camera->front * velocity;
 		}
@@ -44,7 +45,7 @@ void Player::PollMovement(float deltatime) {
 			position -= camera->worldUp * velocity;
 		}
 	}
-	if (camera->type == FIRST_PERSON) {
+	if (camera->type == CAMERA_TYPE_FIRST_PERSON) {
 		if (glfwGetKey(window, GLFW_KEY_W)) {
 			position += this->front * velocity;
 		}
@@ -57,8 +58,9 @@ void Player::PollMovement(float deltatime) {
 		if (glfwGetKey(window, GLFW_KEY_D)) {
 			position += camera->right * velocity;
 		}
-		if (glfwGetKey(window, GLFW_KEY_SPACE)) {
-			// jump
+		if (glfwGetKey(window, GLFW_KEY_SPACE) && !jumped) {
+			jumped = true;
+			std::cout << "player jump\n";
 		}
 	}
 }
@@ -83,4 +85,7 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 		// update Front, Right and Up Vectors using the updated Euler angles
 		camera->UpdateCameraVectors();
 	}
+}
+
+void Player::PollCollision() {
 }

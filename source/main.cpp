@@ -90,8 +90,8 @@ int main(int argc, char* argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 
-	player = Player(coreWindow, glm::vec3(0.0f, 0.0f, 5.0f));
-	player.camera->type = DEBUG;
+	player = Player(coreWindow, glm::vec3(0.0f, 2.0f, 0.0f));
+	player.camera->type = CAMERA_TYPE_DEBUG;
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 	Mesh devMesh = Mesh("resources/objects/devscene.obj", player.camera);
@@ -101,16 +101,18 @@ int main(int argc, char* argv[]) {
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 		// hides mouse for cleaner look in game
 		if (mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
 		// player movement
 		player.PollMovement(deltatime);
+		player.PollCollision();
 		// swaps buffers and gets any event requests
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);

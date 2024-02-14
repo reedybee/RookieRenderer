@@ -21,9 +21,13 @@ public:
 	
 	void PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
 
+	void PollCollision();
+
 	float movementSpeed;
 	float mouseSensitivity;
+
 private:
+	bool jumped;
 	glm::vec3 front;
 	GLFWwindow* window;
 };
