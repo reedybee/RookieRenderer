@@ -13,6 +13,7 @@
 
 #include "shader/Shader.h"
 #include "camera/Camera.h"
+#include "texture/Texture.h"
 
 struct Vertex {
 	// position
@@ -27,16 +28,21 @@ struct Vertex {
 	glm::vec3 Bitangent;
 };
 
+struct Submesh {
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+
+	Texture texture;
+
+	void GenerateBuffers();
+
+	unsigned int VAO, VBO, NBO, EBO;
+};
+
 
 class Mesh {
 public:
 	Mesh(const char* filepath, Camera* camera);
-
-
-	std::vector<Vertex> GetVertices();
-	std::vector<unsigned int> GetIndices();
-
-	void GenerateBuffers();
 
 	void Draw(float aspect);
 
@@ -53,9 +59,5 @@ private:
 
 	const char* filepath;
 
-	std::vector<unsigned int> indices;
-	std::vector<Vertex> vertices;
-
-	unsigned int VAO, VBO, NBO, EBO;
-
+	std::vector<Submesh> meshes;
 };

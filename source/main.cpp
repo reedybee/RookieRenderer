@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	GLFWwindow* coreWindow = glfwCreateWindow(mode->width / 1.2, mode->height / 1.2, "RookieRenderer", NULL, NULL);
+	GLFWwindow* coreWindow = glfwCreateWindow(mode->width / 1.2f, mode->height / 1.2f, "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(coreWindow);
 	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
 	glfwSetCursorPosCallback(coreWindow, mouseCallback);

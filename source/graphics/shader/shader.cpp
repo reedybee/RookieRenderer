@@ -14,7 +14,7 @@
 #include "Shader.h"
 
 Shader::Shader() {
-	
+	program = NULL;
 }
 
 Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
