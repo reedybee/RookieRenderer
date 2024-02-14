@@ -91,6 +91,7 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 
 	player = Player(coreWindow, glm::vec3(0.0f, 0.0f, 5.0f));
+	player.camera->type = DEBUG;
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 	Mesh devMesh = Mesh("resources/objects/devscene.obj", player.camera);
@@ -106,7 +107,6 @@ int main(int argc, char* argv[]) {
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
 		// player movement

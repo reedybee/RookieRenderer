@@ -141,6 +141,7 @@
     <ClCompile Include="source\graphics\mesh\mesh.cpp" />
     <ClCompile Include="source\graphics\texture\texture.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\physics\physics.cpp" />
     <ClCompile Include="source\player\player.cpp" />
     <ClCompile Include="source\graphics\shader\shader.cpp" />
   </ItemGroup>
@@ -541,6 +542,7 @@
     <ClInclude Include="source\camera\Camera.h" />
     <ClInclude Include="source\graphics\mesh\Mesh.h" />
     <ClInclude Include="source\graphics\texture\Texture.h" />
+    <ClInclude Include="source\physics\Physics.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
     <ClInclude Include="source\util\util.h" />
@@ -725,19 +727,7 @@
     <Text Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Object Include="resources\objects\cube.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Object>
     <Object Include="resources\objects\devscene.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Object>
-    <Object Include="resources\objects\scale.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Object>
-    <Object Include="resources\objects\suzz.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>

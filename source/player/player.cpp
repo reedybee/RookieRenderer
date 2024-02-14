@@ -16,6 +16,7 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->movementSpeed = 4.0f;
 	this->mouseSensitivity = 0.1f;
 	this->window = window;
+	this->front = glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
 void Player::PollMovement(float deltatime) {
