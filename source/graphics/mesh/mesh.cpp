@@ -77,7 +77,7 @@ void Mesh::LoadModel() {
 			aiString texturepath;
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texturepath) == aiReturn_SUCCESS) {
 				submesh.texture = Texture(texturepath.C_Str(), GL_RGB);
-				std::cout << "Loaded texture " << texturepath.C_Str() << "\n";
+				std::cout << "Loaded texture from " << texturepath.C_Str() << "\n";
 			}
 		}
 		submesh.GenerateBuffers();

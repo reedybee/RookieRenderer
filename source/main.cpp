@@ -21,23 +21,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
 
-int windowWidth;
-int windowHeight;
+#include "util/util.h"
 
-float lasttime = (float)glfwGetTime();
-float deltatime = (float)glfwGetTime();
-float lastFrame = 0.0f;
-float framerate = 144;
 float lastX = windowWidth / 2.0f;
 float lastY = windowHeight / 2.0f;
 bool firstMouse = true;
 
 Player player;
 bool mouseHidden = false;
-
-float GetAspectRatio() {
-	return (float)windowWidth / (float)windowHeight;
-}
 
 void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_E && action == GLFW_RELEASE) {
@@ -76,6 +67,7 @@ void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 }
 
 int main(int argc, char* argv[]) {
+	std::cout << "Application Started \n\n";
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -97,6 +89,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	glEnable(GL_DEPTH_TEST);
+
 	player = Player(coreWindow, glm::vec3(0.0f, 0.0f, 5.0f));
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
@@ -108,7 +101,7 @@ int main(int argc, char* argv[]) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		// hides mouse for cleaning looking in game
+		// hides mouse for cleaner look in game
 		if (mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (!mouseHidden)
@@ -122,16 +115,7 @@ int main(int argc, char* argv[]) {
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);
 
-		// calculates deltatime
-		float currentFrame = (float)glfwGetTime();
-		deltatime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
-		// waits for amount of frames as defined in framerate
-		while (glfwGetTime() < lasttime + 1.0 / framerate) {
-			std::this_thread::yield();
-		}
-		lasttime += 1.0f / framerate;
+		WaitForFramesElapsed(144);
 	}
 	glfwTerminate();
 }

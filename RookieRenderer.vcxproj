@@ -543,6 +543,7 @@
     <ClInclude Include="source\graphics\texture\Texture.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
+    <ClInclude Include="source\util\util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
