@@ -45,6 +45,8 @@ public:
 
 	void Draw(float aspect);
 
+	float GetNearestDistance(glm::vec3 position, glm::vec3& normal);
+
 	std::vector<Submesh> GetSubmeshes();
 
 	glm::vec3 position;
