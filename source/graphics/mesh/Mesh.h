@@ -44,8 +44,11 @@ public:
 	Mesh(const char* filepath, Camera* camera);
 
 	void Draw(float aspect);
-
-	float GetNearestDistance(glm::vec3 position, glm::vec3& normal);
+	// returns the distances to each triangle in the mesh,
+	// if the threshold value is included ignores any triangles outside the threshold
+	std::vector<float> GetDistances(glm::vec3 position, glm::vec3& normal);
+	// returns the number of triangles the make up the mesh
+	unsigned int GetNumTriangles();
 
 	std::vector<Submesh> GetSubmeshes();
 

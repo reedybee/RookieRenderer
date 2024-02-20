@@ -89,7 +89,6 @@ int main(int argc, char* argv[]) {
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	player = Player(coreWindow, glm::vec3(0.0f, 2.0f, 0.0f));
 	player.camera->type = CAMERA_TYPE_DEBUG;
@@ -100,8 +99,9 @@ int main(int argc, char* argv[]) {
 	devMesh.colour = glm::vec3(0.2f, 0.2f, 0.2f);
 
 	glm::vec3 normal = glm::vec3(0.0f);
+	devMesh.GetNumTriangles();
 
-	devMesh.GetNearestDistance(player.position, normal);
+	devMesh.GetDistances(player.position, normal);
 
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
@@ -113,8 +113,7 @@ int main(int argc, char* argv[]) {
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		
-		//devMesh.GetNearestDistance(player.position, normal);
-		std::cout << devMesh.GetNearestDistance(player.position, normal) << " " << normal.x << " " << normal.y << " " << normal.z << "\n";
+		
 		
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
