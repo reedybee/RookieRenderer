@@ -11,21 +11,23 @@
 #include "mesh/Mesh.h"
 #include "physics/Physics.h"
 
-PhysicsManager::PhysicsManager(Player* player) {
-	this->player = player;
+PhysicsManager::PhysicsManager() {
 }
 
 void PhysicsManager::AddMesh(Mesh mesh) {
 	meshes.push_back(mesh);
 }
 
-std::vector<float> PhysicsManager::PollDistances() {
+std::vector<PhysicsTriangle> PhysicsManager::PollDistances(glm::vec3 position) {
 	glm::vec3 normal = glm::vec3(0.0f);
-	std::vector<float> distances;
+	std::vector<PhysicsTriangle> distances;
 	for (Mesh mesh : meshes) {
-		std::vector<float> meshDistances = mesh.GetDistances(player->position, normal);
+		std::vector<float> meshDistances = mesh.GetDistances(position, normal);
 		for (float distance : meshDistances) {
-			distances.push_back(distance);
+			PhysicsTriangle tri = PhysicsTriangle();
+			tri.distance = distance;
+			tri.normal = normal;
+			distances.push_back(tri);
 		}
 	}
 	return distances;

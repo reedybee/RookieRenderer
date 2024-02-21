@@ -10,15 +10,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "mesh/Mesh.h"
-#include "player/Player.h"
+
+struct PhysicsTriangle {
+	float distance;
+	glm::vec3 normal;
+};
 
 struct PhysicsManager {
 public:
-	PhysicsManager(Player* player);
+	PhysicsManager();
 
 	void AddMesh(Mesh mesh);
-	std::vector<float> PollDistances();
+	//returns an array of each triangles distances and normal
+	std::vector<PhysicsTriangle> PollDistances(glm::vec3 position);
 private:
 	std::vector<Mesh> meshes;
-	Player* player;
 };

@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "camera/Camera.h"
+#include "physics/Physics.h"
 
 class Player {
 public:
@@ -21,13 +22,16 @@ public:
 	
 	void PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
 
-	void PollCollision();
+	void PollCollision(PhysicsManager* physicsManager);
 
 	float movementSpeed;
 	float mouseSensitivity;
 
 private:
+	void ResolveCollision(glm::vec3 normal);
+
 	bool jumped;
 	glm::vec3 front;
 	GLFWwindow* window;
+	float collisionThreshold;
 };

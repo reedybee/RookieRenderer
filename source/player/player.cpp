@@ -8,6 +8,7 @@
 
 #include "camera/Camera.h"
 #include "player/Player.h"
+#include "physics/Physics.h"
 
 Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->position = position;
@@ -18,6 +19,7 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->window = window;
 	this->front = glm::vec3(0.0f, 0.0f, 1.0f);
 	this->jumped = false;
+	this->collisionThreshold = 10.0f;
 }
 
 void Player::PollMovement(float deltatime) {
@@ -87,5 +89,17 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 	}
 }
 
-void Player::PollCollision() {
+void Player::PollCollision(PhysicsManager* physicsManager) {
+	std::vector<PhysicsTriangle> triangles = physicsManager->PollDistances(this->position);
+	for (PhysicsTriangle triangle : triangles) {
+		if (triangle.distance > collisionThreshold)
+			break;
+		ResolveCollision(triangle.normal);
+		std::cout << triangle.distance << "\n";
+	}
+}
+
+void Player::ResolveCollision(glm::vec3 normal) {
+	this->position -= normal;
+	std::cout << normal.x << " " << normal.y << " " << normal.y << "\n";
 }

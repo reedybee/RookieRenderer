@@ -29,7 +29,7 @@ float lastY = windowHeight / 2.0f;
 bool firstMouse = true;
 
 Player player;
-PhysicsManager physicsManager = PhysicsManager(&player);
+PhysicsManager physicsManager = PhysicsManager();
 bool mouseHidden = false;
 
 void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -102,6 +102,8 @@ int main(int argc, char* argv[]) {
 
 	physicsManager.AddMesh(devMesh);
 
+	std::vector<PhysicsTriangle> triangles;
+
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -112,13 +114,12 @@ int main(int argc, char* argv[]) {
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		
-		physicsManager.PollDistances();
-		
+		player.PollCollision(&physicsManager);
+
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
 		// player movement
 		player.PollMovement(deltatime);
-		player.PollCollision();
 		// swaps buffers and gets any event requests
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);
