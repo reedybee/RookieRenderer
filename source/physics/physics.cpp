@@ -13,6 +13,7 @@
 #include "util/util.h"
 
 PhysicsManager::PhysicsManager() {
+	gravity = 9.8f;
 }
 
 void PhysicsManager::AddMesh(Mesh mesh) {

@@ -14,6 +14,7 @@ class Player {
 public:
 	glm::vec3 position;
 	glm::vec3 rotation;
+	glm::vec3 velocity;
 	Camera* camera;
 
 	Player(GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
@@ -22,14 +23,18 @@ public:
 	
 	void PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
 
-	void PollCollision(PhysicsManager* physicsManager);
+	void PollCollision(PhysicsManager* physicsManager, float deltatime);
+
 
 	float movementSpeed;
 	float mouseSensitivity;
 
+	bool noclip;
+
 private:
 	void ResolveCollision(DistTriangle triangle);
 
+	bool grounded;
 	bool jumped;
 	glm::vec3 front;
 	GLFWwindow* window;

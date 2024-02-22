@@ -20,7 +20,9 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->window = window;
 	this->front = glm::vec3(0.0f, 0.0f, 1.0f);
 	this->jumped = false;
-	this->collisionThreshold = 0.2f;
+	this->collisionThreshold = 0.3f;
+	this->noclip = false;
+	this->velocity = glm::vec3(0.0f);
 }
 
 void Player::PollMovement(float deltatime) {
@@ -61,8 +63,9 @@ void Player::PollMovement(float deltatime) {
 		if (glfwGetKey(window, GLFW_KEY_D)) {
 			position += camera->right * velocity;
 		}
-		if (glfwGetKey(window, GLFW_KEY_SPACE) && !jumped) {
-			jumped = true;
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && grounded) {
+			grounded = false;
+			this->velocity += glm::vec3(0.0f, 10.0f, 0.0f);
 			std::cout << "player jump\n";
 		}
 	}
@@ -90,11 +93,22 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 	}
 }
 
-void Player::PollCollision(PhysicsManager* physicsManager) {
-	std::vector<DistTriangle> triangles = physicsManager->PollDistances(this->position);
-	for (DistTriangle triangle : triangles) {
-		if (triangle.distance < collisionThreshold) {
-			ResolveCollision(triangle);
+void Player::PollCollision(PhysicsManager* physicsManager, float deltatime) {
+	if (!noclip) {
+		this->velocity.y -= physicsManager->gravity * deltatime;
+		this->position += velocity * deltatime;
+		std::vector<DistTriangle> triangles = physicsManager->PollDistances(this->position);
+		for (DistTriangle triangle : triangles) {
+			if (triangle.distance < collisionThreshold) {
+				ResolveCollision(triangle);
+				float groundDot = glm::dot(triangle.normal, this->camera->worldUp);
+				//velocity = glm::reflect(velocity, triangle.normal); // leaving here cause funny
+				if (groundDot > 0.80) {
+					velocity = glm::vec3(0.0f);
+					std::cout << "Grounded\n";
+					grounded = true;
+				}
+			}
 		}
 	}
 }
@@ -103,5 +117,5 @@ void Player::ResolveCollision(DistTriangle triangle) {
 	//std::cout << triangle.normal.x << " " << triangle.normal.y << " " << triangle.normal.z << "\n";
 	float depth = collisionThreshold - triangle.distance;
 	this->position += triangle.normal * glm::vec3(depth);
-	std::cout << depth << "\n";
+	//std::cout << depth << "\n";
 }
