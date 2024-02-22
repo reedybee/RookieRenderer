@@ -66,7 +66,7 @@ void Player::PollMovement(float deltatime) {
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && grounded) {
 			grounded = false;
-			this->velocity += glm::vec3(0.0f, 10.0f, 0.0f);
+			this->velocity += glm::vec3(0.0f, 5.0f, 0.0f);
 			//std::cout << "player jump\n";
 		}
 	}
