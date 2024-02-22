@@ -28,7 +28,7 @@ public:
 	float mouseSensitivity;
 
 private:
-	void ResolveCollision(glm::vec3 normal);
+	void ResolveCollision(DistTriangle triangle);
 
 	bool jumped;
 	glm::vec3 front;

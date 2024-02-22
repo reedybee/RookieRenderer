@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
 
 	physicsManager.AddMesh(devMesh);
 
-	std::vector<PhysicsTriangle> triangles;
+	std::vector<DistTriangle> triangles;
 
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);

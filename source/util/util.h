@@ -27,6 +27,11 @@ static void WaitForFramesElapsed(int maxFramerate) {
 	lasttime += 1.0f / maxFramerate;
 }
 
+struct DistTriangle {
+	float distance;
+	glm::vec3 normal;
+};
+
 static float dot2(glm::vec3 a) {
 	return glm::dot(a, a);
 }

@@ -14,6 +14,7 @@
 #include "shader/Shader.h"
 #include "camera/Camera.h"
 #include "texture/Texture.h"
+#include "util/util.h"
 
 struct Vertex {
 	// position
@@ -46,7 +47,7 @@ public:
 	void Draw(float aspect);
 	// returns the distances to each triangle in the mesh,
 	// if the threshold value is included ignores any triangles outside the threshold
-	std::vector<float> GetDistances(glm::vec3 position, glm::vec3& normal);
+	std::vector<DistTriangle> GetDistances(glm::vec3 position);
 	// returns the number of triangles the make up the mesh
 	unsigned int GetNumTriangles();
 

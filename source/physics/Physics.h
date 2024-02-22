@@ -10,11 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "mesh/Mesh.h"
-
-struct PhysicsTriangle {
-	float distance;
-	glm::vec3 normal;
-};
+#include "util/util.h"
 
 struct PhysicsManager {
 public:
@@ -22,7 +18,7 @@ public:
 
 	void AddMesh(Mesh mesh);
 	//returns an array of each triangles distances and normal
-	std::vector<PhysicsTriangle> PollDistances(glm::vec3 position);
+	std::vector<DistTriangle> PollDistances(glm::vec3 position);
 private:
 	std::vector<Mesh> meshes;
 };

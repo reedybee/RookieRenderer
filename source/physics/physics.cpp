@@ -10,6 +10,7 @@
 
 #include "mesh/Mesh.h"
 #include "physics/Physics.h"
+#include "util/util.h"
 
 PhysicsManager::PhysicsManager() {
 }
@@ -18,15 +19,14 @@ void PhysicsManager::AddMesh(Mesh mesh) {
 	meshes.push_back(mesh);
 }
 
-std::vector<PhysicsTriangle> PhysicsManager::PollDistances(glm::vec3 position) {
-	glm::vec3 normal = glm::vec3(0.0f);
-	std::vector<PhysicsTriangle> distances;
+std::vector<DistTriangle> PhysicsManager::PollDistances(glm::vec3 position) {
+	std::vector<DistTriangle> distances;
 	for (Mesh mesh : meshes) {
-		std::vector<float> meshDistances = mesh.GetDistances(position, normal);
-		for (float distance : meshDistances) {
-			PhysicsTriangle tri = PhysicsTriangle();
-			tri.distance = distance;
-			tri.normal = normal;
+		std::vector<DistTriangle> meshDistances = mesh.GetDistances(position);
+		for (DistTriangle distance : meshDistances) {
+			DistTriangle tri = DistTriangle();
+			tri.distance = distance.distance;
+			tri.normal = distance.normal;
 			distances.push_back(tri);
 		}
 	}

@@ -115,11 +115,12 @@ void Mesh::Draw(float aspect) {
 	}
 }
 
-std::vector<float> Mesh::GetDistances(glm::vec3 position, glm::vec3& normal) {
+std::vector<DistTriangle> Mesh::GetDistances(glm::vec3 position) {
 	//float lowest = std::numeric_limits<float>::max();
-	std::vector<float> distances = std::vector<float>();
+	std::vector<DistTriangle> triangles = std::vector<DistTriangle>();
+	DistTriangle triangle = DistTriangle();
 	for (int s = 0; s < meshes.size(); s++) {
-		for (int i = 0; i < meshes[s].vertices.size(); i+=3) {
+		for (int i = 0; i < meshes[s].vertices.size(); i+=3) { 
 			glm::vec3 v1 = meshes[s].vertices[i].Position;
 			glm::vec3 v2 = meshes[s].vertices[i+1].Position;
 			glm::vec3 v3 = meshes[s].vertices[i+2].Position;
@@ -135,10 +136,12 @@ std::vector<float> Mesh::GetDistances(glm::vec3 position, glm::vec3& normal) {
 				normal = n;
 			}
 			*/
-			distances.push_back(current);
+			triangle.distance = current;
+			triangle.normal = n;
+			triangles.push_back(triangle);
 		}
 	}
-	return distances;
+	return triangles;
 }
 
 unsigned int Mesh::GetNumTriangles() {
