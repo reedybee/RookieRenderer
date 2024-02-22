@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 
-	player = Player(coreWindow, glm::vec3(0.0f, 3.0f, 0.0f));
+	player = Player(coreWindow, glm::vec3(0.0f, 10.0f, 0.0f));
 	player.camera->type = CAMERA_TYPE_FIRST_PERSON;
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
@@ -113,13 +113,15 @@ int main(int argc, char* argv[]) {
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		
 		//std::cout << player.position.x << " " << player.position.y << " " << player.position.z << "\n";
+		// player movement
+		player.PollMovement(deltatime);
+
 		player.PollCollision(&physicsManager, deltatime);
 
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
-		// player movement
-		player.PollMovement(deltatime);
 		// swaps buffers and gets any event requests
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);

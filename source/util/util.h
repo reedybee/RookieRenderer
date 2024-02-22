@@ -21,10 +21,10 @@ static void WaitForFramesElapsed(int maxFramerate) {
 	deltatime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 	// pauses execution until framerate elapsed
-	while (glfwGetTime() < lasttime + 1.0 / maxFramerate) {
-		std::this_thread::yield();
+	/*while (glfwGetTime() < lasttime + 1.0 / maxFramerate) {
+		//std::this_thread::yield();
 	}
-	lasttime += 1.0f / maxFramerate;
+	lasttime += 1.0f / maxFramerate;*/
 }
 
 struct DistTriangle {
@@ -35,6 +35,11 @@ struct DistTriangle {
 static float dot2(glm::vec3 a) {
 	return glm::dot(a, a);
 }
+
+static void DisplayVec3(glm::vec3 vector) {
+	std::cout << vector.x << " " << vector.y << " " << vector.z << "\n";
+}
+
 // returns the signed distance to the triangle specified
 // thanks to https://iquilezles.org/articles/distfunctions/
 static float sdfTriangle(glm::vec3 position, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) {

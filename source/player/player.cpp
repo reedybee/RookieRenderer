@@ -15,7 +15,7 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->position = position;
 	rotation = glm::vec3(0.0f);
 	camera = new Camera(glm::vec3(position.x, position.y, position.z));
-	this->movementSpeed = 4.0f;
+	this->movementSpeed = 10.0f;
 	this->mouseSensitivity = 0.1f;
 	this->window = window;
 	this->front = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -23,6 +23,7 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->collisionThreshold = 0.3f;
 	this->noclip = false;
 	this->velocity = glm::vec3(0.0f);
+	this->grounded = true;
 }
 
 void Player::PollMovement(float deltatime) {
@@ -66,7 +67,7 @@ void Player::PollMovement(float deltatime) {
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && grounded) {
 			grounded = false;
 			this->velocity += glm::vec3(0.0f, 10.0f, 0.0f);
-			std::cout << "player jump\n";
+			//std::cout << "player jump\n";
 		}
 	}
 }
@@ -100,22 +101,32 @@ void Player::PollCollision(PhysicsManager* physicsManager, float deltatime) {
 		std::vector<DistTriangle> triangles = physicsManager->PollDistances(this->position);
 		for (DistTriangle triangle : triangles) {
 			if (triangle.distance < collisionThreshold) {
-				ResolveCollision(triangle);
+				ResolveCollision(triangle, deltatime);
 				float groundDot = glm::dot(triangle.normal, this->camera->worldUp);
 				//velocity = glm::reflect(velocity, triangle.normal); // leaving here cause funny
-				if (groundDot > 0.80) {
-					velocity = glm::vec3(0.0f);
-					std::cout << "Grounded\n";
+				if (groundDot > 0.70 && velocity.y <= 0.0f) {
 					grounded = true;
+					//std::cout << groundDot << " " << velocity.y << "\n";
+					velocity.y = 0.0f;
+				} else {
+					grounded = false;
 				}
 			}
 		}
 	}
 }
 
-void Player::ResolveCollision(DistTriangle triangle) {
+void Player::ResolveCollision(DistTriangle triangle, float deltatime) {
 	//std::cout << triangle.normal.x << " " << triangle.normal.y << " " << triangle.normal.z << "\n";
 	float depth = collisionThreshold - triangle.distance;
-	this->position += triangle.normal * glm::vec3(depth);
+	glm::vec3 targetPosition = triangle.normal * glm::vec3(depth);
+
+	// todo: recheck this, sometimes the target position is a NAN, 
+	// this just ignores it for now maybe?
+	if (isnan(targetPosition.x) || isnan(targetPosition.y) || isnan(targetPosition.z)) {
+		std::cout << "Ignored NAN.\n";
+		return;
+	}
+	this->position += targetPosition;
 	//std::cout << depth << "\n";
 }

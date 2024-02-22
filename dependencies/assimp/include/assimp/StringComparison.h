@@ -208,7 +208,7 @@ inline int ASSIMP_strincmp(const char *s1, const char *s2, unsigned int n) {
 // -------------------------------------------------------------------------------
 /** @brief Evaluates an integer power
  *
- * todo: move somewhere where it fits better in than here
+ * 
  */
 inline unsigned int integer_pow(unsigned int base, unsigned int power) {
     unsigned int res = 1;

@@ -32,7 +32,7 @@ public:
 	bool noclip;
 
 private:
-	void ResolveCollision(DistTriangle triangle);
+	void ResolveCollision(DistTriangle triangle, float deltatime);
 
 	bool grounded;
 	bool jumped;
