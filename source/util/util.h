@@ -21,10 +21,10 @@ static void WaitForFramesElapsed(int maxFramerate) {
 	deltatime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 	// pauses execution until framerate elapsed
-	/*while (glfwGetTime() < lasttime + 1.0 / maxFramerate) {
-		//std::this_thread::yield();
+	while (glfwGetTime() < lasttime + 1.0 / maxFramerate) {
+		std::this_thread::yield();
 	}
-	lasttime += 1.0f / maxFramerate;*/
+	lasttime += 1.0f / maxFramerate;
 }
 
 struct DistTriangle {

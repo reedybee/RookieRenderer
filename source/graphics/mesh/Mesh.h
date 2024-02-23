@@ -42,6 +42,7 @@ struct Submesh {
 
 class Mesh {
 public:
+	Mesh();
 	Mesh(const char* filepath, Camera* camera);
 
 	void Draw(float aspect);

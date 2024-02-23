@@ -18,6 +18,10 @@
 #include "mesh/Mesh.h"
 #include "util/Util.h"
 
+Mesh::Mesh() {
+
+}
+
 Mesh::Mesh(const char* filepath, Camera* camera) {
 	this->filepath = filepath;
 	this->camera = camera;
@@ -124,12 +128,16 @@ std::vector<DistTriangle> Mesh::GetDistances(glm::vec3 position) {
 			glm::vec3 v1 = meshes[s].vertices[i].Position;
 			glm::vec3 v2 = meshes[s].vertices[i+1].Position;
 			glm::vec3 v3 = meshes[s].vertices[i+2].Position;
+
+			glm::vec3 s1 = v1 * this->scale + this->position;
+			glm::vec3 s2 = v2 * this->scale + this->position;
+			glm::vec3 s3 = v3 * this->scale + this->position;
 			
 			glm::vec3 n1 = meshes[s].vertices[i].Normal;
 			glm::vec3 n2 = meshes[s].vertices[i+1].Normal;
 			glm::vec3 n3 = meshes[s].vertices[i+2].Normal;
 			glm::vec3 n = glm::normalize(n1 + n2 + n3);
-			float current = sdfTriangle(position + glm::vec3(0.0f, -2.0f, 0.0f), v1, v2, v3);
+			float current = sdfTriangle(position + glm::vec3(0.0f, -2.0f, 0.0f), s1, s2, s3);
 			/*
 			if (current < lowest) {
 				lowest = current;

@@ -18,6 +18,7 @@
 #include "mesh/mesh.h"
 #include "texture/Texture.h"
 #include "physics/Physics.h"
+#include "sprite/Sprite.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
@@ -97,12 +98,15 @@ int main(int argc, char* argv[]) {
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 	Mesh devMesh = Mesh("resources/objects/devscene.obj", player.camera);
+	devMesh.position = glm::vec3(0.0f, -2.5f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	devMesh.colour = glm::vec3(0.2f, 0.2f, 0.2f);
 
 	physicsManager.AddMesh(devMesh);
-
+	
 	std::vector<DistTriangle> triangles;
+
+	Sprite sprite = Sprite(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 3.0f, 1.0f), true, player.camera);
 
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
@@ -114,17 +118,27 @@ int main(int argc, char* argv[]) {
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		
-		//std::cout << player.position.x << " " << player.position.y << " " << player.position.z << "\n";
-		// player movement
-		player.PollMovement(deltatime);
+		sprite.rotation = glm::vec3(glfwGetTime(), 0.0f, 0.0f);
 
-		player.PollCollision(&physicsManager, deltatime);
+		std::cout << "Player: ";
+		DisplayVec3(player.position);
+		std::cout << "Camera: ";
+		DisplayVec3(player.camera->position);
 
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
+
+		sprite.Draw(GetAspectRatio());
 		// swaps buffers and gets any event requests
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);
+		glfwSwapInterval(1);
+
+		//std::cout << player.position.x << " " << player.position.y << " " << player.position.z << "\n";
+		// player movement
+		player.PollMovement(deltatime);
+		// check for collisions
+		player.PollCollision(&physicsManager, deltatime);
 
 		WaitForFramesElapsed(144);
 	}

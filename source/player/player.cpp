@@ -19,8 +19,9 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->mouseSensitivity = 0.1f;
 	this->window = window;
 	this->front = glm::vec3(0.0f, 0.0f, 1.0f);
+	this->cameraOffset = glm::vec3(0.0f, 2.0f, 0.0f);
 	this->jumped = false;
-	this->collisionThreshold = 0.3f;
+	this->collisionThreshold = 0.5f;
 	this->noclip = false;
 	this->velocity = glm::vec3(0.0f);
 	this->grounded = true;
@@ -28,7 +29,7 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 
 void Player::PollMovement(float deltatime) {
 	float velocity = deltatime * movementSpeed;
-	camera->position = this->position;
+	camera->position = this->position + cameraOffset;
 	this->front = glm::normalize(glm::vec3(camera->front.x, 0, camera->front.z));
 
 	if (camera->type == CAMERA_TYPE_DEBUG) {

@@ -37,6 +37,7 @@ private:
 	bool grounded;
 	bool jumped;
 	glm::vec3 front;
+	glm::vec3 cameraOffset;
 	GLFWwindow* window;
 	float collisionThreshold;
 };
