@@ -10,6 +10,11 @@
 #include "camera/Camera.h"
 #include "physics/Physics.h"
 
+enum collisionType {
+	VERTICAL,
+	SLANTED,
+};
+
 class Player {
 public:
 	glm::vec3 position;
@@ -17,13 +22,13 @@ public:
 	glm::vec3 velocity;
 	Camera* camera;
 
-	Player(GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
+	Player(PhysicsManager* physicsManager = nullptr, GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
 	// Executes any movement calls
 	void PollMovement(float deltatime);
 	
 	void PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
 
-	void PollCollision(PhysicsManager* physicsManager, float deltatime);
+	void PollCollision(float deltatime);
 
 
 	float movementSpeed;
@@ -40,4 +45,5 @@ private:
 	glm::vec3 cameraOffset;
 	GLFWwindow* window;
 	float collisionThreshold;
+	PhysicsManager* physicsManager;
 };

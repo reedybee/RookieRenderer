@@ -11,7 +11,7 @@
 #include "physics/Physics.h"
 #include "util/util.h"
 
-Player::Player(GLFWwindow* window, glm::vec3 position) {
+Player::Player(PhysicsManager* physicsManager, GLFWwindow* window, glm::vec3 position) {
 	this->position = position;
 	rotation = glm::vec3(0.0f);
 	camera = new Camera(glm::vec3(position.x, position.y, position.z));
@@ -24,7 +24,8 @@ Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->collisionThreshold = 0.5f;
 	this->noclip = false;
 	this->velocity = glm::vec3(0.0f);
-	this->grounded = true;
+	this->grounded = false;
+	this->physicsManager = physicsManager;
 }
 
 void Player::PollMovement(float deltatime) {
@@ -67,8 +68,8 @@ void Player::PollMovement(float deltatime) {
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && grounded) {
 			grounded = false;
-			this->velocity += glm::vec3(0.0f, 5.0f, 0.0f);
-			//std::cout << "player jump\n";
+			this->velocity += glm::vec3(0.0f, 10.0f, 0.0f);
+			std::cout << "player jump\n";
 		}
 	}
 }
@@ -95,33 +96,43 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 	}
 }
 
-void Player::PollCollision(PhysicsManager* physicsManager, float deltatime) {
+void Player::PollCollision(float deltatime) {
 	if (!noclip) {
-		this->velocity.y -= physicsManager->gravity * deltatime;
-		this->position += velocity * deltatime;
 		std::vector<DistTriangle> triangles = physicsManager->PollDistances(this->position);
 		for (DistTriangle triangle : triangles) {
 			if (triangle.distance < collisionThreshold) {
 				ResolveCollision(triangle, deltatime);
 				float groundDot = glm::dot(triangle.normal, this->camera->worldUp);
 				//velocity = glm::reflect(velocity, triangle.normal); // leaving here cause funny
-				if (groundDot > 0.70 && velocity.y <= 0.0f) {
+				if (groundDot > 0.70f) {
 					grounded = true;
-					//std::cout << groundDot << " " << velocity.y << "\n";
 					velocity.y = 0.0f;
-				} else {
+					std::cout << "Grounded\n";
+				}
+				else {
 					grounded = false;
 				}
 			}
+		}
+		if (!grounded) {
+			this->velocity.y -= physicsManager->gravity * deltatime;
+			this->position += velocity * deltatime;
 		}
 	}
 }
 
 void Player::ResolveCollision(DistTriangle triangle, float deltatime) {
+	// the dot between the triangle and the world up
+	float surfaceDot = glm::dot(triangle.normal, this->camera->worldUp);
+	if (surfaceDot == 0) {
+	}
+	// should be only slanted walls/floors
+	if (surfaceDot != 0 && surfaceDot != 1 && surfaceDot != -1) {
+		//std::cout << "Slanted wall encountered\n";
+	}
 	//std::cout << triangle.normal.x << " " << triangle.normal.y << " " << triangle.normal.z << "\n";
 	float depth = collisionThreshold - triangle.distance;
 	glm::vec3 targetPosition = triangle.normal * glm::vec3(depth);
-
 	// todo: recheck this, sometimes the target position is a NAN, 
 	// this just ignores it for now maybe?
 	if (isnan(targetPosition.x) || isnan(targetPosition.y) || isnan(targetPosition.z)) {
@@ -129,5 +140,4 @@ void Player::ResolveCollision(DistTriangle triangle, float deltatime) {
 		return;
 	}
 	this->position += targetPosition;
-	//std::cout << depth << "\n";
 }
