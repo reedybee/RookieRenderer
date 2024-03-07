@@ -34,30 +34,25 @@ PhysicsManager physicsManager = PhysicsManager();
 bool mouseHidden = false;
 bool shouldRender = true;
 
-void windowPosCallback(GLFWwindow* window, int x, int y) {
-
-}
-
-void windowResizeCallback(GLFWwindow* window, int width, int height) {
-
-}
-
-void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+static void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_E && action == GLFW_RELEASE) {
 		mouseHidden = !mouseHidden;
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
 		glfwSetWindowShouldClose(window, true);
 	}
+	if (key == GLFW_KEY_Q && action == GLFW_RELEASE) {
+		DisplayVec3(player.camera->front);
+	}
 }
 
-void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
+static void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 	windowWidth = width;
 	windowHeight = height;
 }
 
-void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
+static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 	float xpos = static_cast<float>(xposIn);
 	float ypos = static_cast<float>(yposIn);
 
@@ -85,9 +80,13 @@ int main(int argc, char* argv[]) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	GLFWwindow* coreWindow = glfwCreateWindow(mode->width / 1.2f, mode->height / 1.2f, "RookieRenderer", NULL, NULL);
+	GLFWwindow* coreWindow = glfwCreateWindow(int(mode->width / 1.2f), int(mode->height / 1.2f), "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(coreWindow);
 	
+	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
+	glfwSetCursorPosCallback(coreWindow, mouseCallback);
+	glfwSetKeyCallback(coreWindow, keyboardCallback);
+
 	windowWidth = mode->width;
 	windowHeight = mode->height;
 
@@ -97,12 +96,6 @@ int main(int argc, char* argv[]) {
 	}
 
 	glEnable(GL_DEPTH_TEST);
-
-	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
-	glfwSetCursorPosCallback(coreWindow, mouseCallback);
-	glfwSetKeyCallback(coreWindow, keyboardCallback);
-	glfwSetWindowSizeCallback(coreWindow, windowResizeCallback);
-	glfwSetWindowPosCallback(coreWindow, windowPosCallback);
 
 	player = Player(&physicsManager, coreWindow, glm::vec3(0.0f, 10.0f, 0.0f));
 	player.camera->type = CAMERA_TYPE_FIRST_PERSON;
@@ -114,8 +107,6 @@ int main(int argc, char* argv[]) {
 	devMesh.colour = glm::vec3(0.2f, 0.2f, 0.2f);
 
 	physicsManager.AddMesh(devMesh);
-	
-	std::vector<DistTriangle> triangles;
 
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
@@ -130,7 +121,7 @@ int main(int argc, char* argv[]) {
 		devMesh.Draw(GetAspectRatio());
 		
 		updateTickTime();
-		// Update logic if enough time has accumulated
+		// update logic if enough time has accumulated
 		while (accumulatedTime >= tickRate) {
 			// check for collisions
 			player.PollCollision(tickRate);

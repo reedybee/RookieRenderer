@@ -67,9 +67,8 @@ void Player::PollMovement(float deltatime) {
 			position += camera->right * velocity;
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && grounded) {
+			this->velocity.y += 10.0f;
 			grounded = false;
-			this->velocity += glm::vec3(0.0f, 10.0f, 0.0f);
-			std::cout << "player jump\n";
 		}
 	}
 }
@@ -90,8 +89,6 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 			if (camera->pitch < -89.0f)
 				camera->pitch = -89.0f;
 		}
-
-		// update Front, Right and Up Vectors using the updated Euler angles
 		camera->UpdateCameraVectors();
 	}
 }
@@ -107,17 +104,14 @@ void Player::PollCollision(float deltatime) {
 				if (groundDot > 0.70f) {
 					grounded = true;
 					velocity.y = 0.0f;
-					std::cout << "Grounded\n";
 				}
 				else {
 					grounded = false;
 				}
 			}
 		}
-		if (!grounded) {
-			this->velocity.y -= physicsManager->gravity * deltatime;
-			this->position += velocity * deltatime;
-		}
+		this->position += velocity * deltatime;
+		this->velocity.y -= physicsManager->gravity * deltatime;
 	}
 }
 

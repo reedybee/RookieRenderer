@@ -9,11 +9,11 @@ static int windowWidth, windowHeight;
 
 static float tickRate = 1.0f / 60.0f;
 static float accumulatedTime = 0.0f;
-static float currentTime = glfwGetTime();
+static float currentTime = (float)glfwGetTime();
 static float newTime, frameTime;
 
 static void updateTickTime() {
-	newTime = glfwGetTime();
+	newTime = (float)glfwGetTime();
 	frameTime = newTime - currentTime;
 	currentTime = newTime;
 
@@ -35,7 +35,7 @@ static float dot2(glm::vec3 a) {
 }
 
 static void DisplayVec3(glm::vec3 vector) {
-	std::cout << vector.x << " " << vector.y << " " << vector.z << "\n";
+	std::cout << "x: " << vector.x << " y: " << vector.y << " z: " << vector.z << "\n";
 }
 
 // returns the signed distance to the triangle specified

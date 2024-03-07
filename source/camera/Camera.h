@@ -32,6 +32,7 @@ public:
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix(float aspect);
 
+	// updates front, right and up vectors using the updated angles
 	void UpdateCameraVectors();
 
 	glm::vec3 lightPosition;

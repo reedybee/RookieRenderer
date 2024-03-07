@@ -714,10 +714,13 @@
     <None Include="dependencies\glm\gtx\vector_query.inl" />
     <None Include="dependencies\glm\gtx\wrap.inl" />
     <None Include="README.md" />
-    <None Include="resources\objects\devscene.mtl" />
+    <None Include="resources\objects\devscene.mtl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="resources\shaders\unlit\unlit-vertex.glsl" />
     <None Include="resources\shaders\unlit\unlitfragment.glsl" />
     <None Include="resources\shaders\unlit\unlitvertex.glsl" />
+    <None Include="VC_redist.x64.exe" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\assimp\lib\assimp-vc143-mt.lib" />
@@ -729,9 +732,14 @@
     <Text Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Object Include="resources\objects\boundingcube.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
     <Object Include="resources\objects\devscene.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="resources\objects\sprite.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
   </ItemGroup>
   <ItemGroup>

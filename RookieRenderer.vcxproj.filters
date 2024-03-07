@@ -1719,6 +1719,7 @@
     <None Include="dependencies\assimp\lib\D3DCompiler_42.dll" />
     <None Include="dependencies\assimp\lib\D3DX9_42.dll" />
     <None Include="resources\objects\devscene.mtl" />
+    <None Include="VC_redist.x64.exe" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\glfw\lib-vc2022\glfw3_mt.lib" />
@@ -1730,7 +1731,9 @@
     <Text Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Object Include="resources\objects\sprite.obj" />
     <Object Include="resources\objects\devscene.obj" />
+    <Object Include="resources\objects\boundingcube.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\happyface.png">
