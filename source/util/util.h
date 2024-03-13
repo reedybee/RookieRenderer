@@ -1,9 +1,15 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <thread>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include <math.h>
+
+#include "camera/Camera.h"
+#include "physics/Physics.h"
 
 static int windowWidth, windowHeight;
 
@@ -11,6 +17,60 @@ static float tickRate = 1.0f / 60.0f;
 static float accumulatedTime = 0.0f;
 static float currentTime = (float)glfwGetTime();
 static float newTime, frameTime;
+
+static struct DistTriangle {
+	float distance;
+	glm::vec3 normal;
+};
+
+static void DisplayVec3(glm::vec3 vector) {
+	std::cout << "x: " << vector.x << " y: " << vector.y << " z: " << vector.z << "\n";
+}
+
+static glm::vec3 CalculateTriangleCentroid(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3) {
+	return glm::vec3((v1.x + v2.x + v3.x), (v1.y + v2.y + v3.y), (v1.z + v2.z + v3.z));
+}
+// calculates a line between an origin and a new point in a direction
+static glm::vec3 CalculateLine(glm::vec3 origin, glm::vec3 direction, float length) {
+	float newX = length * std::cosf(direction.x);
+	float newY = length * std::sinf(direction.x);
+	glm::vec3 newVec = glm::vec3(newX + origin.x, newY + origin.y, 0);
+	DisplayVec3(newVec);
+	return newVec;
+}
+
+// calculates a ray between an origin and a collider
+static glm::vec3 CalculateColliderRay(Camera* camera, PhysicsManager* physicsManager) {
+	float stepSize = 0.5f;
+	float stepThreshold = 0.05f;
+	float threshold = 0.1f;
+	
+	glm::vec3 rayPos(0.0f);
+	glm::vec3 position = camera->position;
+	glm::vec3 rotation = camera->front;
+
+	
+	/*
+	int count = 0;
+	bool posFound = false;
+	while (!posFound) {
+		std::vector<DistTriangle> triangles = physicsManager->PollDistances(rayPos);
+		for (DistTriangle triangle : triangles) {
+			if (triangle.distance < threshold) {
+				posFound = true;
+			} else {
+				rayPos = CalculateLine(rayPos, rotation, stepSize);
+			}
+
+			if (triangle.distance <= 1.0) {
+				stepSize -= stepThreshold * count;
+				count++;
+			}
+		}
+	}
+	*/
+	return rayPos;
+}
 
 static void updateTickTime() {
 	newTime = (float)glfwGetTime();
@@ -25,17 +85,48 @@ static float GetAspectRatio() {
 	return (float)windowWidth / (float)windowHeight;
 }
 
-struct DistTriangle {
-	float distance;
-	glm::vec3 normal;
-};
+static std::string ReadFromFile(const char* filepath) {
+	std::string contents;
+	std::ifstream file(filepath);
+
+	std::string line;
+
+	if (!file.good()) {
+		std::cout << "Failed to open file " << filepath << "\n";
+	}
+	if (file.is_open()) {
+		while (std::getline(file, line)) {
+			line.append("\n");
+			contents.append(line);
+		}
+	}
+	file.close();
+
+	return contents;
+}
+
+static std::vector<std::string> ReadFromFileIntoArray(const char* filepath) {
+	std::vector<std::string> contents;
+	std::ifstream file(filepath);
+
+	std::string line;
+
+	if (!file.good()) {
+		std::cout << "Failed to open file " << filepath << "\n";
+	}
+	if (file.is_open()) {
+		while (std::getline(file, line)) {
+			line.append("\n");
+			contents.push_back(line);
+		}
+	}
+	file.close();
+
+	return contents;
+}
 
 static float dot2(glm::vec3 a) {
 	return glm::dot(a, a);
-}
-
-static void DisplayVec3(glm::vec3 vector) {
-	std::cout << "x: " << vector.x << " y: " << vector.y << " z: " << vector.z << "\n";
 }
 
 // returns the signed distance to the triangle specified

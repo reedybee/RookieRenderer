@@ -16,11 +16,11 @@ struct PhysicsManager {
 public:
 	PhysicsManager();
 
-	void AddMesh(Mesh mesh);
+	void AddMesh(Mesh* mesh);
 	//returns an array of each triangles distances and normal
 	std::vector<DistTriangle> PollDistances(glm::vec3 position);
 
 	float gravity;
 private:
-	std::vector<Mesh> meshes;
+	std::vector<Mesh*> meshes;
 };

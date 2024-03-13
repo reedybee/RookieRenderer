@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\dev\Projects\C++\RookieRenderer\dependencies\stb_image;C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;C:\dev\Projects\C++\RookieRenderer\dependencies\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\Projects\c++\RookieRenderer\dependencies\nlohmann;C:\dev\Projects\C++\RookieRenderer\dependencies\stb_image;C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;C:\dev\Projects\C++\RookieRenderer\dependencies\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -717,6 +717,8 @@
     <None Include="resources\objects\devscene.mtl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="resources\shaders\unlit\lineFragment.glsl" />
+    <None Include="resources\shaders\unlit\lineVertex.glsl" />
     <None Include="resources\shaders\unlit\unlit-vertex.glsl" />
     <None Include="resources\shaders\unlit\unlitfragment.glsl" />
     <None Include="resources\shaders\unlit\unlitvertex.glsl" />

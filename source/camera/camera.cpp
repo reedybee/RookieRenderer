@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "util/util.h"
 #include "camera/Camera.h"
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
@@ -21,11 +22,11 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
 	UpdateCameraVectors();
 }
 
-glm::mat4 Camera::GetViewMatrix() {
+glm::mat4 Camera::GetViewMatrix() const {
 	return glm::lookAt(position, position + front, up);
 }
 
-glm::mat4 Camera::GetProjectionMatrix(float aspect) {
+glm::mat4 Camera::GetProjectionMatrix(float aspect) const {
 	return glm::perspective(glm::radians(fov), aspect, 0.1f, 100.0f);
 }
 

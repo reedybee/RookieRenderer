@@ -10,6 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "camera/Camera.h"
+#include "util/util.h"
 
 #include "Shader.h"
 
@@ -18,38 +19,15 @@ Shader::Shader() {
 }
 
 Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
-	std::string currentLine;
+	
+	std::string vertexCode = ReadFromFile(vertexShaderPath);
 
-	std::string vertexCode;
-	std::ifstream vertexFile = std::ifstream(vertexShaderPath);
-	if (!vertexFile.good()) {
-		std::cout << "Failed to open file " << vertexShaderPath << "\n";
-	}
-	if (vertexFile.is_open()) {
-		while (std::getline(vertexFile, currentLine)) {
-			currentLine.append("\n");
-			vertexCode.append(currentLine);
-		}
-	}
-	vertexFile.close();
-	currentLine.clear();
 	const char* vertexCodeChar = vertexCode.c_str();
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexCodeChar, NULL);
 	glCompileShader(vertexShader);
-
-	std::string fragmentCode;
-	std::ifstream fragmentFile = std::ifstream(fragmentShaderPath);
-	if (!fragmentFile.good()) {
-		std::cout << "Failed to open file " << vertexShaderPath << "\n";
-	}
-	if (fragmentFile.is_open()) {
-		while (std::getline(fragmentFile, currentLine)) {
-			currentLine.append("\n");
-			fragmentCode.append(currentLine);
-		}
-	}
-	vertexFile.close();
+	
+	std::string fragmentCode = ReadFromFile(fragmentShaderPath);
 
 	const char* fragmentCodeChar = fragmentCode.c_str();
 	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -66,6 +44,8 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 void Shader::use() {
 	glUseProgram(program);
 }
+
+#pragma region SETTERS
 
 void Shader::SetInt(const char* name, int value) const {
 	glUniform1i(glGetUniformLocation(program, name), value);
@@ -106,3 +86,5 @@ void Shader::SetVector4(const char* name, glm::vec4 vector) {
 void Shader::SetMatrix4(const char* name, glm::mat4 matrix) const {
 	glUniformMatrix4fv(glGetUniformLocation(program, name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
+
+#pragma endregion

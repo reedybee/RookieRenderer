@@ -67,7 +67,7 @@ void Player::PollMovement(float deltatime) {
 			position += camera->right * velocity;
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && grounded) {
-			this->velocity.y += 10.0f;
+			this->velocity.y += 5.0f;
 			grounded = false;
 		}
 	}
@@ -91,6 +91,12 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 		}
 		camera->UpdateCameraVectors();
 	}
+}
+
+void Player::Draw(float aspect) {
+	mesh.position = this->position;
+	// draws players mesh
+	mesh.Draw(aspect);
 }
 
 void Player::PollCollision(float deltatime) {

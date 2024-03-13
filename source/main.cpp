@@ -41,8 +41,14 @@ static void keyboardCallback(GLFWwindow* window, int key, int scancode, int acti
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
 		glfwSetWindowShouldClose(window, true);
 	}
-	if (key == GLFW_KEY_Q && action == GLFW_RELEASE) {
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+		std::cout << "Player: ";
 		DisplayVec3(player.camera->front);
+		std::cout << "Direction: ";
+		CalculateLine(player.camera->position, player.camera->front, 10);
+	}
+	if (key == GLFW_KEY_T && action == GLFW_PRESS) {
+		//DisplayVec3(CalculateColliderRay(player.camera, &physicsManager));
 	}
 }
 
@@ -102,11 +108,17 @@ int main(int argc, char* argv[]) {
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 	Mesh devMesh = Mesh("resources/objects/devscene.obj", player.camera);
-	devMesh.position = glm::vec3(0.0f, -2.5f, 0.0f);
+	devMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	devMesh.colour = glm::vec3(0.2f, 0.2f, 0.2f);
 
-	physicsManager.AddMesh(devMesh);
+	Mesh cube = Mesh("resources/objects/boundingcube.obj", player.camera);
+	cube.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
+	cube.position = glm::vec3(0.0f, 1.0f, 0.0f);
+	cube.scale = glm::vec3(0.5f);
+	cube.colour = glm::vec3(1.0f, 0.0f, 0.0f);
+
+	physicsManager.AddMesh(&devMesh);
 
 	while (!glfwWindowShouldClose(coreWindow)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
@@ -118,8 +130,9 @@ int main(int argc, char* argv[]) {
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// draws objects to scene
+		cube.Draw(GetAspectRatio());
 		devMesh.Draw(GetAspectRatio());
-		
+
 		updateTickTime();
 		// update logic if enough time has accumulated
 		while (accumulatedTime >= tickRate) {

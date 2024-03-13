@@ -29,5 +29,6 @@ public:
 	void SetMatrix4(const char* name, glm::mat4 matrix) const;
 
 private:
+
 	unsigned int program;
 };

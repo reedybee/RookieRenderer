@@ -16,12 +16,17 @@
 
 #include "texture/Texture.h"
 #include "mesh/Mesh.h"
-#include "util/Util.h"
+#include "util/util.h"
 
 Mesh::Mesh() {
-
+	this->camera = nullptr;
+	this->colour = glm::vec3(0.0f);
+	this->filepath = nullptr;
+	this->position = glm::vec3(0.0f);
+	this->rotation = glm::vec3(0.0f);
+	this->scale = glm::vec3(0.0f);
 }
-
+// for imported meshes
 Mesh::Mesh(const char* filepath, Camera* camera) {
 	this->filepath = filepath;
 	this->camera = camera;
@@ -81,9 +86,16 @@ void Mesh::LoadModel() {
 			aiMaterial* material = object->mMaterials[mesh->mMaterialIndex];
 			aiString texturepath;
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texturepath) == aiReturn_SUCCESS) {
+				submesh.hasTexture = true;
 				submesh.texture = Texture(texturepath.C_Str(), GL_RGB);
 				std::cout << "Loaded texture from " << texturepath.C_Str() << "\n";
 			}
+		}
+		if (submesh.hasTexture) {
+			std::cout << "Yes\n";
+		}
+		if (!submesh.hasTexture) {
+			std::cout << "no\n";
 		}
 		submesh.GenerateBuffers();
 		meshes.push_back(submesh);
@@ -108,13 +120,13 @@ void Mesh::Draw(float aspect) {
 	shader.SetMatrix4("view", view);
 	shader.SetMatrix4("model", model);
 
-	for (int i = 0; i < meshes.size(); i++) {
-		shader.SetInt("albedoMap", 0);
-
-		meshes[i].texture.Bind(GL_TEXTURE0);
-	
-		glBindVertexArray(meshes[i].VAO);
-		glDrawElements(GL_TRIANGLES, (GLsizei)meshes[i].indices.size(), GL_UNSIGNED_INT, NULL);
+	for (Submesh mesh : meshes) {
+		if (mesh.hasTexture) {
+			shader.SetInt("albedoMap", 0);
+			mesh.texture.Bind(GL_TEXTURE0);
+		}
+		glBindVertexArray(mesh.VAO);
+		glDrawElements(GL_TRIANGLES, (GLsizei)mesh.indices.size(), GL_UNSIGNED_INT, NULL);
 		glBindVertexArray(0);
 	}
 }
@@ -124,28 +136,23 @@ std::vector<DistTriangle> Mesh::GetDistances(glm::vec3 position) {
 	std::vector<DistTriangle> triangles = std::vector<DistTriangle>();
 	DistTriangle triangle = DistTriangle();
 	for (int s = 0; s < meshes.size(); s++) {
-		for (int i = 0; i < meshes[s].vertices.size(); i+=3) { 
+		for (int i = 0; i < meshes[s].vertices.size(); i += 3) {
 			glm::vec3 v1 = meshes[s].vertices[i].Position;
-			glm::vec3 v2 = meshes[s].vertices[i+1].Position;
-			glm::vec3 v3 = meshes[s].vertices[i+2].Position;
+			glm::vec3 v2 = meshes[s].vertices[i + 1].Position;
+			glm::vec3 v3 = meshes[s].vertices[i + 2].Position;
 
-			glm::vec3 s1 = v1 * this->scale + this->position;
-			glm::vec3 s2 = v2 * this->scale + this->position;
-			glm::vec3 s3 = v3 * this->scale + this->position;
-			
+			glm::vec3 s1 = ((v1 + this->position) * this->scale);
+			glm::vec3 s2 = ((v2 + this->position) * this->scale);
+			glm::vec3 s3 = ((v3 + this->position) * this->scale);
+
 			glm::vec3 n1 = meshes[s].vertices[i].Normal;
-			glm::vec3 n2 = meshes[s].vertices[i+1].Normal;
-			glm::vec3 n3 = meshes[s].vertices[i+2].Normal;
-			glm::vec3 n = glm::normalize(n1 + n2 + n3);
-			float current = sdfTriangle(position + glm::vec3(0.0f, -2.0f, 0.0f), s1, s2, s3);
-			/*
-			if (current < lowest) {
-				lowest = current;
-				normal = n;
-			}
-			*/
-			triangle.distance = current;
-			triangle.normal = n;
+			glm::vec3 n2 = meshes[s].vertices[i + 1].Normal;
+			glm::vec3 n3 = meshes[s].vertices[i + 2].Normal;
+			glm::vec3 normal = glm::normalize(n1 + n2 + n3);
+			float distance = sdfTriangle(position, s1, s2, s3);
+
+			triangle.distance = distance;
+			triangle.normal = normal;
 			triangles.push_back(triangle);
 		}
 	}

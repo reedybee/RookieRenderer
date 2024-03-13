@@ -1720,6 +1720,8 @@
     <None Include="dependencies\assimp\lib\D3DX9_42.dll" />
     <None Include="resources\objects\devscene.mtl" />
     <None Include="VC_redist.x64.exe" />
+    <None Include="resources\shaders\unlit\lineVertex.glsl" />
+    <None Include="resources\shaders\unlit\lineFragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\glfw\lib-vc2022\glfw3_mt.lib" />

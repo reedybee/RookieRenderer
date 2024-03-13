@@ -37,7 +37,8 @@ struct Submesh {
 
 	void GenerateBuffers();
 
-	unsigned int VAO, VBO, NBO, EBO;
+	bool hasTexture = false;
+	unsigned int VAO = NULL, VBO = NULL, NBO = NULL, EBO = NULL;
 };
 
 class Mesh {
@@ -58,7 +59,6 @@ public:
 	glm::vec3 scale;
 	glm::vec3 rotation;
 	glm::vec3 colour;
-
 	Shader shader; 
 private:
 	void LoadModel();
@@ -66,6 +66,7 @@ private:
 	Camera* camera;
 	bool ranOnce = false;
 	const char* filepath;
+	std::vector<glm::vec3> vertices;
 
 	std::vector<Submesh> meshes;
 };
