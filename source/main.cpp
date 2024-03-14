@@ -133,7 +133,9 @@ int main(int argc, char* argv[]) {
 		cube.Draw(GetAspectRatio());
 		devMesh.Draw(GetAspectRatio());
 
-		updateTickTime();
+		DisplayVec3(physicsManager.CalculateSurfacePoint(player.camera->position, player.camera->front));
+
+		updateTickTime(true);
 		// update logic if enough time has accumulated
 		while (accumulatedTime >= tickRate) {
 			// check for collisions
@@ -146,6 +148,8 @@ int main(int argc, char* argv[]) {
 		// renders contents and polls events
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);
+		// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
+		glfwSwapInterval(1);
 	}
 	glfwDestroyWindow(coreWindow);
 	glfwTerminate();

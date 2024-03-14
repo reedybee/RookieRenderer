@@ -8,17 +8,17 @@
 
 #include <math.h>
 
-#include "camera/Camera.h"
-#include "physics/Physics.h"
+// CAUTION!!! avoid using customs headers. may break code
 
 static int windowWidth, windowHeight;
 
+// rate at which logic will be updated, 60 times/second.
 static float tickRate = 1.0f / 60.0f;
 static float accumulatedTime = 0.0f;
 static float currentTime = (float)glfwGetTime();
 static float newTime, frameTime;
 
-static struct DistTriangle {
+struct DistTriangle {
 	float distance;
 	glm::vec3 normal;
 };
@@ -38,53 +38,21 @@ static glm::vec3 CalculateLine(glm::vec3 origin, glm::vec3 direction, float leng
 	DisplayVec3(newVec);
 	return newVec;
 }
-
-// calculates a ray between an origin and a collider
-static glm::vec3 CalculateColliderRay(Camera* camera, PhysicsManager* physicsManager) {
-	float stepSize = 0.5f;
-	float stepThreshold = 0.05f;
-	float threshold = 0.1f;
-	
-	glm::vec3 rayPos(0.0f);
-	glm::vec3 position = camera->position;
-	glm::vec3 rotation = camera->front;
-
-	
-	/*
-	int count = 0;
-	bool posFound = false;
-	while (!posFound) {
-		std::vector<DistTriangle> triangles = physicsManager->PollDistances(rayPos);
-		for (DistTriangle triangle : triangles) {
-			if (triangle.distance < threshold) {
-				posFound = true;
-			} else {
-				rayPos = CalculateLine(rayPos, rotation, stepSize);
-			}
-
-			if (triangle.distance <= 1.0) {
-				stepSize -= stepThreshold * count;
-				count++;
-			}
-		}
-	}
-	*/
-	return rayPos;
-}
-
-static void updateTickTime() {
+// updates the logic tick timing
+static void updateTickTime(bool displayFrameRate = false) {
 	newTime = (float)glfwGetTime();
 	frameTime = newTime - currentTime;
 	currentTime = newTime;
-
+	if (displayFrameRate)
+		std::cout << (int)(1 / frameTime) << "\n";
 	// Accumulate frame time
 	accumulatedTime += frameTime;
 }
-
+// returns the aspect ratio of the main window.
 static float GetAspectRatio() {
 	return (float)windowWidth / (float)windowHeight;
 }
-
+// reads contents of a file into a string.
 static std::string ReadFromFile(const char* filepath) {
 	std::string contents;
 	std::ifstream file(filepath);
@@ -104,31 +72,10 @@ static std::string ReadFromFile(const char* filepath) {
 
 	return contents;
 }
-
-static std::vector<std::string> ReadFromFileIntoArray(const char* filepath) {
-	std::vector<std::string> contents;
-	std::ifstream file(filepath);
-
-	std::string line;
-
-	if (!file.good()) {
-		std::cout << "Failed to open file " << filepath << "\n";
-	}
-	if (file.is_open()) {
-		while (std::getline(file, line)) {
-			line.append("\n");
-			contents.push_back(line);
-		}
-	}
-	file.close();
-
-	return contents;
-}
-
+// calcutates the dot of the two same numbers
 static float dot2(glm::vec3 a) {
 	return glm::dot(a, a);
 }
-
 // returns the signed distance to the triangle specified
 // thanks to https://iquilezles.org/articles/distfunctions/
 static float sdfTriangle(glm::vec3 position, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) {

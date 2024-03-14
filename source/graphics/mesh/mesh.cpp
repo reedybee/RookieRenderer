@@ -91,12 +91,6 @@ void Mesh::LoadModel() {
 				std::cout << "Loaded texture from " << texturepath.C_Str() << "\n";
 			}
 		}
-		if (submesh.hasTexture) {
-			std::cout << "Yes\n";
-		}
-		if (!submesh.hasTexture) {
-			std::cout << "no\n";
-		}
 		submesh.GenerateBuffers();
 		meshes.push_back(submesh);
 	}
