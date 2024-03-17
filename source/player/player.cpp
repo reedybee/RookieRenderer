@@ -78,8 +78,8 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 		xoffset *= mouseSensitivity;
 		yoffset *= mouseSensitivity;
 
-		camera->yaw += xoffset;
-		camera->pitch += yoffset;
+		camera->pitch += yoffset;	// up/down
+		camera->yaw += xoffset;		// left/right
 
 		// make sure that when pitch is out of bounds, screen doesn't get flipped
 		if (constrainPitch)

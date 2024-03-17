@@ -5,10 +5,13 @@
 #include <thread>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 // CAUTION!!! avoid using customs headers. may break code
+
+#define SSAA_SAMPLE_SIZE 16
+#define M_TAU 2 * M_PI
 
 static int windowWidth, windowHeight;
 
@@ -23,23 +26,38 @@ struct DistTriangle {
 	glm::vec3 normal;
 };
 
+// prints a vector 3 to the standard outputS
 static void DisplayVec3(glm::vec3 vector) {
 	std::cout << "x: " << vector.x << " y: " << vector.y << " z: " << vector.z << "\n";
 }
 
-static glm::vec3 CalculateTriangleCentroid(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3) {
-	return glm::vec3((v1.x + v2.x + v3.x), (v1.y + v2.y + v3.y), (v1.z + v2.z + v3.z));
+// converts radians to degrees
+template <typename T> T degrees(T num) {
+	return (num * 180) / M_PI;
 }
-// calculates a line between an origin and a new point in a direction
-static glm::vec3 CalculateLine(glm::vec3 origin, glm::vec3 direction, float length) {
-	float newX = length * std::cosf(direction.x);
-	float newY = length * std::sinf(direction.x);
-	glm::vec3 newVec = glm::vec3(newX + origin.x, newY + origin.y, 0);
-	DisplayVec3(newVec);
-	return newVec;
+
+// converts degrees to radians
+template <typename T> T radians(T num) {
+	return (num * M_PI) / 180;
 }
-// updates the logic tick timing
-static void updateTickTime(bool displayFrameRate = false) {
+
+// finds the lowest value in an array
+template <typename T> T FindLowestValue(std::vector<T> values) {
+	T best = std::numeric_limits<T>::max();
+	T current = 0;
+	T last = 0;
+	for (T t : values) {
+		current = t;
+		if (current < best) {
+			best = current;
+			last = current;
+		}
+	}
+	return best;
+}
+
+// updates the logic tick timings, avoid making func take longer than 1 / 60s.
+static void ProcessLogic(void (*func)(), bool displayFrameRate = false) {
 	newTime = (float)glfwGetTime();
 	frameTime = newTime - currentTime;
 	currentTime = newTime;
@@ -47,11 +65,17 @@ static void updateTickTime(bool displayFrameRate = false) {
 		std::cout << (int)(1 / frameTime) << "\n";
 	// Accumulate frame time
 	accumulatedTime += frameTime;
+	while (accumulatedTime >= tickRate) {
+		func();
+		accumulatedTime -= tickRate;
+	}
 }
+
 // returns the aspect ratio of the main window.
 static float GetAspectRatio() {
 	return (float)windowWidth / (float)windowHeight;
 }
+
 // reads contents of a file into a string.
 static std::string ReadFromFile(const char* filepath) {
 	std::string contents;
@@ -72,10 +96,12 @@ static std::string ReadFromFile(const char* filepath) {
 
 	return contents;
 }
+
 // calcutates the dot of the two same numbers
 static float dot2(glm::vec3 a) {
 	return glm::dot(a, a);
 }
+
 // returns the signed distance to the triangle specified
 // thanks to https://iquilezles.org/articles/distfunctions/
 static float sdfTriangle(glm::vec3 position, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) {

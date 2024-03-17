@@ -34,6 +34,8 @@ PhysicsManager physicsManager = PhysicsManager();
 bool mouseHidden = false;
 bool shouldRender = true;
 
+Mesh cube;
+
 static void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_E && action == GLFW_RELEASE) {
 		mouseHidden = !mouseHidden;
@@ -41,14 +43,8 @@ static void keyboardCallback(GLFWwindow* window, int key, int scancode, int acti
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
 		glfwSetWindowShouldClose(window, true);
 	}
-	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-		std::cout << "Player: ";
-		DisplayVec3(player.camera->front);
-		std::cout << "Direction: ";
-		CalculateLine(player.camera->position, player.camera->front, 10);
-	}
 	if (key == GLFW_KEY_T && action == GLFW_PRESS) {
-		//DisplayVec3(CalculateColliderRay(player.camera, &physicsManager));
+		printf("Camera Front: ");  DisplayVec3(player.camera->front);
 	}
 }
 
@@ -70,7 +66,7 @@ static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 	}
 
 	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+	float yoffset = lastY - ypos;
 
 	lastX = xpos;
 	lastY = ypos;
@@ -79,14 +75,15 @@ static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 }
 
 int main(int argc, char* argv[]) {
-	std::cout << "Application Started \n\n";
+	printf("Application Started\n\n");
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+	glfwWindowHint(GLFW_SAMPLES, SSAA_SAMPLE_SIZE);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	GLFWwindow* coreWindow = glfwCreateWindow(int(mode->width / 1.2f), int(mode->height / 1.2f), "RookieRenderer", NULL, NULL);
+	GLFWwindow* coreWindow = glfwCreateWindow(int(mode->width / 1.5f), int(mode->height / 1.5f), "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(coreWindow);
 	
 	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
@@ -102,6 +99,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 
 	player = Player(&physicsManager, coreWindow, glm::vec3(0.0f, 10.0f, 0.0f));
 	player.camera->type = CAMERA_TYPE_FIRST_PERSON;
@@ -112,9 +110,8 @@ int main(int argc, char* argv[]) {
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	devMesh.colour = glm::vec3(0.2f, 0.2f, 0.2f);
 
-	Mesh cube = Mesh("resources/objects/boundingcube.obj", player.camera);
+	cube = Mesh("resources/objects/boundingcube.obj", player.camera);
 	cube.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
-	cube.position = glm::vec3(0.0f, 1.0f, 0.0f);
 	cube.scale = glm::vec3(0.5f);
 	cube.colour = glm::vec3(1.0f, 0.0f, 0.0f);
 
@@ -133,18 +130,12 @@ int main(int argc, char* argv[]) {
 		cube.Draw(GetAspectRatio());
 		devMesh.Draw(GetAspectRatio());
 
-		DisplayVec3(physicsManager.CalculateSurfacePoint(player.camera->position, player.camera->front));
-
-		updateTickTime(true);
-		// update logic if enough time has accumulated
-		while (accumulatedTime >= tickRate) {
+		ProcessLogic([]{
 			// check for collisions
 			player.PollCollision(tickRate);
 			// player movement
 			player.PollMovement(tickRate);
-
-			accumulatedTime -= tickRate;
-		}
+		});
 		// renders contents and polls events
 		glfwPollEvents();
 		glfwSwapBuffers(coreWindow);
@@ -153,5 +144,6 @@ int main(int argc, char* argv[]) {
 	}
 	glfwDestroyWindow(coreWindow);
 	glfwTerminate();
+	printf("\nApplication Terminated");
 	return 1;
 }

@@ -29,13 +29,12 @@ glm::mat4 Camera::GetViewMatrix() const {
 glm::mat4 Camera::GetProjectionMatrix(float aspect) const {
 	return glm::perspective(glm::radians(fov), aspect, 0.1f, 100.0f);
 }
-
+	
 void Camera::UpdateCameraVectors() {
-	glm::vec3 newFront = glm::vec3(0.0f);
-	newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	newFront.y = sin(glm::radians(pitch));
-	newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front = glm::normalize(newFront);
+	front = glm::normalize(glm::vec3(
+	cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+	sin(glm::radians(pitch)),
+	sin(glm::radians(yaw)) * cos(glm::radians(pitch))));
 	// also re-calculate the Right and Up vector
 	right = glm::normalize(glm::cross(front, worldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 	up = glm::normalize(glm::cross(right, front));

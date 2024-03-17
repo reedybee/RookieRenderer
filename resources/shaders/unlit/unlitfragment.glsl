@@ -35,4 +35,5 @@ void main() {
 	vec3 result = (ambient + diffuse + specular) * vec3(albedo);
 
 	fragColour = vec4(result, 1.0);
+	//fragColour = vec4(fragPos, 1.0);
 }
