@@ -16,6 +16,18 @@
 #include "texture/Texture.h"
 #include "util/util.h"
 
+// uses an unsigned 8 bit number
+enum MESH_TAG {
+	MESH_NONE			= 0b00000001,
+	MESH_ENVIRONMENT	= 0b00000010,
+	MESH_LOCAL_PLAYER	= 0b00000100,
+	MESH_NETWORK_PLAYER	= 0b00001000,
+	MESH_ENEMY			= 0b00010000,
+	MESH_EMPTY1			= 0b00100000,
+	MESH_EMPTY2			= 0b01000000,
+	MESH_EMPTY3			= 0b10000000,
+};
+
 struct Vertex {
 	// position
 	glm::vec3 Position;
@@ -60,6 +72,7 @@ public:
 	glm::vec3 rotation;
 	glm::vec3 colour;
 	Shader shader; 
+	unsigned char tag;
 private:
 	void LoadModel();
 

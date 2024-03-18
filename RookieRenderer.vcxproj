@@ -139,7 +139,6 @@
     <ClCompile Include="dependencies\glm\glm.cppm" />
     <ClCompile Include="source\camera\camera.cpp" />
     <ClCompile Include="source\graphics\mesh\mesh.cpp" />
-    <ClCompile Include="source\graphics\sprite\sprite.cpp" />
     <ClCompile Include="source\graphics\texture\texture.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\physics\physics.cpp" />
@@ -542,7 +541,6 @@
     <ClInclude Include="dependencies\stb_image\stb_voxel_render.h" />
     <ClInclude Include="source\camera\Camera.h" />
     <ClInclude Include="source\graphics\mesh\Mesh.h" />
-    <ClInclude Include="source\graphics\sprite\Sprite.h" />
     <ClInclude Include="source\graphics\texture\Texture.h" />
     <ClInclude Include="source\physics\Physics.h" />
     <ClInclude Include="source\player\Player.h" />
@@ -741,6 +739,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
     <Object Include="resources\objects\sprite.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="resources\objects\square.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
   </ItemGroup>

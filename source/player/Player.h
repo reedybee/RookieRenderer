@@ -29,10 +29,6 @@ public:
 	void PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
 	//
 	void PollCollision(float deltatime);
-	// renders mesh
-	void Draw(float aspect);
-
-	Mesh mesh;
 
 	float movementSpeed;
 	float mouseSensitivity;

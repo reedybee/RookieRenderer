@@ -18,7 +18,6 @@
 #include "mesh/mesh.h"
 #include "texture/Texture.h"
 #include "physics/Physics.h"
-#include "sprite/Sprite.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
@@ -43,8 +42,16 @@ static void keyboardCallback(GLFWwindow* window, int key, int scancode, int acti
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
 		glfwSetWindowShouldClose(window, true);
 	}
-	if (key == GLFW_KEY_T && action == GLFW_PRESS) {
-		printf("Camera Front: ");  DisplayVec3(player.camera->front);
+}
+
+static void mousebuttonCallback(GLFWwindow* window, int button, int action, int mods) {
+	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
+		unsigned int tag;
+		glm::vec3 point = physicsManager.FindPointDirection(player.camera->position, player.camera->front, &tag);
+		if (tag & MESH_ENVIRONMENT) {
+			printf("Enivronment Hit at ");
+			DisplayVec3(point);
+		}
 	}
 }
 
@@ -89,6 +96,7 @@ int main(int argc, char* argv[]) {
 	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
 	glfwSetCursorPosCallback(coreWindow, mouseCallback);
 	glfwSetKeyCallback(coreWindow, keyboardCallback);
+	glfwSetMouseButtonCallback(coreWindow, mousebuttonCallback);
 
 	windowWidth = mode->width;
 	windowHeight = mode->height;
@@ -109,11 +117,7 @@ int main(int argc, char* argv[]) {
 	devMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	devMesh.colour = glm::vec3(0.2f, 0.2f, 0.2f);
-
-	cube = Mesh("resources/objects/boundingcube.obj", player.camera);
-	cube.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
-	cube.scale = glm::vec3(0.5f);
-	cube.colour = glm::vec3(1.0f, 0.0f, 0.0f);
+	devMesh.tag = MESH_ENVIRONMENT;
 
 	physicsManager.AddMesh(&devMesh);
 
@@ -127,10 +131,9 @@ int main(int argc, char* argv[]) {
 		if (!mouseHidden)
 			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// draws objects to scene
-		cube.Draw(GetAspectRatio());
 		devMesh.Draw(GetAspectRatio());
 
-		ProcessLogic([]{
+		FixedUpdate([]{
 			// check for collisions
 			player.PollCollision(tickRate);
 			// player movement

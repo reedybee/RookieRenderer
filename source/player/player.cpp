@@ -93,16 +93,10 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 	}
 }
 
-void Player::Draw(float aspect) {
-	mesh.position = this->position;
-	// draws players mesh
-	mesh.Draw(aspect);
-}
-
 void Player::PollCollision(float deltatime) {
 	if (!noclip) {
 		std::vector<DistTriangle> triangles = physicsManager->PollDistances(this->position);
-		for (DistTriangle triangle : triangles) {
+		for (const DistTriangle& triangle : triangles) {
 			if (triangle.distance < collisionThreshold) {
 				ResolveCollision(triangle, deltatime);
 				float groundDot = glm::dot(triangle.normal, this->camera->worldUp);

@@ -45,9 +45,6 @@
     <ClCompile Include="source\physics\physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\sprite\sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\include\glad\glad.h">
@@ -1250,9 +1247,6 @@
     <ClInclude Include="source\physics\Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\sprite\Sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\glfw\lib-vc2022\glfw3.dll" />
@@ -1736,6 +1730,7 @@
     <Object Include="resources\objects\sprite.obj" />
     <Object Include="resources\objects\devscene.obj" />
     <Object Include="resources\objects\boundingcube.obj" />
+    <Object Include="resources\objects\square.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\happyface.png">

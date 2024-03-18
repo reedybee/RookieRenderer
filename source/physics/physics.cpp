@@ -24,12 +24,47 @@ std::vector<DistTriangle> PhysicsManager::PollDistances(glm::vec3 position) {
 	std::vector<DistTriangle> distances;
 	for (Mesh* mesh : meshes) {
 		std::vector<DistTriangle> meshDistances = mesh->GetDistances(position);
-		for (DistTriangle distance : meshDistances) {
+		for (const DistTriangle& distance : meshDistances) {
 			DistTriangle tri = DistTriangle();
 			tri.distance = distance.distance;
 			tri.normal = distance.normal;
+			tri.tag = mesh->tag;
 			distances.push_back(tri);
 		}
 	}
 	return distances;
+}
+
+glm::vec3 PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direction, unsigned int* tag) {
+	glm::vec3 lastPos(position);
+	glm::vec3 currentPos(position);
+
+	int count = 0;
+	int maxCount = 100;
+	float threshold = 0.01;
+	while (true) {
+		count++;
+		std::vector<DistTriangle> triangles = PollDistances(lastPos);
+		float distance = std::numeric_limits<float>::max();
+		// gets the closest distances to the current ray pos
+		for (unsigned int i = 0; i < triangles.size(); i++) {
+			if (triangles[i].distance < distance) {
+				distance = triangles[i].distance;
+				*tag = triangles[i].tag;
+			}
+		}
+		// breaks function if ray pos is invalid, ex. looking into the sky where there is no valid point
+		if (distance > 50000 || distance >= std::numeric_limits<float>::max()) {
+			printf("Could not find point on mesh, returning zero!\n");
+			return glm::vec3(0.0f);
+			break;
+		}
+		// this is the final check if the raypos is found.
+		if (distance <= threshold)
+			break;
+		// moves ray pos along rotation
+		currentPos = lastPos + direction * distance;
+		lastPos = currentPos;
+	}
+	return currentPos;
 }

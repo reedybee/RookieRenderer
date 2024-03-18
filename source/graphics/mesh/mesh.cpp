@@ -25,6 +25,7 @@ Mesh::Mesh() {
 	this->position = glm::vec3(0.0f);
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(0.0f);
+	this->tag = MESH_NONE;
 }
 // for imported meshes
 Mesh::Mesh(const char* filepath, Camera* camera) {
@@ -147,6 +148,7 @@ std::vector<DistTriangle> Mesh::GetDistances(glm::vec3 position) {
 
 			triangle.distance = distance;
 			triangle.normal = normal;
+			triangle.tag = this->tag;
 			triangles.push_back(triangle);
 		}
 	}

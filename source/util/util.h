@@ -24,6 +24,7 @@ static float newTime, frameTime;
 struct DistTriangle {
 	float distance;
 	glm::vec3 normal;
+	unsigned int tag;
 };
 
 // prints a vector 3 to the standard outputS
@@ -41,13 +42,13 @@ template <typename T> T radians(T num) {
 	return (num * M_PI) / 180;
 }
 
-// finds the lowest value in an array
+// finds the lowest value in an array, and optionally returns the index
 template <typename T> T FindLowestValue(std::vector<T> values) {
 	T best = std::numeric_limits<T>::max();
 	T current = 0;
 	T last = 0;
-	for (T t : values) {
-		current = t;
+	for (int i = 0; i < values.size(); i++) {
+		current = values[i];
 		if (current < best) {
 			best = current;
 			last = current;
@@ -56,8 +57,23 @@ template <typename T> T FindLowestValue(std::vector<T> values) {
 	return best;
 }
 
+// finds the max value in an array, and optionally returns the index
+template <typename T> T FindHighestValue(std::vector<T> values) {
+	T best = std::numeric_limits<T>::min();
+	T current = 0;
+	T last = 0;
+	for (int i = 0; i < values.size(); i++) {
+		current = values[i];
+		if (current > best) {
+			best = current;
+			last = current;
+		}
+	}
+	return best;
+}
+
 // updates the logic tick timings, avoid making func take longer than 1 / 60s.
-static void ProcessLogic(void (*func)(), bool displayFrameRate = false) {
+static void FixedUpdate(void (*func)(), bool displayFrameRate = false) {
 	newTime = (float)glfwGetTime();
 	frameTime = newTime - currentTime;
 	currentTime = newTime;
