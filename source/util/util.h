@@ -1,4 +1,6 @@
 #pragma once
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -40,14 +42,21 @@ static int InitGLFW(double version, int openglProfile) {
 		}
 		return 0;
 	}
-
+	// sets the windows hints 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, (int)major);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, (int)minor);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, openglProfile);
 	glfwWindowHint(GLFW_SAMPLES, SSAA_SAMPLE_SIZE);
 
-	std::cout << "GLFW Initialized: Version " << major << "." << minor << "\n";
+	std::cout << "GLFW Initialized: Version " << major << "." << minor << "\n\n";
 	return 1;
+}
+
+static int InitGlad() {
+	int code = gladLoadGLLoader(GLADloadproc(glfwGetProcAddress));
+	if (!code)
+		std::cout << "Failed to initialize GLAD \n";
+	return code;
 }
 
 // prints a vector 3 to the standard outputS

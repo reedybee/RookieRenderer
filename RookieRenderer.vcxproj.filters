@@ -1247,6 +1247,9 @@
     <ClInclude Include="source\physics\Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="source\network\Network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\glfw\lib-vc2022\glfw3.dll" />

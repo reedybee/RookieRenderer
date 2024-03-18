@@ -31,7 +31,6 @@ bool firstMouse = true;
 Player player;
 PhysicsManager physicsManager = PhysicsManager();
 bool mouseHidden = false;
-bool shouldRender = true;
 
 Mesh cube;
 
@@ -81,8 +80,9 @@ static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 	player.PollMouse(xoffset, yoffset, mouseHidden);
 }
 
+// main execution of the program. returns 0 on success, 1 on fail;
 int main(int argc, char* argv[]) {
-	printf("Application Started\n\n");
+	printf("Application Started\n");
 	if (!InitGLFW(4.6, GLFW_OPENGL_CORE_PROFILE))
 		return 1;
 
@@ -98,14 +98,12 @@ int main(int argc, char* argv[]) {
 	windowWidth = mode->width;
 	windowHeight = mode->height;
 
-	if (!gladLoadGLLoader(GLADloadproc(glfwGetProcAddress))) {
-		std::cout << "Failed to initialize GLAD \n";
-		return -1;
-	}
+	if (!InitGlad())
+		return 1;
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
-
+	
 	player = Player(&physicsManager, window, glm::vec3(0.0f, 10.0f, 0.0f));
 	player.camera->type = CAMERA_TYPE_FIRST_PERSON;
 
@@ -113,7 +111,7 @@ int main(int argc, char* argv[]) {
 	Mesh devMesh = Mesh("resources/objects/devscene.obj", player.camera);
 	devMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
-	devMesh.colour = glm::vec3(0.2f, 0.2f, 0.2f);
+	devMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
 	devMesh.tag = MESH_ENVIRONMENT;
 
 	physicsManager.AddMesh(&devMesh);
@@ -145,5 +143,5 @@ int main(int argc, char* argv[]) {
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	printf("\nApplication Terminated");
-	return 1;
+	return 0;
 }
