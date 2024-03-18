@@ -41,7 +41,7 @@ glm::vec3 PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direc
 
 	int count = 0;
 	int maxCount = 100;
-	float threshold = 0.01;
+	float threshold = 0.01f;
 	while (true) {
 		count++;
 		std::vector<DistTriangle> triangles = PollDistances(lastPos);

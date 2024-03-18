@@ -83,20 +83,17 @@ static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 
 int main(int argc, char* argv[]) {
 	printf("Application Started\n\n");
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
-	glfwWindowHint(GLFW_SAMPLES, SSAA_SAMPLE_SIZE);
+	if (!InitGLFW(4.6, GLFW_OPENGL_CORE_PROFILE))
+		return 1;
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	GLFWwindow* coreWindow = glfwCreateWindow(int(mode->width / 1.5f), int(mode->height / 1.5f), "RookieRenderer", NULL, NULL);
-	glfwMakeContextCurrent(coreWindow);
+	GLFWwindow* window = glfwCreateWindow(int(mode->width / 1.5f), int(mode->height / 1.5f), "RookieRenderer", NULL, NULL);
+	glfwMakeContextCurrent(window);
 	
-	glfwSetFramebufferSizeCallback(coreWindow, frambuffersizeCallback);
-	glfwSetCursorPosCallback(coreWindow, mouseCallback);
-	glfwSetKeyCallback(coreWindow, keyboardCallback);
-	glfwSetMouseButtonCallback(coreWindow, mousebuttonCallback);
+	glfwSetFramebufferSizeCallback(window, frambuffersizeCallback);
+	glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetKeyCallback(window, keyboardCallback);
+	glfwSetMouseButtonCallback(window, mousebuttonCallback);
 
 	windowWidth = mode->width;
 	windowHeight = mode->height;
@@ -109,7 +106,7 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
 
-	player = Player(&physicsManager, coreWindow, glm::vec3(0.0f, 10.0f, 0.0f));
+	player = Player(&physicsManager, window, glm::vec3(0.0f, 10.0f, 0.0f));
 	player.camera->type = CAMERA_TYPE_FIRST_PERSON;
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
@@ -121,15 +118,15 @@ int main(int argc, char* argv[]) {
 
 	physicsManager.AddMesh(&devMesh);
 
-	while (!glfwWindowShouldClose(coreWindow)) {
+	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// hides mouse for cleaner look in game
 		if (mouseHidden)
-			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (!mouseHidden)
-			glfwSetInputMode(coreWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
 
@@ -141,11 +138,11 @@ int main(int argc, char* argv[]) {
 		});
 		// renders contents and polls events
 		glfwPollEvents();
-		glfwSwapBuffers(coreWindow);
+		glfwSwapBuffers(window);
 		// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
 		glfwSwapInterval(1);
 	}
-	glfwDestroyWindow(coreWindow);
+	glfwDestroyWindow(window);
 	glfwTerminate();
 	printf("\nApplication Terminated");
 	return 1;

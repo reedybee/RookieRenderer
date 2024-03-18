@@ -13,7 +13,8 @@
 #define SSAA_SAMPLE_SIZE 16
 #define M_TAU 2 * M_PI
 
-static int windowWidth, windowHeight;
+static int windowWidth;
+static int windowHeight;
 
 // rate at which logic will be updated, 60 times/second.
 static float tickRate = 1.0f / 60.0f;
@@ -26,6 +27,28 @@ struct DistTriangle {
 	glm::vec3 normal;
 	unsigned int tag;
 };
+
+static int InitGLFW(double version, int openglProfile) {
+	double major = 0.0;
+	double minor = modf(version, &major) * 10;
+	const char* error;
+	int initCode = glfwInit();
+	// check for errors initiallizing glfw
+	if (initCode == GLFW_FALSE) {
+		while (glfwGetError(&error) != GLFW_NO_ERROR) {
+			std::cout << "GLFW failed to Initialize\n Error Code: " << error << "\n";
+		}
+		return 0;
+	}
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, (int)major);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, (int)minor);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, openglProfile);
+	glfwWindowHint(GLFW_SAMPLES, SSAA_SAMPLE_SIZE);
+
+	std::cout << "GLFW Initialized: Version " << major << "." << minor << "\n";
+	return 1;
+}
 
 // prints a vector 3 to the standard outputS
 static void DisplayVec3(glm::vec3 vector) {
