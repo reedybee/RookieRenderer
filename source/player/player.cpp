@@ -122,7 +122,8 @@ void Player::ResolveCollision(DistTriangle triangle, float deltatime) {
 	}
 	// should be only slanted walls/floors
 	if (surfaceDot != 0 && surfaceDot != 1 && surfaceDot != -1) {
-		//std::cout << "Slanted wall encountered\n";
+		triangle.normal = glm::vec3(0, triangle.normal.y, 0);
+		glm::normalize(triangle.normal);
 	}
 	//std::cout << triangle.normal.x << " " << triangle.normal.y << " " << triangle.normal.z << "\n";
 	float depth = collisionThreshold - triangle.distance;
