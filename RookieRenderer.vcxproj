@@ -144,6 +144,7 @@
     <ClCompile Include="source\physics\physics.cpp" />
     <ClCompile Include="source\player\player.cpp" />
     <ClCompile Include="source\graphics\shader\shader.cpp" />
+    <ClCompile Include="source\util\initialization.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\assimp\include\assimp\aabb.h" />
@@ -547,6 +548,7 @@
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
     <ClInclude Include="source\util\filesystem.h" />
+    <ClInclude Include="source\util\math.h" />
     <ClInclude Include="source\util\util.h" />
   </ItemGroup>
   <ItemGroup>
