@@ -546,6 +546,7 @@
     <ClInclude Include="source\physics\Physics.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
+    <ClInclude Include="source\util\filesystem.h" />
     <ClInclude Include="source\util\util.h" />
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "filesystem.h"
+
 // CAUTION!!! avoid using customs headers. may break code
 
 #define SSAA_SAMPLE_SIZE 16
@@ -122,27 +124,6 @@ static void FixedUpdate(void (*func)(), bool displayFrameRate = false) {
 // returns the aspect ratio of the main window.
 static float GetAspectRatio() {
 	return (float)windowWidth / (float)windowHeight;
-}
-
-// reads contents of a file into a string.
-static std::string ReadFromFile(const char* filepath) {
-	std::string contents;
-	std::ifstream file(filepath);
-
-	std::string line;
-
-	if (!file.good()) {
-		std::cout << "Failed to open file " << filepath << "\n";
-	}
-	if (file.is_open()) {
-		while (std::getline(file, line)) {
-			line.append("\n");
-			contents.append(line);
-		}
-	}
-	file.close();
-
-	return contents;
 }
 
 // calcutates the dot of the two same numbers

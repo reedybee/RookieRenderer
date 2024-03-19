@@ -112,7 +112,13 @@ int main(int argc, char* argv[]) {
 	devMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	devMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
-	devMesh.tag = MESH_ENVIRONMENT;
+	devMesh.tag = MESH_ENEMY;
+
+	Mesh cubeMesh = Mesh("resources/objects/devscene.obj", player.camera);
+	cubeMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
+	cubeMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
+	cubeMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
+	cubeMesh.tag = MESH_ENEMY;
 
 	physicsManager.AddMesh(&devMesh);
 
