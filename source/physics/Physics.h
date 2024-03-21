@@ -11,7 +11,7 @@
 
 #include "mesh/Mesh.h"
 #include "util/util.h"
-
+class Player;
 struct PhysicsManager {
 public:
 	PhysicsManager();
@@ -20,9 +20,10 @@ public:
 	//returns an array of each triangles distances and normal
 	std::vector<DistTriangle> PollDistances(glm::vec3 position);
 	// finds the closest point on the mesh in the given direction and position
-	glm::vec3 FindPointDirection(glm::vec3 position, glm::vec3 direction, unsigned int* tag = nullptr);
+	glm::vec3 FindPointDirection(glm::vec3 position, glm::vec3 direction, unsigned int* tag = nullptr, Player* player = nullptr);
 
 	float gravity;
 private:
+	std::vector<Player*> players;
 	std::vector<Mesh*> meshes;
 };

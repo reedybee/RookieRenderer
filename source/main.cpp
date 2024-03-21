@@ -23,6 +23,7 @@
 #include <stb_image/stb_image.h>
 
 #include "util/util.h"
+#include "util/server.h"
 
 float lastX = windowWidth / 2.0f;
 float lastY = windowHeight / 2.0f;
@@ -46,9 +47,15 @@ static void keyboardCallback(GLFWwindow* window, int key, int scancode, int acti
 static void mousebuttonCallback(GLFWwindow* window, int button, int action, int mods) {
 	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
 		unsigned int tag;
-		glm::vec3 point = physicsManager.FindPointDirection(player.camera->position, player.camera->front, &tag);
+		Player hitplayer;
+		glm::vec3 point = physicsManager.FindPointDirection(player.camera->position, player.camera->front, &tag, &hitplayer);
 		if (tag & MESH_ENVIRONMENT) {
 			printf("Enivronment Hit at ");
+			DisplayVec3(point);
+		}
+		if (tag & MESH_ENEMY) {
+			DisplayVec3(hitplayer.position);
+			printf("Enemy Hit at ");
 			DisplayVec3(point);
 		}
 	}
@@ -87,6 +94,8 @@ int main(int argc, char* argv[]) {
 		return 1;
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	windowWidth = mode->width;
+	windowHeight = mode->height;
 	GLFWwindow* window = glfwCreateWindow(int(mode->width / 1.5f), int(mode->height / 1.5f), "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	
@@ -94,9 +103,6 @@ int main(int argc, char* argv[]) {
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetKeyCallback(window, keyboardCallback);
 	glfwSetMouseButtonCallback(window, mousebuttonCallback);
-
-	windowWidth = mode->width;
-	windowHeight = mode->height;
 
 	if (!InitGlad())
 		return 1;
@@ -112,15 +118,18 @@ int main(int argc, char* argv[]) {
 	devMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	devMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
-	devMesh.tag = MESH_ENEMY;
+	devMesh.tag = MESH_ENVIRONMENT | MESH_COLLIDER;
 
-	Mesh cubeMesh = Mesh("resources/objects/devscene.obj", player.camera);
-	cubeMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
-	cubeMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
-	cubeMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
-	cubeMesh.tag = MESH_ENEMY;
+	Player otherPlayer = Player(&physicsManager, window, glm::vec3(0.0f));
+	Mesh scaleMesh = Mesh("resources/objects/scale.obj", player.camera);
+	scaleMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
+	scaleMesh.player = &otherPlayer;
+	scaleMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
+	scaleMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
+	scaleMesh.tag = MESH_ENEMY;
 
 	physicsManager.AddMesh(&devMesh);
+	physicsManager.AddMesh(&scaleMesh);
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
@@ -133,12 +142,11 @@ int main(int argc, char* argv[]) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
+		scaleMesh.Draw(GetAspectRatio());
 
+		player.Update();
 		FixedUpdate([]{
-			// check for collisions
-			player.PollCollision(tickRate);
-			// player movement
-			player.PollMovement(tickRate);
+			player.FixedUpdate(tickRate);
 		});
 		// renders contents and polls events
 		glfwPollEvents();

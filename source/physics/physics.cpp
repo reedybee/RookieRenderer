@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "mesh/Mesh.h"
+#include "player/Player.h"
 #include "physics/Physics.h"
 #include "util/util.h"
 
@@ -35,22 +36,24 @@ std::vector<DistTriangle> PhysicsManager::PollDistances(glm::vec3 position) {
 	return distances;
 }
 
-glm::vec3 PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direction, unsigned int* tag) {
+glm::vec3 PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direction, unsigned int* tag, Player* player) {
 	glm::vec3 lastPos(position);
 	glm::vec3 currentPos(position);
 
 	int count = 0;
 	int maxCount = 100;
 	float threshold = 0.01f;
-	while (true) {
+	float distance = 1.0f;
+	while (distance >= threshold) {
 		count++;
 		std::vector<DistTriangle> triangles = PollDistances(lastPos);
-		float distance = std::numeric_limits<float>::max();
+		distance = std::numeric_limits<float>::max();
 		// gets the closest distances to the current ray pos
 		for (unsigned int i = 0; i < triangles.size(); i++) {
 			if (triangles[i].distance < distance) {
 				distance = triangles[i].distance;
 				*tag = triangles[i].tag;
+				player = triangles[i].player;
 			}
 		}
 		// breaks function if ray pos is invalid, ex. looking into the sky where there is no valid point

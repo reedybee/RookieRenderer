@@ -4,7 +4,7 @@
 #include <iostream>
 
 #define SSAA_SAMPLE_SIZE 16
-
+// initializes GLFW
 static int InitGLFW(double version, int openglProfile) {
 	double major = 0.0;
 	double minor = modf(version, &major) * 10;
@@ -26,10 +26,12 @@ static int InitGLFW(double version, int openglProfile) {
 	std::cout << "GLFW Initialized: Version " << major << "." << minor << "\n\n";
 	return 1;
 }
-
+// initializes OpenGL
 static int InitGlad() {
 	int code = gladLoadGLLoader(GLADloadproc(glfwGetProcAddress));
 	if (!code)
 		std::cout << "Failed to initialize GLAD \n";
+	if (code)
+		std::cout << "GLAD initialized \n";
 	return code;
 }

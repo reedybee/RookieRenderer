@@ -12,6 +12,8 @@
 #include "initialization.h"
 #include "math.h"
 
+class Player;
+
 // CAUTION!!! avoid using customs headers. may break code
 
 #define M_TAU 2 * M_PI
@@ -29,6 +31,7 @@ struct DistTriangle {
 	float distance;
 	glm::vec3 normal;
 	unsigned int tag;
+	Player* player;
 };
 
 // prints a vector 3 to the standard outputS

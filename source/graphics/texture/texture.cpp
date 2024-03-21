@@ -49,3 +49,6 @@ void Texture::Bind(GLenum target) {
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
 
+void Texture::Unbind() {
+	glBindTexture(GL_TEXTURE_2D, 0);
+}

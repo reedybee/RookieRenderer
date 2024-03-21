@@ -45,6 +45,9 @@
     <ClCompile Include="source\physics\physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\util\initialization.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\include\glad\glad.h">
@@ -1250,6 +1253,15 @@
     <ClInclude Include="source\network\Network.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="source\util\filesystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\util\math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\util\server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\glfw\lib-vc2022\glfw3.dll" />
@@ -1734,6 +1746,7 @@
     <Object Include="resources\objects\devscene.obj" />
     <Object Include="resources\objects\boundingcube.obj" />
     <Object Include="resources\objects\square.obj" />
+    <Object Include="resources\objects\scale.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\happyface.png">

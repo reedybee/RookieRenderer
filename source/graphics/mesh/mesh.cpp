@@ -26,11 +26,13 @@ Mesh::Mesh() {
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(0.0f);
 	this->tag = MESH_NONE;
+	this->player = nullptr;
 }
 // for imported meshes
 Mesh::Mesh(const char* filepath, Camera* camera) {
 	this->filepath = filepath;
 	this->camera = camera;
+	this->player = nullptr;
 
 	this->scale = glm::vec3(1.0f);
 
@@ -123,6 +125,7 @@ void Mesh::Draw(float aspect) {
 		glBindVertexArray(mesh.VAO);
 		glDrawElements(GL_TRIANGLES, (GLsizei)mesh.indices.size(), GL_UNSIGNED_INT, NULL);
 		glBindVertexArray(0);
+		mesh.texture.Unbind();
 	}
 }
 
@@ -149,6 +152,9 @@ std::vector<DistTriangle> Mesh::GetDistances(glm::vec3 position) {
 			triangle.distance = distance;
 			triangle.normal = normal;
 			triangle.tag = this->tag;
+			if (this->player != nullptr) {
+				triangle.player = this->player;
+			}
 			triangles.push_back(triangle);
 		}
 	}

@@ -97,7 +97,7 @@ void Player::PollCollision(float deltatime) {
 	if (!noclip) {
 		std::vector<DistTriangle> triangles = physicsManager->PollDistances(this->position);
 		for (const DistTriangle& triangle : triangles) {
-			if (triangle.distance < collisionThreshold) {
+			if (triangle.distance < collisionThreshold && triangle.tag & MESH_COLLIDER) {
 				ResolveCollision(triangle, deltatime);
 				float groundDot = glm::dot(triangle.normal, this->camera->worldUp);
 				//velocity = glm::reflect(velocity, triangle.normal); // leaving here cause funny
@@ -135,4 +135,15 @@ void Player::ResolveCollision(DistTriangle triangle, float deltatime) {
 		return;
 	}
 	this->position += targetPosition;
+}
+
+void Player::Update() {
+	
+}
+
+void Player::FixedUpdate(float deltatime) {
+	// check for collisions
+	this->PollCollision(tickRate);
+	// player movement
+	this->PollMovement(tickRate);
 }

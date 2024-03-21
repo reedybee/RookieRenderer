@@ -19,7 +19,8 @@ public:
 	Texture(const char* filepath, GLenum format, GLenum wrap = GL_REPEAT, GLenum filter = GL_LINEAR);
 	// binds the texture to target for use in shaders
 	void Bind(GLenum target);
-
+	// unbinds the texture
+	void Unbind();
 private:
 	unsigned int texture;
 

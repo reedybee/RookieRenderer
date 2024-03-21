@@ -549,6 +549,7 @@
     <ClInclude Include="source\graphics\shader\Shader.h" />
     <ClInclude Include="source\util\filesystem.h" />
     <ClInclude Include="source\util\math.h" />
+    <ClInclude Include="source\util\server.h" />
     <ClInclude Include="source\util\util.h" />
   </ItemGroup>
   <ItemGroup>
@@ -740,6 +741,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
     <Object Include="resources\objects\devscene.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="resources\objects\scale.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
     <Object Include="resources\objects\sprite.obj">

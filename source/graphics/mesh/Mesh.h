@@ -15,7 +15,7 @@
 #include "camera/Camera.h"
 #include "texture/Texture.h"
 #include "util/util.h"
-
+class Player;
 // uses an unsigned 8 bit number
 enum MESH_TAG {
 	MESH_NONE			= 0b00000001,
@@ -23,7 +23,7 @@ enum MESH_TAG {
 	MESH_LOCAL_PLAYER	= 0b00000100,
 	MESH_NETWORK_PLAYER	= 0b00001000,
 	MESH_ENEMY			= 0b00010000,
-	MESH_EMPTY1			= 0b00100000,
+	MESH_COLLIDER		= 0b00100000,
 	MESH_EMPTY2			= 0b01000000,
 	MESH_EMPTY3			= 0b10000000,
 };
@@ -73,6 +73,7 @@ public:
 	glm::vec3 colour;
 	Shader shader; 
 	unsigned char tag;
+	Player* player;
 private:
 	void LoadModel();
 

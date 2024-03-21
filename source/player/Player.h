@@ -23,12 +23,12 @@ public:
 	Camera* camera;
 
 	Player(PhysicsManager* physicsManager = nullptr, GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
-	// Executes any movement calls
-	void PollMovement(float deltatime);
 	// 
 	void PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
-	//
-	void PollCollision(float deltatime);
+	// any constant updates can be put here
+	void Update();
+	// any frame rate dependent updates can be put here
+	void FixedUpdate(float deltatime);
 
 	float movementSpeed;
 	float mouseSensitivity;
@@ -36,14 +36,18 @@ public:
 	bool noclip;
 
 private:
+	// Executes any movement calls
+	void PollMovement(float deltatime);
+	//
+	void PollCollision(float deltatime);
 	//
 	void ResolveCollision(DistTriangle triangle, float deltatime);
 
+	float collisionThreshold;
 	bool grounded;
 	bool jumped;
 	glm::vec3 front;
 	glm::vec3 cameraOffset;
 	GLFWwindow* window;
-	float collisionThreshold;
 	PhysicsManager* physicsManager;
 };
