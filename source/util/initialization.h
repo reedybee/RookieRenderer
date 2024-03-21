@@ -23,7 +23,7 @@ static int InitGLFW(double version, int openglProfile) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, openglProfile);
 	glfwWindowHint(GLFW_SAMPLES, SSAA_SAMPLE_SIZE);
 
-	std::cout << "GLFW Initialized: Version " << major << "." << minor << "\n\n";
+	std::cout << "GLFW Initialized: Version " << major << "." << minor << "\n";
 	return 1;
 }
 // initializes OpenGL
@@ -32,6 +32,6 @@ static int InitGlad() {
 	if (!code)
 		std::cout << "Failed to initialize GLAD \n";
 	if (code)
-		std::cout << "GLAD initialized \n";
+		std::cout << "GLAD initialized \n\n";
 	return code;
 }

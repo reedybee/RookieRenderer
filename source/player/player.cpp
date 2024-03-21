@@ -25,6 +25,9 @@ Player::Player(PhysicsManager* physicsManager, GLFWwindow* window, glm::vec3 pos
 	this->noclip = false;
 	this->velocity = glm::vec3(0.0f);
 	this->grounded = false;
+	this->health = 100;
+	this->maxHealth = 100;
+	this->dead = false;
 	this->physicsManager = physicsManager;
 }
 
@@ -138,7 +141,10 @@ void Player::ResolveCollision(DistTriangle triangle, float deltatime) {
 }
 
 void Player::Update() {
-	
+	if (health <= 0) {
+		dead = true;
+		std::cout << "Player Died.\n";
+	}
 }
 
 void Player::FixedUpdate(float deltatime) {

@@ -54,7 +54,8 @@ static void mousebuttonCallback(GLFWwindow* window, int button, int action, int 
 			DisplayVec3(point);
 		}
 		if (tag & MESH_ENEMY) {
-			DisplayVec3(hitplayer.position);
+			hitplayer.health -= 10.0f;
+			printf("Player health: %d", hitplayer.health);
 			printf("Enemy Hit at ");
 			DisplayVec3(point);
 		}
@@ -145,6 +146,7 @@ int main(int argc, char* argv[]) {
 		scaleMesh.Draw(GetAspectRatio());
 
 		player.Update();
+		otherPlayer.Update();
 		FixedUpdate([]{
 			player.FixedUpdate(tickRate);
 		});

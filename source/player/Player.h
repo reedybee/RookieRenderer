@@ -20,6 +20,9 @@ public:
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 velocity;
+	float health;
+	float maxHealth;
+	bool dead;
 	Camera* camera;
 
 	Player(PhysicsManager* physicsManager = nullptr, GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
@@ -29,6 +32,8 @@ public:
 	void Update();
 	// any frame rate dependent updates can be put here
 	void FixedUpdate(float deltatime);
+
+
 
 	float movementSpeed;
 	float mouseSensitivity;
