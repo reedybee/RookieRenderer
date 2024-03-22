@@ -53,7 +53,6 @@ glm::vec3 PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direc
 			if (triangles[i].distance < distance) {
 				distance = triangles[i].distance;
 				*tag = triangles[i].tag;
-				player = triangles[i].player;
 			}
 		}
 		// breaks function if ray pos is invalid, ex. looking into the sky where there is no valid point

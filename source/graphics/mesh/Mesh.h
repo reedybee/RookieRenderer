@@ -73,7 +73,6 @@ public:
 	glm::vec3 colour;
 	Shader shader; 
 	unsigned char tag;
-	Player* player;
 private:
 	void LoadModel();
 

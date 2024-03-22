@@ -45,21 +45,7 @@ static void keyboardCallback(GLFWwindow* window, int key, int scancode, int acti
 }
 
 static void mousebuttonCallback(GLFWwindow* window, int button, int action, int mods) {
-	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
-		unsigned int tag;
-		Player hitplayer;
-		glm::vec3 point = physicsManager.FindPointDirection(player.camera->position, player.camera->front, &tag, &hitplayer);
-		if (tag & MESH_ENVIRONMENT) {
-			printf("Enivronment Hit at ");
-			DisplayVec3(point);
-		}
-		if (tag & MESH_ENEMY) {
-			hitplayer.health -= 10.0f;
-			printf("Player health: %d", hitplayer.health);
-			printf("Enemy Hit at ");
-			DisplayVec3(point);
-		}
-	}
+	player.PollMouseButtons(button, action);
 }
 
 static void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
@@ -85,7 +71,7 @@ static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 	lastX = xpos;
 	lastY = ypos;
 
-	player.PollMouse(xoffset, yoffset, mouseHidden);
+	player.PollMouseMovement(xoffset, yoffset, mouseHidden);
 }
 
 // main execution of the program. returns 0 on success, 1 on fail;
@@ -123,8 +109,8 @@ int main(int argc, char* argv[]) {
 
 	Player otherPlayer = Player(&physicsManager, window, glm::vec3(0.0f));
 	Mesh scaleMesh = Mesh("resources/objects/scale.obj", player.camera);
-	scaleMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
-	scaleMesh.player = &otherPlayer;
+	
+	scaleMesh.position = glm::vec3(5.0f, 1.0f, 6.0f);
 	scaleMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	scaleMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
 	scaleMesh.tag = MESH_ENEMY;

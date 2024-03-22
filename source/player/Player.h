@@ -27,17 +27,16 @@ public:
 
 	Player(PhysicsManager* physicsManager = nullptr, GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
 	// 
-	void PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
+	void PollMouseMovement(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
+
+	void PollMouseButtons(int button, int action);
 	// any constant updates can be put here
 	void Update();
 	// any frame rate dependent updates can be put here
 	void FixedUpdate(float deltatime);
 
-
-
 	float movementSpeed;
 	float mouseSensitivity;
-
 	bool noclip;
 
 private:

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -76,7 +77,7 @@ void Player::PollMovement(float deltatime) {
 	}
 }
 
-void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch) {
+void Player::PollMouseMovement(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch) {
 	if (mouseHidden) {
 		xoffset *= mouseSensitivity;
 		yoffset *= mouseSensitivity;
@@ -93,6 +94,22 @@ void Player::PollMouse(float xoffset, float yoffset, bool mouseHidden, GLboolean
 				camera->pitch = -89.0f;
 		}
 		camera->UpdateCameraVectors();
+	}
+}
+
+void Player::PollMouseButtons(int button, int action) {
+	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
+		unsigned int tag;
+		Player hitplayer;
+		glm::vec3 point = physicsManager->FindPointDirection(this->camera->position, this->camera->front, &tag, &hitplayer);
+		if (tag & MESH_ENVIRONMENT) {
+			printf("Enivronment Hit at ");
+			DisplayVec3(point);
+		}
+		if (tag & MESH_ENEMY) {
+			printf("Enemy Hit at ");
+			DisplayVec3(point);
+		}
 	}
 }
 

@@ -543,7 +543,6 @@
     <ClInclude Include="source\camera\Camera.h" />
     <ClInclude Include="source\graphics\mesh\Mesh.h" />
     <ClInclude Include="source\graphics\texture\Texture.h" />
-    <ClInclude Include="source\network\Network.h" />
     <ClInclude Include="source\physics\Physics.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
