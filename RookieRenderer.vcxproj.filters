@@ -48,6 +48,9 @@
     <ClCompile Include="source\util\initialization.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\player\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\include\glad\glad.h">
@@ -1250,9 +1253,6 @@
     <ClInclude Include="source\physics\Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\network\Network.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\util\filesystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1260,6 +1260,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\util\server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\player\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1747,6 +1750,8 @@
     <Object Include="resources\objects\boundingcube.obj" />
     <Object Include="resources\objects\square.obj" />
     <Object Include="resources\objects\scale.obj" />
+    <Object Include="resources\objects\elf.obj" />
+    <Object Include="resources\objects\cube.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\happyface.png">

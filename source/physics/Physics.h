@@ -11,7 +11,7 @@
 
 #include "mesh/Mesh.h"
 #include "util/util.h"
-class Player;
+
 struct PhysicsManager {
 public:
 	PhysicsManager();
@@ -24,6 +24,5 @@ public:
 
 	float gravity;
 private:
-	std::vector<Player*> players;
 	std::vector<Mesh*> meshes;
 };

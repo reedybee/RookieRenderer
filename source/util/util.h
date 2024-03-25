@@ -31,6 +31,7 @@ struct DistTriangle {
 	float distance;
 	glm::vec3 normal;
 	unsigned int tag;
+	Player* player;
 };
 
 // prints a vector 3 to the standard outputS

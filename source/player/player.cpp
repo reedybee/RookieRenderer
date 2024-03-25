@@ -16,19 +16,19 @@ Player::Player(PhysicsManager* physicsManager, GLFWwindow* window, glm::vec3 pos
 	this->position = position;
 	rotation = glm::vec3(0.0f);
 	camera = new Camera(glm::vec3(position.x, position.y, position.z));
-	this->movementSpeed = 10.0f;
-	this->mouseSensitivity = 0.1f;
+	movementSpeed = 10.0f;
+	mouseSensitivity = 0.1f;
 	this->window = window;
-	this->front = glm::vec3(0.0f, 0.0f, 1.0f);
-	this->cameraOffset = glm::vec3(0.0f, 2.0f, 0.0f);
-	this->jumped = false;
-	this->collisionThreshold = 0.5f;
-	this->noclip = false;
-	this->velocity = glm::vec3(0.0f);
-	this->grounded = false;
-	this->health = 100;
-	this->maxHealth = 100;
-	this->dead = false;
+	front = glm::vec3(0.0f, 0.0f, 1.0f);
+	cameraOffset = glm::vec3(0.0f, 2.0f, 0.0f);
+	jumped = false;
+	collisionThreshold = 0.5f;
+	noclip = false;
+	velocity = glm::vec3(0.0f);
+	grounded = false;
+	health = 100;
+	maxHealth = 100;
+	dead = false;
 	this->physicsManager = physicsManager;
 }
 

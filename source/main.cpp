@@ -15,6 +15,7 @@
 #include "shader/Shader.h"
 #include "camera/Camera.h"
 #include "player/Player.h"
+#include "player/Enemy.h"
 #include "mesh/mesh.h"
 #include "texture/Texture.h"
 #include "physics/Physics.h"
@@ -107,7 +108,6 @@ int main(int argc, char* argv[]) {
 	devMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
 	devMesh.tag = MESH_ENVIRONMENT | MESH_COLLIDER;
 
-	Player otherPlayer = Player(&physicsManager, window, glm::vec3(0.0f));
 	Mesh scaleMesh = Mesh("resources/objects/scale.obj", player.camera);
 	
 	scaleMesh.position = glm::vec3(5.0f, 1.0f, 6.0f);
@@ -117,6 +117,10 @@ int main(int argc, char* argv[]) {
 
 	physicsManager.AddMesh(&devMesh);
 	physicsManager.AddMesh(&scaleMesh);
+
+	Enemy enemy = Enemy(glm::vec3(0.0f), glm::vec3(0.0f), "resources/objects/elf.obj", "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", player.camera);
+	enemy.scale = glm::vec3(0.025f);
+	enemies.push_back(&enemy);
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
@@ -129,10 +133,11 @@ int main(int argc, char* argv[]) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
-		scaleMesh.Draw(GetAspectRatio());
+		//scaleMesh.Draw(GetAspectRatio());
+
+		DrawEnemies(GetAspectRatio());
 
 		player.Update();
-		otherPlayer.Update();
 		FixedUpdate([]{
 			player.FixedUpdate(tickRate);
 		});

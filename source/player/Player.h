@@ -24,6 +24,7 @@ public:
 	float maxHealth;
 	bool dead;
 	Camera* camera;
+	Mesh mesh;
 
 	Player(PhysicsManager* physicsManager = nullptr, GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
 	// 
