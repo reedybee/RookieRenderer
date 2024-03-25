@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
 	physicsManager.AddMesh(&devMesh);
 	physicsManager.AddMesh(&scaleMesh);
 
-	Enemy enemy = Enemy(glm::vec3(0.0f), glm::vec3(0.0f), "resources/objects/elf.obj", "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", player.camera);
+	Enemy enemy = Enemy(glm::vec3(0.0f), glm::vec3(0.0f), "resources/objects/elf", "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", player.camera);
 	enemy.scale = glm::vec3(0.025f);
 	enemies.push_back(&enemy);
 
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
 		player.Update();
 		FixedUpdate([]{
 			player.FixedUpdate(tickRate);
-		}, true);
+		});
 		// renders contents and polls events
 		glfwPollEvents();
 		glfwSwapBuffers(window);

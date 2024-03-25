@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\dev\Projects\c++\RookieRenderer\dependencies\nlohmann;C:\dev\Projects\C++\RookieRenderer\dependencies\stb_image;C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;C:\dev\Projects\C++\RookieRenderer\dependencies\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,7 +124,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\dev\Projects\c++\RookieRenderer\dependencies\nlohmann;C:\dev\Projects\C++\RookieRenderer\dependencies\stb_image;C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;C:\dev\Projects\C++\RookieRenderer\dependencies\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -719,10 +720,11 @@
     <None Include="dependencies\glm\gtx\vector_query.inl" />
     <None Include="dependencies\glm\gtx\wrap.inl" />
     <None Include="README.md" />
-    <None Include="resources\objects\devscene.mtl">
+    <None Include="resources\objects\devscene\devscene.mtl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="resources\objects\elf\Elf bikini 1.mtl" />
     <None Include="resources\shaders\unlit\lineFragment.glsl" />
     <None Include="resources\shaders\unlit\lineVertex.glsl" />
     <None Include="resources\shaders\unlit\unlit-vertex.glsl" />
@@ -748,7 +750,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
-    <Object Include="resources\objects\devscene.obj">
+    <Object Include="resources\objects\devscene\devscene.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
@@ -756,7 +758,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
-    <Object Include="resources\objects\scale.obj">
+    <Object Include="resources\objects\elf\Elf bikini 1.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="resources\objects\scalemesh\scale.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
@@ -770,6 +775,26 @@
     </Object>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\objects\elf\Elf bikini 1_Body_diffuse.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Body_gloss.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Body_normal.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Body_specular.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Bottom_diffuse.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Bottom_gloss.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Bottom_normal.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Bottom_specular.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Hair_diffuse.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Hair_gloss.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Hair_normal.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Hair_specular.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Shoes_diffuse.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Shoes_gloss.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Shoes_normal.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Shoes_specular.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Top_diffuse.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Top_gloss.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Top_normal.png" />
+    <Image Include="resources\objects\elf\Elf bikini 1_Top_specular.png" />
     <Image Include="resources\textures\Face.JPG" />
     <Image Include="resources\textures\happyface.png" />
     <Image Include="resources\textures\treadplate1.jpg" />
