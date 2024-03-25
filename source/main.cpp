@@ -140,12 +140,12 @@ int main(int argc, char* argv[]) {
 		player.Update();
 		FixedUpdate([]{
 			player.FixedUpdate(tickRate);
-		});
+		}, true);
 		// renders contents and polls events
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 		// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
-		glfwSwapInterval(1);
+		glfwSwapInterval(0);
 	}
 	glfwDestroyWindow(window);
 	glfwTerminate();

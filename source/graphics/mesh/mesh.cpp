@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <filesystem>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -88,8 +89,10 @@ void Mesh::LoadModel() {
 			aiString texturepath;
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texturepath) == aiReturn_SUCCESS) {
 				submesh.hasTexture = true;
-				submesh.texture = Texture(texturepath.C_Str(), GL_RGB);
-				std::cout << "Loaded texture from " << texturepath.C_Str() << "\n";
+				std::filesystem::path path = std::filesystem::current_path();
+				std::string spath = path.string().append(texturepath.C_Str());
+				submesh.texture = Texture(spath.c_str(), GL_RGB);
+				std::cout << "Loaded texture from " << spath << "\n";
 			}
 		}
 		submesh.GenerateBuffers();
