@@ -38,7 +38,7 @@ Texture::Texture(const char* filepath, GLenum format, GLenum wrap, GLenum filter
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	if (!data) {
-		std::cout << "Image Failed to Load: " << stbi_failure_reason << "\n";
+		std::cout << "Image Failed to Load: " << stbi_failure_reason() << " From file: " << filepath << "\n";
 	}
 
 	stbi_image_free(data);

@@ -724,7 +724,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="resources\objects\elf\Elf bikini 1.mtl" />
     <None Include="resources\shaders\unlit\lineFragment.glsl" />
     <None Include="resources\shaders\unlit\lineVertex.glsl" />
     <None Include="resources\shaders\unlit\unlit-vertex.glsl" />
@@ -750,17 +749,13 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Object>
-    <Object Include="resources\objects\devscene\devscene.obj">
+    <Resource Include="resources\objects\devscene\devscene.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Object>
-    <Object Include="resources\objects\elf.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Object>
-    <Object Include="resources\objects\elf\Elf bikini 1.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Object>
+      <FileType>Document</FileType>
+    </Resource>
     <Object Include="resources\objects\scalemesh\scale.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -795,9 +790,9 @@
     <Image Include="resources\objects\elf\Elf bikini 1_Top_gloss.png" />
     <Image Include="resources\objects\elf\Elf bikini 1_Top_normal.png" />
     <Image Include="resources\objects\elf\Elf bikini 1_Top_specular.png" />
-    <Image Include="resources\textures\Face.JPG" />
+    <Image Include="resources\objects\devscene\Face.JPG" />
     <Image Include="resources\textures\happyface.png" />
-    <Image Include="resources\textures\treadplate1.jpg" />
+    <Image Include="resources\objects\devscene\treadplate1.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

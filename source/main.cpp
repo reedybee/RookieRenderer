@@ -102,14 +102,13 @@ int main(int argc, char* argv[]) {
 	player.camera->type = CAMERA_TYPE_FIRST_PERSON;
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
-	Mesh devMesh = Mesh("resources/objects/devscene.obj", player.camera);
+	Mesh devMesh = Mesh("resources/objects/devscene", player.camera);
 	devMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	devMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
 	devMesh.tag = MESH_ENVIRONMENT | MESH_COLLIDER;
 
-	Mesh scaleMesh = Mesh("resources/objects/scale.obj", player.camera);
-	
+	Mesh scaleMesh = Mesh("resources/objects/scalemesh", player.camera);
 	scaleMesh.position = glm::vec3(5.0f, 1.0f, 6.0f);
 	scaleMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	scaleMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);

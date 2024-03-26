@@ -41,7 +41,26 @@ Mesh::Mesh(const char* filepath, Camera* camera) {
 void Mesh::LoadModel() {
 	Assimp::Importer importer;
 
-	const aiScene* object = importer.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
+	std::string pathToObject;
+	std::filesystem::path pathToFolder = std::filesystem::current_path();
+	if (std::filesystem::path(filepath).extension() != ".obj") {
+		try {
+			for (const auto& entry : std::filesystem::directory_iterator(pathToFolder.append(filepath))) {
+				if (entry.is_regular_file()) {
+					if (entry.path().extension() == ".obj") {
+						pathToObject = entry.path().string();
+					}
+				}
+			}
+		}
+		catch (const std::exception& e) {
+			std::cout << "Error Loading File: " << e.what() << "\n";
+		}
+	} else {
+		pathToObject = filepath;
+	}
+
+	const aiScene* object = importer.ReadFile(pathToObject, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 	if (!object || object->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !object->mRootNode)
 	{
@@ -88,11 +107,10 @@ void Mesh::LoadModel() {
 			aiMaterial* material = object->mMaterials[mesh->mMaterialIndex];
 			aiString texturepath;
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texturepath) == aiReturn_SUCCESS) {
+				std::string pathToTexture = pathToFolder.string().append("/").append(texturepath.C_Str());
 				submesh.hasTexture = true;
-				std::filesystem::path path = std::filesystem::current_path();
-				std::string spath = path.string().append(texturepath.C_Str());
-				submesh.texture = Texture(spath.c_str(), GL_RGB);
-				std::cout << "Loaded texture from " << spath << "\n";
+				submesh.texture = Texture(pathToTexture.c_str(), GL_RGBA);
+				std::cout << "Loaded texture from " << texturepath.C_Str() << "\n";
 			}
 		}
 		submesh.GenerateBuffers();
