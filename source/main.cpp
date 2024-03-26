@@ -108,14 +108,7 @@ int main(int argc, char* argv[]) {
 	devMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
 	devMesh.tag = MESH_ENVIRONMENT | MESH_COLLIDER;
 
-	Mesh scaleMesh = Mesh("resources/objects/scalemesh", player.camera);
-	scaleMesh.position = glm::vec3(5.0f, 1.0f, 6.0f);
-	scaleMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
-	scaleMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
-	scaleMesh.tag = MESH_ENEMY;
-
 	physicsManager.AddMesh(&devMesh);
-	physicsManager.AddMesh(&scaleMesh);
 
 	Enemy enemy = Enemy(glm::vec3(0.0f), glm::vec3(0.0f), "resources/objects/elf", "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", player.camera);
 	enemy.scale = glm::vec3(0.025f);
@@ -132,8 +125,7 @@ int main(int argc, char* argv[]) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
-		//scaleMesh.Draw(GetAspectRatio());
-
+		
 		DrawEnemies(GetAspectRatio());
 
 		player.Update();

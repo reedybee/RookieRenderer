@@ -11,6 +11,7 @@
 Enemy::Enemy() {
 	position = glm::vec3(0.0f);
 	rotation = glm::vec3(0.0f);
+	scale = glm::vec3(1.0f);
 
 	health = 100;
 	maxHealth = 100;
@@ -22,6 +23,7 @@ Enemy::Enemy() {
 Enemy::Enemy(glm::vec3 pos, glm::vec3 rot, const char* meshpath, const char* vertexshader, const char* fragmentshader, Camera* camera) {
 	position = pos;
 	rotation = rot;
+	scale = glm::vec3(1.0f);
 
 	health = 100;
 	maxHealth = 100;

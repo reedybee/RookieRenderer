@@ -108,8 +108,19 @@ void Mesh::LoadModel() {
 			aiString texturepath;
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texturepath) == aiReturn_SUCCESS) {
 				std::string pathToTexture = pathToFolder.string().append("/").append(texturepath.C_Str());
+
+				int format;
+				std::string ext = std::filesystem::path(pathToTexture).extension().string();
+				if (ext == ".png" || ext == ".PNG") {
+					format = GL_RGBA;
+				} else if (ext == ".jpg" || ext == ".JPG") {
+					format = GL_RGB;
+				} else {
+					printf("Format not recognized: %s\n", ext.c_str());
+				}
+
 				submesh.hasTexture = true;
-				submesh.texture = Texture(pathToTexture.c_str(), GL_RGBA);
+				submesh.texture = Texture(pathToTexture.c_str(), format);
 				std::cout << "Loaded texture from " << texturepath.C_Str() << "\n";
 			}
 		}
