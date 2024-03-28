@@ -16,6 +16,7 @@
 #include "texture/Texture.h"
 #include "util/util.h"
 class Player;
+struct Enemy;
 // uses an unsigned 8 bit number
 enum MESH_TAG {
 	MESH_NONE			= 0b00000001,
@@ -67,6 +68,9 @@ public:
 
 	std::vector<Submesh> GetSubmeshes();
 
+	void SetEnemy(Enemy* enemy);
+	Enemy* GetEnemy();
+
 	glm::vec3 position;
 	glm::vec3 scale;
 	glm::vec3 rotation;
@@ -80,6 +84,6 @@ private:
 	bool ranOnce = false;
 	const char* filepath;
 	std::vector<glm::vec3> vertices;
-
 	std::vector<Submesh> meshes;
+	Enemy* enemy;
 };

@@ -9,6 +9,7 @@
 
 #include "camera/Camera.h"
 #include "player/Player.h"
+#include "player/Enemy.h"
 #include "physics/Physics.h"
 #include "util/util.h"
 
@@ -99,16 +100,17 @@ void Player::PollMouseMovement(float xoffset, float yoffset, bool mouseHidden, G
 
 void Player::PollMouseButtons(int button, int action) {
 	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
-		unsigned int tag;
-		Player hitplayer;
-		glm::vec3 point = physicsManager->FindPointDirection(this->camera->position, this->camera->front, &tag, &hitplayer);
-		if (tag & MESH_ENVIRONMENT) {
+		Ray point = physicsManager->FindPointDirection(this->camera->position, this->camera->front);
+		if (point.tag & MESH_ENVIRONMENT) {
 			printf("Enivronment Hit at ");
-			DisplayVec3(point);
+			DisplayVec3(point.position);
 		}
-		if (tag & MESH_ENEMY) {
+		if (point.tag & MESH_ENEMY) {
+			if (!point.enemy->isDead)
+				point.enemy->health -= 10.0f;
+			std::cout << point.enemy->health << "\n";
 			printf("Enemy Hit at ");
-			DisplayVec3(point);
+			DisplayVec3(point.position);
 		}
 	}
 }

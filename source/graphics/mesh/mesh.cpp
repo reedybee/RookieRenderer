@@ -27,6 +27,7 @@ Mesh::Mesh() {
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(0.0f);
 	this->tag = MESH_NONE;
+	this->enemy = nullptr;
 }
 // for imported meshes
 Mesh::Mesh(const char* filepath, Camera* camera) {
@@ -34,6 +35,7 @@ Mesh::Mesh(const char* filepath, Camera* camera) {
 	this->camera = camera;
 
 	this->scale = glm::vec3(1.0f);
+	this->enemy = nullptr;
 
 	LoadModel();
 }
@@ -109,7 +111,7 @@ void Mesh::LoadModel() {
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texturepath) == aiReturn_SUCCESS) {
 				std::string pathToTexture = pathToFolder.string().append("/").append(texturepath.C_Str());
 
-				int format;
+				int format = 0;
 				std::string ext = std::filesystem::path(pathToTexture).extension().string();
 				if (ext == ".png" || ext == ".PNG") {
 					format = GL_RGBA;
@@ -182,6 +184,7 @@ std::vector<DistTriangle> Mesh::GetDistances(glm::vec3 position) {
 			triangle.distance = distance;
 			triangle.normal = normal;
 			triangle.tag = this->tag;
+			triangle.enemy = enemy;
 			triangles.push_back(triangle);
 		}
 	}
@@ -197,6 +200,14 @@ unsigned int Mesh::GetNumTriangles() {
 	}
 	std::cout << numTriangles / 3 << "\n";
 	return numTriangles / 3;
+}
+
+void Mesh::SetEnemy(Enemy* enemy) {
+	this->enemy = enemy;
+}
+
+Enemy* Mesh::GetEnemy() {
+	return this->enemy;
 }
 
 std::vector<Submesh> Mesh::GetSubmeshes() {

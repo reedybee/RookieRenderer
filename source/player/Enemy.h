@@ -25,6 +25,7 @@ public:
 
 	float health;
 	float maxHealth;
+	bool isDead;
 
 	Mesh mesh;
 	Camera* camera;
@@ -35,8 +36,13 @@ private:
 static std::vector<Enemy*> enemies;
 
 static void DrawEnemies(float aspect) {
-	for (Enemy* enemy : enemies) {
-		enemy->Update();
-		enemy->mesh.Draw(aspect);
+	try {
+		for (Enemy* enemy : enemies) {
+			enemy->Update();
+			enemy->mesh.Draw(aspect);
+		}
+	}
+	catch (std::exception e) {
+		std::cout << e.what() << "\n";
 	}
 }

@@ -110,9 +110,11 @@ int main(int argc, char* argv[]) {
 
 	physicsManager.AddMesh(&devMesh);
 
-	Enemy enemy = Enemy(glm::vec3(0.0f), glm::vec3(0.0f), "resources/objects/elf", "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", player.camera);
-	enemy.scale = glm::vec3(0.025f);
+	Enemy enemy = Enemy(glm::vec3(0.0f), glm::vec3(0.0f), "resources/objects/scalemesh", "resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl", player.camera);
+	enemy.scale = glm::vec3(1.0f);
 	enemies.push_back(&enemy);
+	std::cout << enemy.mesh.GetEnemy() << "\n";
+	physicsManager.AddMesh(&enemy.mesh);
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);

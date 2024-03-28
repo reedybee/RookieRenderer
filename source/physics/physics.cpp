@@ -30,16 +30,18 @@ std::vector<DistTriangle> PhysicsManager::PollDistances(glm::vec3 position) {
 			tri.distance = distance.distance;
 			tri.normal = distance.normal;
 			tri.tag = mesh->tag;
+			tri.enemy = mesh->GetEnemy();
 			distances.push_back(tri);
 		}
 	}
 	return distances;
 }
 
-glm::vec3 PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direction, unsigned int* tag, Player* player) {
+Ray PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direction) {
 	glm::vec3 lastPos(position);
 	glm::vec3 currentPos(position);
-
+	Ray ray = Ray();
+	
 	int count = 0;
 	int maxCount = 100;
 	float threshold = 0.01f;
@@ -52,13 +54,14 @@ glm::vec3 PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direc
 		for (unsigned int i = 0; i < triangles.size(); i++) {
 			if (triangles[i].distance < distance) {
 				distance = triangles[i].distance;
-				*tag = triangles[i].tag;
+				ray.tag = triangles[i].tag;
+				ray.enemy = triangles[i].enemy;
 			}
 		}
 		// breaks function if ray pos is invalid, ex. looking into the sky where there is no valid point
 		if (distance > 50000 || distance >= std::numeric_limits<float>::max()) {
 			printf("Could not find point on mesh, returning zero!\n");
-			return glm::vec3(0.0f);
+			return Ray();
 			break;
 		}
 		// this is the final check if the raypos is found.
@@ -68,5 +71,6 @@ glm::vec3 PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direc
 		currentPos = lastPos + direction * distance;
 		lastPos = currentPos;
 	}
-	return currentPos;
+	ray.position = currentPos;
+	return ray;
 }

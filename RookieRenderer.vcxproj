@@ -770,26 +770,6 @@
     </Object>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\objects\elf\Elf bikini 1_Body_diffuse.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Body_gloss.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Body_normal.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Body_specular.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Bottom_diffuse.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Bottom_gloss.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Bottom_normal.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Bottom_specular.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Hair_diffuse.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Hair_gloss.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Hair_normal.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Hair_specular.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Shoes_diffuse.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Shoes_gloss.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Shoes_normal.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Shoes_specular.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Top_diffuse.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Top_gloss.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Top_normal.png" />
-    <Image Include="resources\objects\elf\Elf bikini 1_Top_specular.png" />
     <Image Include="resources\objects\devscene\Face.JPG" />
     <Image Include="resources\textures\happyface.png" />
     <Image Include="resources\objects\devscene\treadplate1.jpg" />

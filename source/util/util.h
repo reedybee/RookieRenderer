@@ -13,6 +13,7 @@
 #include "math.h"
 
 class Player;
+struct Enemy;
 
 // CAUTION!!! avoid using customs headers. may break code
 
@@ -32,6 +33,7 @@ struct DistTriangle {
 	glm::vec3 normal;
 	unsigned int tag;
 	Player* player;
+	Enemy* enemy;
 };
 
 // prints a vector 3 to the standard outputS

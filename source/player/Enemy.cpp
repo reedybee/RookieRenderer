@@ -27,9 +27,11 @@ Enemy::Enemy(glm::vec3 pos, glm::vec3 rot, const char* meshpath, const char* ver
 
 	health = 100;
 	maxHealth = 100;
+	isDead = false;
 
 	this->camera = camera;
 	mesh = Mesh(meshpath, this->camera);
+	mesh.SetEnemy(this);
 	mesh.shader = Shader(vertexshader, fragmentshader);
 	mesh.tag = MESH_ENEMY;
 }
@@ -38,4 +40,10 @@ void Enemy::Update() {
 	mesh.position = position;
 	mesh.rotation = rotation;
 	mesh.scale = scale;
+
+	if (health <= 0) {
+		isDead = true;
+		health = 0;
+		delete(this);
+	}
 }

@@ -1730,10 +1730,10 @@
     <None Include="dependencies\assimp\lib\assimp-vc143-mt.dll" />
     <None Include="dependencies\assimp\lib\D3DCompiler_42.dll" />
     <None Include="dependencies\assimp\lib\D3DX9_42.dll" />
-    <None Include="resources\objects\devscene.mtl" />
     <None Include="VC_redist.x64.exe" />
     <None Include="resources\shaders\unlit\lineVertex.glsl" />
     <None Include="resources\shaders\unlit\lineFragment.glsl" />
+    <None Include="resources\objects\devscene\devscene.mtl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dependencies\glfw\lib-vc2022\glfw3_mt.lib" />
@@ -1746,22 +1746,23 @@
   </ItemGroup>
   <ItemGroup>
     <Object Include="resources\objects\sprite.obj" />
-    <Object Include="resources\objects\devscene.obj" />
     <Object Include="resources\objects\boundingcube.obj" />
     <Object Include="resources\objects\square.obj" />
-    <Object Include="resources\objects\scale.obj" />
-    <Object Include="resources\objects\elf.obj" />
     <Object Include="resources\objects\cube.obj" />
+    <Object Include="resources\objects\scalemesh\scale.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\happyface.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="resources\textures\Face.JPG">
+    <Image Include="resources\objects\devscene\Face.JPG">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="resources\textures\treadplate1.jpg">
+    <Image Include="resources\objects\devscene\treadplate1.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="resources\objects\devscene\devscene.obj" />
   </ItemGroup>
 </Project>
