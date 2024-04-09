@@ -48,9 +48,6 @@
     <ClCompile Include="source\util\initialization.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\player\Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\glad\include\glad\glad.h">
@@ -1260,9 +1257,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\util\server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\player\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

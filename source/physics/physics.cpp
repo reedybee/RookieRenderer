@@ -30,7 +30,6 @@ std::vector<DistTriangle> PhysicsManager::PollDistances(glm::vec3 position) {
 			tri.distance = distance.distance;
 			tri.normal = distance.normal;
 			tri.tag = mesh->tag;
-			tri.enemy = mesh->GetEnemy();
 			distances.push_back(tri);
 		}
 	}
@@ -55,7 +54,6 @@ Ray PhysicsManager::FindPointDirection(glm::vec3 position, glm::vec3 direction) 
 			if (triangles[i].distance < distance) {
 				distance = triangles[i].distance;
 				ray.tag = triangles[i].tag;
-				ray.enemy = triangles[i].enemy;
 			}
 		}
 		// breaks function if ray pos is invalid, ex. looking into the sky where there is no valid point

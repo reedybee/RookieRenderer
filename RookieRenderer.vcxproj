@@ -144,7 +144,6 @@
     <ClCompile Include="source\graphics\texture\texture.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\physics\physics.cpp" />
-    <ClCompile Include="source\player\Enemy.cpp" />
     <ClCompile Include="source\player\player.cpp" />
     <ClCompile Include="source\graphics\shader\shader.cpp" />
     <ClCompile Include="source\util\initialization.h" />
@@ -547,7 +546,6 @@
     <ClInclude Include="source\graphics\mesh\Mesh.h" />
     <ClInclude Include="source\graphics\texture\Texture.h" />
     <ClInclude Include="source\physics\Physics.h" />
-    <ClInclude Include="source\player\Enemy.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
     <ClInclude Include="source\util\filesystem.h" />

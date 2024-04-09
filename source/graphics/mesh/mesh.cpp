@@ -184,7 +184,6 @@ std::vector<DistTriangle> Mesh::GetDistances(glm::vec3 position) {
 			triangle.distance = distance;
 			triangle.normal = normal;
 			triangle.tag = this->tag;
-			triangle.enemy = enemy;
 			triangles.push_back(triangle);
 		}
 	}

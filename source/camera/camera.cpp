@@ -39,3 +39,14 @@ void Camera::UpdateCameraVectors() {
 	right = glm::normalize(glm::cross(front, worldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 	up = glm::normalize(glm::cross(right, front));
 }
+
+void Camera::DrawUI(GLFWwindow* window) {
+	int xWinSize, yWinSize;
+	glfwGetWindowSize(window, &xWinSize, &yWinSize);
+	double xCursPos, yCursPos;
+	glfwGetCursorPos(window, &xCursPos, &yCursPos);
+	float xNorm =  (float)((xCursPos / xWinSize) - 0.5f) * 2.0f;
+	float yNorm = -(float)((yCursPos / yWinSize) - 0.5f) * 2.0f;
+	// do rest of ui here
+
+}

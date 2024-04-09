@@ -9,7 +9,6 @@
 
 #include "camera/Camera.h"
 #include "player/Player.h"
-#include "player/Enemy.h"
 #include "physics/Physics.h"
 #include "util/util.h"
 
@@ -106,11 +105,6 @@ void Player::PollMouseButtons(int button, int action) {
 			DisplayVec3(point.position);
 		}
 		if (point.tag & MESH_ENEMY) {
-			if (!point.enemy->isDead)
-				point.enemy->health -= 10.0f;
-			std::cout << point.enemy->health << "\n";
-			printf("Enemy Hit at ");
-			DisplayVec3(point.position);
 		}
 	}
 }

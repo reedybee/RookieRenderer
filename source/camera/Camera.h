@@ -33,6 +33,8 @@ public:
 
 	// updates front, right and up vectors using the updated angles
 	void UpdateCameraVectors();
+	// draws and updates the ui elements
+	void DrawUI(GLFWwindow* window);
 
 	glm::vec3 lightPosition;
 
