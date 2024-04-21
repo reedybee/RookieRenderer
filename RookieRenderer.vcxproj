@@ -143,7 +143,6 @@
     <ClCompile Include="source\graphics\mesh\mesh.cpp" />
     <ClCompile Include="source\graphics\texture\texture.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\physics\physics.cpp" />
     <ClCompile Include="source\player\player.cpp" />
     <ClCompile Include="source\graphics\shader\shader.cpp" />
     <ClCompile Include="source\util\initialization.h" />
@@ -545,12 +544,10 @@
     <ClInclude Include="source\camera\Camera.h" />
     <ClInclude Include="source\graphics\mesh\Mesh.h" />
     <ClInclude Include="source\graphics\texture\Texture.h" />
-    <ClInclude Include="source\physics\Physics.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
     <ClInclude Include="source\util\filesystem.h" />
     <ClInclude Include="source\util\math.h" />
-    <ClInclude Include="source\util\server.h" />
     <ClInclude Include="source\util\util.h" />
   </ItemGroup>
   <ItemGroup>
@@ -768,7 +765,7 @@
     </Object>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\objects\devscene\Face.JPG" />
+    <Image Include="resources\objects\devscene\Wood5.jpg" />
     <Image Include="resources\textures\happyface.png" />
     <Image Include="resources\objects\devscene\treadplate1.jpg" />
   </ItemGroup>

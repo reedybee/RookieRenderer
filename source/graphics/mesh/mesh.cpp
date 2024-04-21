@@ -18,24 +18,24 @@
 #include "texture/Texture.h"
 #include "mesh/Mesh.h"
 #include "util/util.h"
+#include "player/Player.h"
 
 Mesh::Mesh() {
-	this->camera = nullptr;
+	this->player = nullptr;
 	this->colour = glm::vec3(0.0f);
 	this->filepath = nullptr;
 	this->position = glm::vec3(0.0f);
 	this->rotation = glm::vec3(0.0f);
 	this->scale = glm::vec3(0.0f);
 	this->tag = MESH_NONE;
-	this->enemy = nullptr;
 }
 // for imported meshes
-Mesh::Mesh(const char* filepath, Camera* camera) {
+Mesh::Mesh(const char* filepath, Player* player) {
 	this->filepath = filepath;
-	this->camera = camera;
-
+	this->player = player;
 	this->scale = glm::vec3(1.0f);
-	this->enemy = nullptr;
+	// add this mesh to the players meshes !
+	player->environmentMeshes.push_back(this);
 
 	LoadModel();
 }
@@ -135,15 +135,15 @@ void Mesh::LoadModel() {
 void Mesh::Draw(float aspect) {
 	shader.use();
 
-	glm::mat4 projection = camera->GetProjectionMatrix(aspect);
+	glm::mat4 projection = player->camera->GetProjectionMatrix(aspect);
 
-	glm::mat4 view = camera->GetViewMatrix();
+	glm::mat4 view = player->camera->GetViewMatrix();
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::scale(model, scale);
 	model = glm::translate(model, position);
+	model = glm::scale(model, scale);
 
-	shader.SetVector3("cameraPos", camera->position);
-	shader.SetVector3("lightPosition", camera->lightPosition);
+	shader.SetVector3("cameraPos", player->camera->position);
+	shader.SetVector3("lightPosition", player->camera->lightPosition);
 	shader.SetVector3("objectColour", colour);
 	shader.SetMatrix4("projection", projection);
 	shader.SetMatrix4("view", view);
@@ -199,14 +199,6 @@ unsigned int Mesh::GetNumTriangles() {
 	}
 	std::cout << numTriangles / 3 << "\n";
 	return numTriangles / 3;
-}
-
-void Mesh::SetEnemy(Enemy* enemy) {
-	this->enemy = enemy;
-}
-
-Enemy* Mesh::GetEnemy() {
-	return this->enemy;
 }
 
 std::vector<Submesh> Mesh::GetSubmeshes() {

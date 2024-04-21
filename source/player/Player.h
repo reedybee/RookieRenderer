@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "camera/Camera.h"
-#include "physics/Physics.h"
+#include "mesh/Mesh.h"
 
 enum collisionType {
 	VERTICAL,
@@ -20,13 +20,15 @@ public:
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 velocity;
+	glm::vec3 gravity;
 	float health;
 	float maxHealth;
 	bool dead;
 	Camera* camera;
 	Mesh mesh;
+	std::vector<Mesh*> environmentMeshes;
 
-	Player(PhysicsManager* physicsManager = nullptr, GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
+	Player(GLFWwindow* window = nullptr, glm::vec3 position = glm::vec3(0.0f));
 	// 
 	void PollMouseMovement(float xoffset, float yoffset, bool mouseHidden, GLboolean constrainPitch = true);
 
@@ -54,5 +56,4 @@ private:
 	glm::vec3 front;
 	glm::vec3 cameraOffset;
 	GLFWwindow* window;
-	PhysicsManager* physicsManager;
 };

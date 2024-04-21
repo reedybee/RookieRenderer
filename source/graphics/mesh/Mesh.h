@@ -16,7 +16,6 @@
 #include "texture/Texture.h"
 #include "util/util.h"
 class Player;
-struct Enemy;
 // uses an unsigned 8 bit number
 enum MESH_TAG {
 	MESH_NONE			= 0b00000001,
@@ -57,7 +56,7 @@ struct Submesh {
 class Mesh {
 public:
 	Mesh();
-	Mesh(const char* filepath, Camera* camera);
+	Mesh(const char* filepath, Player* player);
 
 	void Draw(float aspect);
 	// returns the distances to each triangle in the mesh,
@@ -65,11 +64,8 @@ public:
 	std::vector<DistTriangle> GetDistances(glm::vec3 position);
 	// returns the number of triangles the make up the mesh
 	unsigned int GetNumTriangles();
-
+	// 
 	std::vector<Submesh> GetSubmeshes();
-
-	void SetEnemy(Enemy* enemy);
-	Enemy* GetEnemy();
 
 	glm::vec3 position;
 	glm::vec3 scale;
@@ -80,10 +76,52 @@ public:
 private:
 	void LoadModel();
 
-	Camera* camera;
+	Player* player;
 	bool ranOnce = false;
 	const char* filepath;
 	std::vector<glm::vec3> vertices;
 	std::vector<Submesh> meshes;
-	Enemy* enemy;
 };
+
+// returns array of each distance to each triangle in an array of meshes from some postion.
+static std::vector<DistTriangle> PollEachMeshesDistances(std::vector<Mesh*> meshes, glm::vec3 position) {
+	std::vector<DistTriangle> distances;
+	for (Mesh* mesh : meshes) {
+		std::vector<DistTriangle> meshDistances = mesh->GetDistances(position);
+		for (DistTriangle tri : meshDistances) {
+			tri.tag = mesh->tag;
+			distances.push_back(tri);
+		}
+	}
+	return distances;
+}
+
+// finds the closest point on the mesh in the given direction and position
+static RayPoint FindPointInDirection(glm::vec3 position, glm::vec3 direction, std::vector<Mesh*> meshes) {
+	glm::vec3 lastPos(position);
+	glm::vec3 currentPos(position);
+	RayPoint point;
+
+	float threshold = 0.01f;
+	float distance = std::numeric_limits<float>::max();
+	while (distance >= threshold) {
+		std::vector<DistTriangle> triangles = PollEachMeshesDistances(meshes, lastPos);
+		for (const DistTriangle& tri : triangles) {
+			if (tri.distance < distance) {
+				distance = tri.distance;
+				point.tag = tri.tag;
+			}
+		}
+		if (distance > 50000) {
+			printf("Could not find point on mesh, returning zero!\n");
+			return RayPoint();
+		}
+		if (distance <= threshold) {
+			break;
+		}
+		currentPos = lastPos + direction * distance;
+		lastPos = currentPos;
+	}
+	point.position = lastPos;
+	return point;
+}

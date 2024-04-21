@@ -31,6 +31,11 @@ struct DistTriangle {
 	unsigned int tag;
 };
 
+struct RayPoint {
+	glm::vec3 position;
+	unsigned int tag;
+};
+
 // prints a vector 3 to the standard outputS
 static void DisplayVec3(glm::vec3 vector) {
 	std::cout << "x: " << vector.x << " y: " << vector.y << " z: " << vector.z << "\n";

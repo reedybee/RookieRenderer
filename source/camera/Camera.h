@@ -25,6 +25,7 @@ public:
 
 	float fov;
 	float yaw, pitch;
+	float nearPlane, farPlane;
 
 	Camera(glm::vec3 position = glm::vec3(0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f, float pitch = 0.0f);
 
@@ -33,8 +34,6 @@ public:
 
 	// updates front, right and up vectors using the updated angles
 	void UpdateCameraVectors();
-	// draws and updates the ui elements
-	void DrawUI(GLFWwindow* window);
 
 	glm::vec3 lightPosition;
 

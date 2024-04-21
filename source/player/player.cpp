@@ -9,10 +9,10 @@
 
 #include "camera/Camera.h"
 #include "player/Player.h"
-#include "physics/Physics.h"
+#include "mesh/Mesh.h"
 #include "util/util.h"
 
-Player::Player(PhysicsManager* physicsManager, GLFWwindow* window, glm::vec3 position) {
+Player::Player(GLFWwindow* window, glm::vec3 position) {
 	this->position = position;
 	rotation = glm::vec3(0.0f);
 	camera = new Camera(glm::vec3(position.x, position.y, position.z));
@@ -21,6 +21,7 @@ Player::Player(PhysicsManager* physicsManager, GLFWwindow* window, glm::vec3 pos
 	this->window = window;
 	front = glm::vec3(0.0f, 0.0f, 1.0f);
 	cameraOffset = glm::vec3(0.0f, 2.0f, 0.0f);
+	gravity = glm::vec3(0.0f, -9.8f, 0.0f);
 	jumped = false;
 	collisionThreshold = 0.5f;
 	noclip = false;
@@ -29,7 +30,6 @@ Player::Player(PhysicsManager* physicsManager, GLFWwindow* window, glm::vec3 pos
 	health = 100;
 	maxHealth = 100;
 	dead = false;
-	this->physicsManager = physicsManager;
 }
 
 void Player::PollMovement(float deltatime) {
@@ -74,6 +74,10 @@ void Player::PollMovement(float deltatime) {
 			this->velocity.y += 5.0f;
 			grounded = false;
 		}
+		// TODO: REMOVE THIS LATER
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+			position = glm::vec3(0.0f, 10.0f, 0.0f);
+		}
 	}
 }
 
@@ -99,7 +103,7 @@ void Player::PollMouseMovement(float xoffset, float yoffset, bool mouseHidden, G
 
 void Player::PollMouseButtons(int button, int action) {
 	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
-		Ray point = physicsManager->FindPointDirection(this->camera->position, this->camera->front);
+		RayPoint point = FindPointInDirection(position, camera->front, environmentMeshes);
 		if (point.tag & MESH_ENVIRONMENT) {
 			printf("Enivronment Hit at ");
 			DisplayVec3(point.position);
@@ -111,7 +115,7 @@ void Player::PollMouseButtons(int button, int action) {
 
 void Player::PollCollision(float deltatime) {
 	if (!noclip) {
-		std::vector<DistTriangle> triangles = physicsManager->PollDistances(this->position);
+		std::vector<DistTriangle> triangles = PollEachMeshesDistances(environmentMeshes, position);
 		for (const DistTriangle& triangle : triangles) {
 			if (triangle.distance < collisionThreshold && triangle.tag & MESH_COLLIDER) {
 				ResolveCollision(triangle, deltatime);
@@ -119,15 +123,14 @@ void Player::PollCollision(float deltatime) {
 				//velocity = glm::reflect(velocity, triangle.normal); // leaving here cause funny
 				if (groundDot > 0.70f) {
 					grounded = true;
-					velocity.y = 0.0f;
-				}
-				else {
+					velocity = glm::vec3(0.0f);
+				} else {
 					grounded = false;
 				}
 			}
 		}
 		this->position += velocity * deltatime;
-		this->velocity.y -= physicsManager->gravity * deltatime;
+		this->velocity += gravity * deltatime;
 	}
 }
 

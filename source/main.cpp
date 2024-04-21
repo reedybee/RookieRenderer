@@ -17,20 +17,17 @@
 #include "player/Player.h"
 #include "mesh/mesh.h"
 #include "texture/Texture.h"
-#include "physics/Physics.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
 
 #include "util/util.h"
-#include "util/server.h"
 
 float lastX = windowWidth / 2.0f;
 float lastY = windowHeight / 2.0f;
 bool firstMouse = true;
 
 Player player;
-PhysicsManager physicsManager = PhysicsManager();
 bool mouseHidden = false;
 
 Mesh cube;
@@ -97,22 +94,19 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
 	
-	player = Player(&physicsManager, window, glm::vec3(0.0f, 10.0f, 0.0f));
+	player = Player(window, glm::vec3(0.0f, 10.0f, 0.0f));
 	player.camera->type = CAMERA_TYPE_FIRST_PERSON;
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
-	Mesh devMesh = Mesh("resources/objects/devscene", player.camera);
+	Mesh devMesh = Mesh("resources/objects/devscene", &player);
 	devMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
 	devMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
 	devMesh.tag = MESH_ENVIRONMENT | MESH_COLLIDER;
 
-	physicsManager.AddMesh(&devMesh);
-
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		// hides mouse for cleaner look in game
 		if (mouseHidden)
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -122,7 +116,6 @@ int main(int argc, char* argv[]) {
 		devMesh.Draw(GetAspectRatio());
 
 		player.Update();
-		player.camera->DrawUI(window);
 		FixedUpdate([]{
 			player.FixedUpdate(tickRate);
 		});
