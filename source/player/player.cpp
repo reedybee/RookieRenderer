@@ -116,6 +116,7 @@ void Player::PollMouseButtons(int button, int action) {
 void Player::PollCollision(float deltatime) {
 	if (!noclip) {
 		std::vector<DistTriangle> triangles = PollEachMeshesDistances(environmentMeshes, position);
+		// checks for any collisions between the environment and the players feet (position)
 		for (const DistTriangle& triangle : triangles) {
 			if (triangle.distance < collisionThreshold && triangle.tag & MESH_COLLIDER) {
 				ResolveCollision(triangle, deltatime);
@@ -127,6 +128,13 @@ void Player::PollCollision(float deltatime) {
 				} else {
 					grounded = false;
 				}
+			}
+		}
+		triangles = PollEachMeshesDistances(environmentMeshes, position + glm::vec3(0.0f, 2.0f, 0.0f));
+		// checks for collisions between the environment and the players head (position + 2)
+		for (const DistTriangle& triangle : triangles) {
+			if (triangle.distance < collisionThreshold && triangle.tag & MESH_COLLIDER) {
+				ResolveCollision(triangle, deltatime);
 			}
 		}
 		this->position += velocity * deltatime;
@@ -141,7 +149,10 @@ void Player::ResolveCollision(DistTriangle triangle, float deltatime) {
 	}
 	// should be only slanted walls/floors
 	if (surfaceDot != 0 && surfaceDot != 1 && surfaceDot != -1) {
-		triangle.normal = glm::vec3(0, triangle.normal.y, 0);
+		if (surfaceDot > 0)
+			triangle.normal = glm::vec3(0, triangle.normal.y, 0);
+		if (surfaceDot < 0)
+			triangle.normal = glm::vec3(triangle.normal.x, 0, triangle.normal.z);
 		glm::normalize(triangle.normal);
 	}
 	//std::cout << triangle.normal.x << " " << triangle.normal.y << " " << triangle.normal.z << "\n";
