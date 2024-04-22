@@ -16,15 +16,6 @@
 
 #define M_TAU 2 * M_PI
 
-static int initialWindowWidth;
-static int initialWindowHeight;
-
-static int currentWindowWidth;
-static int currentWindowHeight;
-
-static int lastWindowWidth;
-static int lastWindowHeight;
-
 static bool fullscreen = false;
 
 // rate at which logic will be updated, 60 times/second.
@@ -32,6 +23,14 @@ static float tickRate = 1.0f / 60.0f;
 static float accumulatedTime = 0.0f;
 static float currentTime = (float)glfwGetTime();
 static float newTime, frameTime;
+
+struct Resolution {
+	int x, y;
+	int w, h;
+};
+
+static Resolution windowResolution;
+static Resolution fullscreenResolution;
 
 struct DistTriangle {
 	float distance;
@@ -47,15 +46,24 @@ struct RayPoint {
 #define WINDOWED_FULLSCREEN 0
 #define FULLSCREEN 1
 
-static void ToggleFullscreen(GLFWwindow* window, int fullscreenType, int xResolution, int yResolution) {
+static void GetMonitorResolutions() {
+	int count;
+	const GLFWvidmode* modes = glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
+	for (int i = 0; i < count; i++) {
+		std::cout << modes[i].width << " " << modes[i].height << "\n";
+	}
+}
+
+static void ToggleFullscreen(GLFWwindow* window, int fullscreenType, Resolution fullscreenResolution) {
 	if (!fullscreen) {
 		if (fullscreenType == WINDOWED_FULLSCREEN) {
 			glfwMaximizeWindow(window);
 			glfwSetWindowAttrib(window, GLFW_DECORATED, false);
-			glfwSetWindowSize(window, xResolution, yResolution);
+			glfwSetWindowSize(window, fullscreenResolution.w, fullscreenResolution.h);
+			glfwSetWindowPos(window, 0, 0);
 		}
 		if (fullscreenType == FULLSCREEN) {
-			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), NULL, NULL, initialWindowWidth, initialWindowHeight, NULL);
+			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), NULL, NULL, fullscreenResolution.w, fullscreenResolution.h, NULL);
 		}
 		fullscreen = true;
 	} else if (fullscreen) {
@@ -92,5 +100,5 @@ static void FixedUpdate(void (*func)(), bool displayFrameRate = false) {
 
 // returns the aspect ratio of the main window.
 static float GetAspectRatio() {
-	return (float)currentWindowWidth / (float)currentWindowHeight;
+	return (float)windowResolution.w / (float)windowResolution.h;
 }
