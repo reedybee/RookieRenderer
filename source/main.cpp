@@ -23,8 +23,8 @@
 
 #include "util/util.h"
 
-float lastX = windowWidth / 2.0f;
-float lastY = windowHeight / 2.0f;
+float lastX = initialWindowWidth / 2.0f;
+float lastY = initialWindowHeight / 2.0f;
 bool firstMouse = true;
 
 Player player;
@@ -35,6 +35,9 @@ Mesh cube;
 static void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_E && action == GLFW_RELEASE) {
 		mouseHidden = !mouseHidden;
+	}
+	if (key == GLFW_KEY_F11  && action == GLFW_RELEASE) {
+		ToggleFullscreen(window, FULLSCREEN, initialWindowWidth, initialWindowHeight);
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
 		glfwSetWindowShouldClose(window, true);
@@ -47,8 +50,11 @@ static void mousebuttonCallback(GLFWwindow* window, int button, int action, int 
 
 static void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
-	windowWidth = width;
-	windowHeight = height;
+	lastWindowWidth = currentWindowWidth;
+	lastWindowHeight = currentWindowHeight;
+
+	currentWindowWidth = width;
+	currentWindowHeight = height;
 }
 
 static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
@@ -78,9 +84,11 @@ int main(int argc, char* argv[]) {
 		return 1;
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	windowWidth = mode->width;
-	windowHeight = mode->height;
-	GLFWwindow* window = glfwCreateWindow(int(mode->width / 1.5f), int(mode->height / 1.5f), "RookieRenderer", NULL, NULL);
+	initialWindowWidth = mode->width;
+	initialWindowHeight = mode->height;
+	currentWindowWidth = initialWindowWidth;
+	currentWindowHeight = initialWindowHeight;
+	GLFWwindow* window = glfwCreateWindow(int(currentWindowWidth / 1.5f), int(currentWindowHeight / 1.5f), "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	
 	glfwSetFramebufferSizeCallback(window, frambuffersizeCallback);

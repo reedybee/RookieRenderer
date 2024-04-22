@@ -16,8 +16,16 @@
 
 #define M_TAU 2 * M_PI
 
-static int windowWidth;
-static int windowHeight;
+static int initialWindowWidth;
+static int initialWindowHeight;
+
+static int currentWindowWidth;
+static int currentWindowHeight;
+
+static int lastWindowWidth;
+static int lastWindowHeight;
+
+static bool fullscreen = false;
 
 // rate at which logic will be updated, 60 times/second.
 static float tickRate = 1.0f / 60.0f;
@@ -35,6 +43,32 @@ struct RayPoint {
 	glm::vec3 position;
 	unsigned int tag;
 };
+
+#define WINDOWED_FULLSCREEN 0
+#define FULLSCREEN 1
+
+static void ToggleFullscreen(GLFWwindow* window, int fullscreenType, int xResolution, int yResolution) {
+	if (!fullscreen) {
+		if (fullscreenType == WINDOWED_FULLSCREEN) {
+			glfwMaximizeWindow(window);
+			glfwSetWindowAttrib(window, GLFW_DECORATED, false);
+			glfwSetWindowSize(window, xResolution, yResolution);
+		}
+		if (fullscreenType == FULLSCREEN) {
+			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), NULL, NULL, initialWindowWidth, initialWindowHeight, NULL);
+		}
+		fullscreen = true;
+	} else if (fullscreen) {
+		if (fullscreenType == WINDOWED_FULLSCREEN) {
+			glfwRestoreWindow(window);
+			glfwSetWindowAttrib(window, GLFW_DECORATED, true);
+		}
+		if (fullscreenType == FULLSCREEN) {
+			glfwSetWindowMonitor(window, NULL, NULL, NULL, NULL, NULL, NULL);
+		}
+		fullscreen = false;
+	}
+}
 
 // prints a vector 3 to the standard outputS
 static void DisplayVec3(glm::vec3 vector) {
@@ -58,5 +92,5 @@ static void FixedUpdate(void (*func)(), bool displayFrameRate = false) {
 
 // returns the aspect ratio of the main window.
 static float GetAspectRatio() {
-	return (float)windowWidth / (float)windowHeight;
+	return (float)currentWindowWidth / (float)currentWindowHeight;
 }
