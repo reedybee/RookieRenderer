@@ -23,8 +23,8 @@
 
 #include "util/util.h"
 
-float lastX = initialWindowWidth / 2.0f;
-float lastY = initialWindowHeight / 2.0f;
+float lastX = windowResolution.x / 2.0f;
+float lastY = windowResolution.y / 2.0f;
 bool firstMouse = true;
 
 Player player;
@@ -37,7 +37,7 @@ static void keyboardCallback(GLFWwindow* window, int key, int scancode, int acti
 		mouseHidden = !mouseHidden;
 	}
 	if (key == GLFW_KEY_F11  && action == GLFW_RELEASE) {
-		ToggleFullscreen(window, FULLSCREEN, initialWindowWidth, initialWindowHeight);
+		ToggleFullscreen(window, WINDOWED_FULLSCREEN, fullscreenResolution);
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
 		glfwSetWindowShouldClose(window, true);
@@ -50,11 +50,9 @@ static void mousebuttonCallback(GLFWwindow* window, int button, int action, int 
 
 static void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
-	lastWindowWidth = currentWindowWidth;
-	lastWindowHeight = currentWindowHeight;
 
-	currentWindowWidth = width;
-	currentWindowHeight = height;
+	windowResolution.x = width;
+	windowResolution.y = height;
 }
 
 static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
@@ -84,20 +82,28 @@ int main(int argc, char* argv[]) {
 		return 1;
 
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	initialWindowWidth = mode->width;
-	initialWindowHeight = mode->height;
-	currentWindowWidth = initialWindowWidth;
-	currentWindowHeight = initialWindowHeight;
-	GLFWwindow* window = glfwCreateWindow(int(currentWindowWidth / 1.5f), int(currentWindowHeight / 1.5f), "RookieRenderer", NULL, NULL);
+	windowResolution.w = mode->width;
+	windowResolution.h = mode->height;
+	fullscreenResolution.w = windowResolution.w;
+	fullscreenResolution.h = windowResolution.h;
+	GLFWwindow* window = glfwCreateWindow(int(windowResolution.w/ 1.5f), int(windowResolution.h / 1.5f), "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
+	// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
+	glfwSwapInterval(1);
 	
 	glfwSetFramebufferSizeCallback(window, frambuffersizeCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetKeyCallback(window, keyboardCallback);
 	glfwSetMouseButtonCallback(window, mousebuttonCallback);
 
+	std::vector<int> refreshRates;
+	std::vector<std::string> resolutions = MonitorResolutionsToString(GetMonitorResolutions(), &refreshRates);
+	static const char* currentReso = NULL;
+
 	if (!InitGlad())
 		return 1;
+
+	InitIMGUI(window);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
@@ -127,11 +133,25 @@ int main(int argc, char* argv[]) {
 		FixedUpdate([]{
 			player.FixedUpdate(tickRate);
 		});
+		// debug window
+		NewImGUIWindow([] {
+			ImGui::Begin("Debug Window");
+			
+			ImGui::Text("Window");
+
+			if (ImGui::BeginCombo("Resolution", currentReso)) {
+
+			}
+
+			ImGui::Text("Player: ");
+			ImGui::InputFloat3("Position ", glm::value_ptr(player.position));
+
+			ImGui::End();
+		});
+
 		// renders contents and polls events
 		glfwPollEvents();
 		glfwSwapBuffers(window);
-		// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
-		glfwSwapInterval(0);
 	}
 	glfwDestroyWindow(window);
 	glfwTerminate();

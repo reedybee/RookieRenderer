@@ -11,19 +11,11 @@
 #include "filesystem.h"
 #include "initialization.h"
 #include "math.h"
+#include "debug.h"
 
 // CAUTION!!! avoid using customs headers. may break code
 
 #define M_TAU 2 * M_PI
-
-static int initialWindowWidth;
-static int initialWindowHeight;
-
-static int currentWindowWidth;
-static int currentWindowHeight;
-
-static int lastWindowWidth;
-static int lastWindowHeight;
 
 static bool fullscreen = false;
 
@@ -32,6 +24,15 @@ static float tickRate = 1.0f / 60.0f;
 static float accumulatedTime = 0.0f;
 static float currentTime = (float)glfwGetTime();
 static float newTime, frameTime;
+
+struct Resolution {
+	int x, y;
+	int w, h;
+	int refreshRate;
+};
+
+static Resolution windowResolution;
+static Resolution fullscreenResolution;
 
 struct DistTriangle {
 	float distance;
@@ -47,15 +48,48 @@ struct RayPoint {
 #define WINDOWED_FULLSCREEN 0
 #define FULLSCREEN 1
 
-static void ToggleFullscreen(GLFWwindow* window, int fullscreenType, int xResolution, int yResolution) {
+static std::vector<std::string> MonitorResolutionsToString(std::vector<Resolution> resolutions, std::vector<int>* refreshRates) {
+	std::vector<std::string> strings;
+	for (const Resolution& res : resolutions) {
+		std::string resolution = res.w + " x " + res.h;
+		strings.push_back(resolution);
+		if (refreshRates.size() == 0) {
+			refreshRates.push_back(res.refreshRate);
+			break;
+		}
+		for (int i = 0; i < refreshRates.size(); i++) {
+			if (refreshRates[i] == res.refreshRate)
+				break;
+			refreshRates.push_back(res.refreshRate);
+		}
+	}
+	return strings;
+}
+
+static std::vector<Resolution> GetMonitorResolutions() {
+	int count;
+	std::vector<Resolution> resolutions;
+	const GLFWvidmode* modes = glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
+	for (int i = 0; i < count; i++) {
+		Resolution res;
+		res.w = modes[i].width;
+		res.h = modes[i].height;
+		res.refreshRate = modes[i].refreshRate;
+		resolutions.push_back(res);
+	}
+	return resolutions;
+}
+
+static void ToggleFullscreen(GLFWwindow* window, int fullscreenType, Resolution fullscreenResolution) {
 	if (!fullscreen) {
 		if (fullscreenType == WINDOWED_FULLSCREEN) {
 			glfwMaximizeWindow(window);
 			glfwSetWindowAttrib(window, GLFW_DECORATED, false);
-			glfwSetWindowSize(window, xResolution, yResolution);
+			glfwSetWindowSize(window, fullscreenResolution.w, fullscreenResolution.h);
+			glfwSetWindowPos(window, 0, 0);
 		}
 		if (fullscreenType == FULLSCREEN) {
-			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), NULL, NULL, initialWindowWidth, initialWindowHeight, NULL);
+			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), NULL, NULL, fullscreenResolution.w, fullscreenResolution.h, NULL);
 		}
 		fullscreen = true;
 	} else if (fullscreen) {
@@ -92,5 +126,5 @@ static void FixedUpdate(void (*func)(), bool displayFrameRate = false) {
 
 // returns the aspect ratio of the main window.
 static float GetAspectRatio() {
-	return (float)currentWindowWidth / (float)currentWindowHeight;
+	return (float)windowResolution.w / (float)windowResolution.h;
 }

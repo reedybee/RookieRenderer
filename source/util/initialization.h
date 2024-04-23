@@ -23,6 +23,7 @@ static int InitGLFW(double version, int openglProfile) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, openglProfile);
 	glfwWindowHint(GLFW_SAMPLES, SSAA_SAMPLE_SIZE);
 	glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+	glfwWindowHint(GLFW_RESIZABLE, false);
 
 	std::cout << "GLFW Initialized: Version " << major << "." << minor << "\n";
 	return 1;
