@@ -11,6 +11,7 @@
 #include "filesystem.h"
 #include "initialization.h"
 #include "math.h"
+#include "debug.h"
 
 // CAUTION!!! avoid using customs headers. may break code
 
@@ -27,6 +28,7 @@ static float newTime, frameTime;
 struct Resolution {
 	int x, y;
 	int w, h;
+	int refreshRate;
 };
 
 static Resolution windowResolution;
@@ -46,12 +48,36 @@ struct RayPoint {
 #define WINDOWED_FULLSCREEN 0
 #define FULLSCREEN 1
 
-static void GetMonitorResolutions() {
+static std::vector<std::string> MonitorResolutionsToString(std::vector<Resolution> resolutions, std::vector<int>* refreshRates) {
+	std::vector<std::string> strings;
+	for (const Resolution& res : resolutions) {
+		std::string resolution = res.w + " x " + res.h;
+		strings.push_back(resolution);
+		if (refreshRates.size() == 0) {
+			refreshRates.push_back(res.refreshRate);
+			break;
+		}
+		for (int i = 0; i < refreshRates.size(); i++) {
+			if (refreshRates[i] == res.refreshRate)
+				break;
+			refreshRates.push_back(res.refreshRate);
+		}
+	}
+	return strings;
+}
+
+static std::vector<Resolution> GetMonitorResolutions() {
 	int count;
+	std::vector<Resolution> resolutions;
 	const GLFWvidmode* modes = glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
 	for (int i = 0; i < count; i++) {
-		std::cout << modes[i].width << " " << modes[i].height << "\n";
+		Resolution res;
+		res.w = modes[i].width;
+		res.h = modes[i].height;
+		res.refreshRate = modes[i].refreshRate;
+		resolutions.push_back(res);
 	}
+	return resolutions;
 }
 
 static void ToggleFullscreen(GLFWwindow* window, int fullscreenType, Resolution fullscreenResolution) {

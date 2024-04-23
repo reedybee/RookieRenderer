@@ -81,8 +81,6 @@ int main(int argc, char* argv[]) {
 	if (!InitGLFW(4.6, GLFW_OPENGL_CORE_PROFILE))
 		return 1;
 
-	GetMonitorResolutions();
-
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	windowResolution.w = mode->width;
 	windowResolution.h = mode->height;
@@ -90,14 +88,22 @@ int main(int argc, char* argv[]) {
 	fullscreenResolution.h = windowResolution.h;
 	GLFWwindow* window = glfwCreateWindow(int(windowResolution.w/ 1.5f), int(windowResolution.h / 1.5f), "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
+	// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
+	glfwSwapInterval(1);
 	
 	glfwSetFramebufferSizeCallback(window, frambuffersizeCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetKeyCallback(window, keyboardCallback);
 	glfwSetMouseButtonCallback(window, mousebuttonCallback);
 
+	std::vector<int> refreshRates;
+	std::vector<std::string> resolutions = MonitorResolutionsToString(GetMonitorResolutions(), &refreshRates);
+	static const char* currentReso = NULL;
+
 	if (!InitGlad())
 		return 1;
+
+	InitIMGUI(window);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
@@ -127,11 +133,25 @@ int main(int argc, char* argv[]) {
 		FixedUpdate([]{
 			player.FixedUpdate(tickRate);
 		});
+		// debug window
+		NewImGUIWindow([] {
+			ImGui::Begin("Debug Window");
+			
+			ImGui::Text("Window");
+
+			if (ImGui::BeginCombo("Resolution", currentReso)) {
+
+			}
+
+			ImGui::Text("Player: ");
+			ImGui::InputFloat3("Position ", glm::value_ptr(player.position));
+
+			ImGui::End();
+		});
+
 		// renders contents and polls events
 		glfwPollEvents();
 		glfwSwapBuffers(window);
-		// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
-		glfwSwapInterval(0);
 	}
 	glfwDestroyWindow(window);
 	glfwTerminate();

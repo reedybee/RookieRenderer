@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\dev\Projects\c++\RookieRenderer\dependencies\nlohmann;C:\dev\Projects\C++\RookieRenderer\dependencies\stb_image;C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;C:\dev\Projects\C++\RookieRenderer\dependencies\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\Projects\c++\RookieRenderer\dependencies\imgui;C:\dev\Projects\c++\RookieRenderer\dependencies\nlohmann;C:\dev\Projects\C++\RookieRenderer\dependencies\stb_image;C:\dev\Projects\C++\RookieRenderer\dependencies;C:\dev\Projects\C++\RookieRenderer\dependencies\glm;C:\dev\Projects\C++\RookieRenderer\source\graphics;C:\dev\Projects\c++\RookieRenderer\source;C:\dev\Projects\C++\RookieRenderer\dependencies\glfw\include;C:\dev\Projects\C++\RookieRenderer\dependencies\glad\include;C:\dev\Projects\C++\RookieRenderer\dependencies\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -139,6 +139,13 @@
     <ClCompile Include="dependencies\glad\src\glad.c" />
     <ClCompile Include="dependencies\glm\detail\glm.cpp" />
     <ClCompile Include="dependencies\glm\glm.cppm" />
+    <ClCompile Include="dependencies\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="dependencies\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="source\camera\camera.cpp" />
     <ClCompile Include="source\graphics\mesh\mesh.cpp" />
     <ClCompile Include="source\graphics\texture\texture.cpp" />
@@ -521,6 +528,15 @@
     <ClInclude Include="dependencies\glm\vec3.hpp" />
     <ClInclude Include="dependencies\glm\vec4.hpp" />
     <ClInclude Include="dependencies\glm\vector_relational.hpp" />
+    <ClInclude Include="dependencies\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="dependencies\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="dependencies\imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="dependencies\imgui\imconfig.h" />
+    <ClInclude Include="dependencies\imgui\imgui.h" />
+    <ClInclude Include="dependencies\imgui\imgui_internal.h" />
+    <ClInclude Include="dependencies\imgui\imstb_rectpack.h" />
+    <ClInclude Include="dependencies\imgui\imstb_textedit.h" />
+    <ClInclude Include="dependencies\imgui\imstb_truetype.h" />
     <ClInclude Include="dependencies\stb_image\stb_connected_components.h" />
     <ClInclude Include="dependencies\stb_image\stb_c_lexer.h" />
     <ClInclude Include="dependencies\stb_image\stb_divide.h" />
@@ -546,6 +562,7 @@
     <ClInclude Include="source\graphics\texture\Texture.h" />
     <ClInclude Include="source\player\Player.h" />
     <ClInclude Include="source\graphics\shader\Shader.h" />
+    <ClInclude Include="source\util\debug.h" />
     <ClInclude Include="source\util\filesystem.h" />
     <ClInclude Include="source\util\math.h" />
     <ClInclude Include="source\util\util.h" />
