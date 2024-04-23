@@ -23,8 +23,8 @@
 
 #include "util/util.h"
 
-float lastX = windowResolution.x / 2.0f;
-float lastY = windowResolution.y / 2.0f;
+float lastX = initialWindowWidth / 2.0f;
+float lastY = initialWindowHeight / 2.0f;
 bool firstMouse = true;
 
 Player player;
@@ -37,7 +37,7 @@ static void keyboardCallback(GLFWwindow* window, int key, int scancode, int acti
 		mouseHidden = !mouseHidden;
 	}
 	if (key == GLFW_KEY_F11  && action == GLFW_RELEASE) {
-		ToggleFullscreen(window, FULLSCREEN, fullscreenResolution);
+		ToggleFullscreen(window, FULLSCREEN, initialWindowWidth, initialWindowHeight);
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
 		glfwSetWindowShouldClose(window, true);
@@ -50,9 +50,11 @@ static void mousebuttonCallback(GLFWwindow* window, int button, int action, int 
 
 static void frambuffersizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
+	lastWindowWidth = currentWindowWidth;
+	lastWindowHeight = currentWindowHeight;
 
-	windowResolution.x = width;
-	windowResolution.y = height;
+	currentWindowWidth = width;
+	currentWindowHeight = height;
 }
 
 static void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
@@ -81,14 +83,12 @@ int main(int argc, char* argv[]) {
 	if (!InitGLFW(4.6, GLFW_OPENGL_CORE_PROFILE))
 		return 1;
 
-	GetMonitorResolutions();
-
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	windowResolution.w = mode->width;
-	windowResolution.h = mode->height;
-	fullscreenResolution.w = windowResolution.w;
-	fullscreenResolution.h = windowResolution.h;
-	GLFWwindow* window = glfwCreateWindow(int(windowResolution.w/ 1.5f), int(windowResolution.h / 1.5f), "RookieRenderer", NULL, NULL);
+	initialWindowWidth = mode->width;
+	initialWindowHeight = mode->height;
+	currentWindowWidth = initialWindowWidth;
+	currentWindowHeight = initialWindowHeight;
+	GLFWwindow* window = glfwCreateWindow(int(currentWindowWidth / 1.5f), int(currentWindowHeight / 1.5f), "RookieRenderer", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	
 	glfwSetFramebufferSizeCallback(window, frambuffersizeCallback);
@@ -131,7 +131,7 @@ int main(int argc, char* argv[]) {
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 		// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
-		glfwSwapInterval(1);
+		glfwSwapInterval(0);
 	}
 	glfwDestroyWindow(window);
 	glfwTerminate();
