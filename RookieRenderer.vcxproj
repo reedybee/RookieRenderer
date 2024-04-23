@@ -731,6 +731,7 @@
     <None Include="dependencies\glm\gtx\vector_angle.inl" />
     <None Include="dependencies\glm\gtx\vector_query.inl" />
     <None Include="dependencies\glm\gtx\wrap.inl" />
+    <None Include="imgui.ini" />
     <None Include="README.md" />
     <None Include="resources\objects\devscene\devscene.mtl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

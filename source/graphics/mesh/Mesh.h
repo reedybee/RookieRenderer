@@ -41,6 +41,7 @@ struct Vertex {
 	glm::vec3 Bitangent;
 };
 
+// a submesh: uses separate textures
 struct Submesh {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -53,14 +54,14 @@ struct Submesh {
 	unsigned int VAO = NULL, VBO = NULL, NBO = NULL, EBO = NULL;
 };
 
+// one total mesh
 class Mesh {
 public:
 	Mesh();
 	Mesh(const char* filepath, Player* player);
 
 	void Draw(float aspect);
-	// returns the distances to each triangle in the mesh,
-	// if the threshold value is included ignores any triangles outside the threshold
+	// returns the distances to each triangle in the mesh
 	std::vector<DistTriangle> GetDistances(glm::vec3 position);
 	// returns the number of triangles the make up the mesh
 	unsigned int GetNumTriangles();

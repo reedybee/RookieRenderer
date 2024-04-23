@@ -48,24 +48,6 @@ struct RayPoint {
 #define WINDOWED_FULLSCREEN 0
 #define FULLSCREEN 1
 
-static std::vector<std::string> MonitorResolutionsToString(std::vector<Resolution> resolutions, std::vector<int>* refreshRates) {
-	std::vector<std::string> strings;
-	for (const Resolution& res : resolutions) {
-		std::string resolution = res.w + " x " + res.h;
-		strings.push_back(resolution);
-		if (refreshRates.size() == 0) {
-			refreshRates.push_back(res.refreshRate);
-			break;
-		}
-		for (int i = 0; i < refreshRates.size(); i++) {
-			if (refreshRates[i] == res.refreshRate)
-				break;
-			refreshRates.push_back(res.refreshRate);
-		}
-	}
-	return strings;
-}
-
 static std::vector<Resolution> GetMonitorResolutions() {
 	int count;
 	std::vector<Resolution> resolutions;

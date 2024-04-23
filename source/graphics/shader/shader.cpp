@@ -19,21 +19,22 @@ Shader::Shader() {
 }
 
 Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
-	
+	// where to store vertex shader contents
 	std::string vertexCode = ReadFromFile(vertexShaderPath);
-
+	// creates and compiles vertex shader
 	const char* vertexCodeChar = vertexCode.c_str();
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexCodeChar, NULL);
 	glCompileShader(vertexShader);
 	
+	// where to store fragment shader contents
 	std::string fragmentCode = ReadFromFile(fragmentShaderPath);
-
+	// creates and compiles fragment shader
 	const char* fragmentCodeChar = fragmentCode.c_str();
 	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentCodeChar, NULL);
 	glCompileShader(fragmentShader);
-
+	// create and attaches shader to program
 	program = glCreateProgram();
 	glAttachShader(program, vertexShader);
 	glAttachShader(program, fragmentShader);

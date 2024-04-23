@@ -22,7 +22,7 @@
 
 Mesh::Mesh() {
 	this->player = nullptr;
-	this->colour = glm::vec3(0.0f);
+	this->colour = glm::vec3(1.0f);
 	this->filepath = nullptr;
 	this->position = glm::vec3(0.0f);
 	this->rotation = glm::vec3(0.0f);
@@ -34,6 +34,7 @@ Mesh::Mesh(const char* filepath, Player* player) {
 	this->filepath = filepath;
 	this->player = player;
 	this->scale = glm::vec3(1.0f);
+	this->colour = glm::vec3(1.0f);
 	// add this mesh to the players meshes !
 	player->environmentMeshes.push_back(this);
 
@@ -42,7 +43,7 @@ Mesh::Mesh(const char* filepath, Player* player) {
 
 void Mesh::LoadModel() {
 	Assimp::Importer importer;
-
+	// finds the path to the object file
 	std::string pathToObject;
 	std::filesystem::path pathToFolder = std::filesystem::current_path();
 	if (std::filesystem::path(filepath).extension() != ".obj") {
@@ -63,13 +64,13 @@ void Mesh::LoadModel() {
 	}
 
 	const aiScene* object = importer.ReadFile(pathToObject, aiProcess_Triangulate | aiProcess_FlipUVs);
-
+	// when the object fails to load, either an incorrect path or corrupt file.
 	if (!object || object->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !object->mRootNode)
 	{
 		std::cout << "Failed to load file " << filepath << "\n";
 		return;
 	}
-
+	// loads each submesh
 	for (unsigned int m = 0; m < object->mNumMeshes; m++) {
 		Submesh submesh;
 		aiMesh* mesh = object->mMeshes[m];
@@ -134,21 +135,20 @@ void Mesh::LoadModel() {
 
 void Mesh::Draw(float aspect) {
 	shader.use();
-
+	// setups each matrix from the camera
 	glm::mat4 projection = player->camera->GetProjectionMatrix(aspect);
-
 	glm::mat4 view = player->camera->GetViewMatrix();
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
 	model = glm::scale(model, scale);
-
+	// sends data to shader
 	shader.SetVector3("cameraPos", player->camera->position);
 	shader.SetVector3("lightPosition", player->camera->lightPosition);
 	shader.SetVector3("objectColour", colour);
 	shader.SetMatrix4("projection", projection);
 	shader.SetMatrix4("view", view);
 	shader.SetMatrix4("model", model);
-
+	// draws each submeshes mesh
 	for (Submesh mesh : meshes) {
 		if (mesh.hasTexture) {
 			shader.SetInt("albedoMap", 0);
@@ -162,11 +162,11 @@ void Mesh::Draw(float aspect) {
 }
 
 std::vector<DistTriangle> Mesh::GetDistances(glm::vec3 position) {
-	//float lowest = std::numeric_limits<float>::max();
 	std::vector<DistTriangle> triangles = std::vector<DistTriangle>();
 	DistTriangle triangle = DistTriangle();
 	for (int s = 0; s < meshes.size(); s++) {
 		for (int i = 0; i < meshes[s].vertices.size(); i += 3) {
+			// fun function
 			glm::vec3 v1 = meshes[s].vertices[i].Position;
 			glm::vec3 v2 = meshes[s].vertices[i + 1].Position;
 			glm::vec3 v3 = meshes[s].vertices[i + 2].Position;

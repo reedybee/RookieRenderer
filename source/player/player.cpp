@@ -90,8 +90,7 @@ void Player::PollMouseMovement(float xoffset, float yoffset, bool mouseHidden, G
 		camera->yaw += xoffset;		// left/right
 
 		// make sure that when pitch is out of bounds, screen doesn't get flipped
-		if (constrainPitch)
-		{
+		if (constrainPitch) {
 			if (camera->pitch > 89.0f)
 				camera->pitch = 89.0f;
 			if (camera->pitch < -89.0f)
@@ -176,7 +175,7 @@ void Player::Update() {
 
 void Player::FixedUpdate(float deltatime) {
 	// check for collisions
-	this->PollCollision(tickRate);
+	PollCollision(tickRate);
 	// player movement
-	this->PollMovement(tickRate);
+	PollMovement(tickRate);
 }

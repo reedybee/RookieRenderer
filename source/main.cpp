@@ -34,7 +34,12 @@ Mesh cube;
 
 static void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_E && action == GLFW_RELEASE) {
+		// hides mouse for cleaner look in game
 		mouseHidden = !mouseHidden;
+		if (mouseHidden)
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		if (!mouseHidden)
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 	if (key == GLFW_KEY_F11  && action == GLFW_RELEASE) {
 		ToggleFullscreen(window, WINDOWED_FULLSCREEN, fullscreenResolution);
@@ -81,6 +86,9 @@ int main(int argc, char* argv[]) {
 	if (!InitGLFW(4.6, GLFW_OPENGL_CORE_PROFILE))
 		return 1;
 
+	static std::vector<Resolution> resolutions = GetMonitorResolutions();
+	static const char* currentResolution;
+
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	windowResolution.w = mode->width;
 	windowResolution.h = mode->height;
@@ -90,20 +98,16 @@ int main(int argc, char* argv[]) {
 	glfwMakeContextCurrent(window);
 	// 0 -> uncapped, 1 -> screen refresh, 2+ -> screenrefresh / num;
 	glfwSwapInterval(1);
-	
+	// set each callback
 	glfwSetFramebufferSizeCallback(window, frambuffersizeCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetKeyCallback(window, keyboardCallback);
 	glfwSetMouseButtonCallback(window, mousebuttonCallback);
 
-	std::vector<int> refreshRates;
-	std::vector<std::string> resolutions = MonitorResolutionsToString(GetMonitorResolutions(), &refreshRates);
-	static const char* currentReso = NULL;
-
 	if (!InitGlad())
 		return 1;
 
-	InitIMGUI(window);
+	InitImGui(window);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
@@ -113,19 +117,12 @@ int main(int argc, char* argv[]) {
 
 	player.camera->lightPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 	Mesh devMesh = Mesh("resources/objects/devscene", &player);
-	devMesh.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	devMesh.shader = Shader("resources/shaders/unlit/unlitvertex.glsl", "resources/shaders/unlit/unlitfragment.glsl");
-	devMesh.colour = glm::vec3(1.0f, 0.2f, 0.2f);
 	devMesh.tag = MESH_ENVIRONMENT | MESH_COLLIDER;
-
+	// main loop, anything that need to be updated while game running should be in here
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// hides mouse for cleaner look in game
-		if (mouseHidden)
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		if (!mouseHidden)
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// draws objects to scene
 		devMesh.Draw(GetAspectRatio());
 
@@ -134,17 +131,12 @@ int main(int argc, char* argv[]) {
 			player.FixedUpdate(tickRate);
 		});
 		// debug window
-		NewImGUIWindow([] {
+		ImGuiWindow([] {
 			ImGui::Begin("Debug Window");
-			
-			ImGui::Text("Window");
-
-			if (ImGui::BeginCombo("Resolution", currentReso)) {
-
-			}
 
 			ImGui::Text("Player: ");
-			ImGui::InputFloat3("Position ", glm::value_ptr(player.position));
+			ImGui::InputFloat3("Position", glm::value_ptr(player.position));
+			ImGui::InputFloat3("Rotation", glm::value_ptr(player.camera->front));
 
 			ImGui::End();
 		});

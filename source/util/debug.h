@@ -3,7 +3,7 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
-static int InitIMGUI(GLFWwindow* window) {
+static int InitImGui(GLFWwindow* window) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -17,7 +17,7 @@ static int InitIMGUI(GLFWwindow* window) {
 	return 1;
 }
 
-static void NewImGUIWindow(void(*func)() ) {
+static void ImGuiWindow(void(*func)() ) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
